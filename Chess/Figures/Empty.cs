@@ -28,7 +28,7 @@ namespace Chess.Figures
 
         public HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            throw new NotImplementedException();
+            return new HashSet<string>();
         }
     }
 }

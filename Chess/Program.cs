@@ -7,7 +7,16 @@ using System.Text;
 
 var board = new Checkerboard();
 
+var whitePlayer = new Player(0, true,true);
+var blackPlayer = new Player(0, false,false);
 
+var changePlayer = new Dictionary<Player, Player>()
+{ 
+    {whitePlayer,blackPlayer },
+    {blackPlayer,whitePlayer } 
+};
+
+var currentPlayer = whitePlayer;
 
 while(true)
 {
@@ -20,6 +29,24 @@ while(true)
     var currentField = board.Board.SelectMany(f => f)
         .FirstOrDefault(field => field.Col == currPosition.Col && field.Row == currPosition.Row);
 
+    if(!currentField.IsUsed)
+    {
+        Console.WriteLine("Choosen empty field");
+        continue;
+    }
+
+    if (currentPlayer.IsWhite && currentPlayer.IsWhite != currentField.Figure.IsWhite)
+    {
+        Console.WriteLine("Choosen wrong color figure");
+        continue;
+    }
+
+    if (!currentPlayer.IsWhite && currentPlayer.IsWhite != currentField.Figure.IsWhite)
+    {
+        Console.WriteLine("Choosen wrong color figure");
+        continue;
+    }
+
     var possibleMoves = currentField.Figure.PossibleMoves(board, currentField);
 
     var targetPosition = CalculateTargetPosition(parsedInput.Item2);
@@ -28,7 +55,9 @@ while(true)
     {
         if (possibleMove.Equals(targetMove))
         {
+
             currentField.Figure.Move(board, currentField, targetPosition);
+            changePlayer.TryGetValue(currentPlayer,out currentPlayer);
             break;
         }
     }

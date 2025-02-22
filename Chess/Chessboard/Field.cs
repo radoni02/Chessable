@@ -35,5 +35,12 @@ namespace Chess.Chessboard
         public IField Figure { get; set; }
         public int Row { get; set; }
         public int Col { get; set; }
+
+        public bool CheckIfFieldIsNotEmpty()
+        {
+            if (Figure is Figure)
+                return true;
+            return false;
+        }
     }
 }

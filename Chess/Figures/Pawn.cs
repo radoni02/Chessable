@@ -72,18 +72,6 @@ namespace Chess.Figures
             return new HashSet<string>();
         }
 
-        //private string ForwardMoveByTwo(Checkerboard checkerboard, Field currentField)
-        //{
-        //    var tempField = new Field(false, new Empty(0, "Empty"), currentField.Row + 1, currentField.Col);
-        //    var tempCurrent = checkerboard.Board[cu]
-        //    tempCurrent
-        //    if ((currentField.Row == 7 || currentField.Row == 2) && ForwardMove(checkerboard, tempField) is not "")
-        //    {
-        //        return $"{tempField.Row + 1}{tempField.Col - 1}";
-        //    }
-        //    return "";
-        //}
-
         private string ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row + 1, currentField.Col);
