@@ -21,6 +21,11 @@ namespace Chess.Figures
         public string Name { get; set; }
         public bool IsWhite { get; }
 
+        public void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             throw new NotImplementedException();

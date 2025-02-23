@@ -23,11 +23,13 @@ namespace Chess.Figures
             Name = name;
         }
 
+        public List<Field> AttackedFields { get; set; }
         public bool IsWhite { get; set; }
         public int Value { get; set; }
         public string Name { get; set; }
         public abstract HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
         public abstract void Move(Checkerboard checkerboard, Field currentField, Position targetField);
 
+        public abstract void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
     }
 }

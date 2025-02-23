@@ -12,6 +12,44 @@ namespace Chess.Figures
     {
         public Pawn(bool isWhite, int value, string name) : base(isWhite, value, name)
         {
+            
+        }
+
+        public override void CalculateAtackedFields(Checkerboard checkerboard,Field currentField)
+        {
+
+            if(currentField.Figure.IsWhite)
+            {
+                CheckIfShloudAddToAttackedFields(checkerboard, currentField, -2, 0);
+                CheckIfShloudAddToAttackedFields(checkerboard, currentField, 0, 0);
+            }
+            
+            if(!currentField.Figure.IsWhite)
+            {
+                CheckIfShloudAddToAttackedFields(checkerboard, currentField, -2, -2);
+                CheckIfShloudAddToAttackedFields(checkerboard, currentField, 0, -2);
+            }
+        }
+
+        private void CheckIfShloudAddToAttackedFields(Checkerboard checkerboard, Field currentField,int adjustValueCol, int adjustValueRow)
+        {
+            if (IsWhite && !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].IsUsed)
+            {
+                AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
+            }
+            if(IsWhite && !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].Figure.IsWhite)
+            {
+                AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
+            }
+
+            if(!IsWhite && !checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col+ adjustValueCol].IsUsed)
+            {
+                AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
+            }
+            if (!IsWhite && checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].Figure.IsWhite)
+            {
+                AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
+            }
         }
 
         public override void Move(Checkerboard checkerboard,Field currentField,Position targetField)

@@ -21,6 +21,8 @@ var currentPlayer = whitePlayer;
 while(true)
 {
     ShowNewPosition();
+    UsedFields();
+
     Console.WriteLine("Provide move in format \"a2-a3\":");
     var move = Console.ReadLine();
     var parsedInput = ParseMoveInput(move);
@@ -131,4 +133,21 @@ Position CalculateTargetPosition(string position) // in format "a2" to format en
     dict.TryGetValue(position.First(), out var value);
     var row = (int)char.GetNumericValue(position.Last());
     return new Position(row - 1, value);
+}
+
+void UsedFields()
+{
+    var usedWhiteFields = board.Board.SelectMany(f => f)
+    .Where(field => field.IsUsed && field.Figure.IsWhite);
+    foreach(var field in usedWhiteFields)
+    {
+        field.Figure.CalculateAtackedFields(board, field);
+    }
+    
+    var usedBlackFields = board.Board.SelectMany(f => f)
+    .Where(field => field.IsUsed && !field.Figure.IsWhite);
+    foreach (var field in usedBlackFields)
+    {
+        field.Figure.CalculateAtackedFields(board, field);
+    }
 }
