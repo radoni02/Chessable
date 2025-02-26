@@ -15,6 +15,7 @@ namespace Chess.Figures
             IsWhite = isWhite;
             Value = value;
             Name = name;
+            AttackedFields = new List<Field>();
         }
 
         private Figure(int value, string name)

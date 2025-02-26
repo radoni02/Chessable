@@ -12,7 +12,6 @@ namespace Chess.Figures
     {
         public Pawn(bool isWhite, int value, string name) : base(isWhite, value, name)
         {
-            
         }
 
         public override void CalculateAtackedFields(Checkerboard checkerboard,Field currentField)
@@ -31,13 +30,30 @@ namespace Chess.Figures
             }
         }
 
+        private bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol)
+        {
+            try
+            {
+                var exists = checkerboard.Board[targetRow][targetCol].IsUsed;
+                return false;
+            }
+            catch(Exception ex)
+            {
+                return true;
+            }
+        }
+
         private void CheckIfShloudAddToAttackedFields(Checkerboard checkerboard, Field currentField,int adjustValueCol, int adjustValueRow)
         {
+            if (CheckIfFieldIsOutOfTheBoard(checkerboard, currentField.Row + adjustValueRow, currentField.Col + adjustValueCol))
+                return;
             if (IsWhite && !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].IsUsed)
             {
                 AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
             }
-            if(IsWhite && !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].Figure.IsWhite)
+            if(IsWhite &&
+                checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].IsUsed &&
+                !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].Figure.IsWhite)
             {
                 AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
             }
@@ -46,7 +62,9 @@ namespace Chess.Figures
             {
                 AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
             }
-            if (!IsWhite && checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].Figure.IsWhite)
+            if (!IsWhite &&
+                checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].IsUsed &&
+                checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].Figure.IsWhite)
             {
                 AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
             }
