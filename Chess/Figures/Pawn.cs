@@ -72,21 +72,42 @@ namespace Chess.Figures
 
         public override void Move(Checkerboard checkerboard,Field currentField,Position targetField)
         {
-            var newField = new Field()
+            if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
             {
-                Row = targetField.Row + 1,
-                Col = targetField.Col + 1,
-                Figure = currentField.Figure,
-                IsUsed = currentField.IsUsed
-            };
+                var newField = new Field()
+                {
+                    Row = targetField.Row + 1,
+                    Col = targetField.Col + 1,
+                    Figure = currentField.Figure,
+                    IsUsed = currentField.IsUsed
+                };
 
-            var temp = checkerboard.Board[targetField.Row][targetField.Col];
+                var temp = checkerboard.Board[targetField.Row][targetField.Col];
 
-            checkerboard.Board[targetField.Row][targetField.Col] = newField;
+                checkerboard.Board[targetField.Row][targetField.Col] = newField;
 
-            checkerboard.Board[currentField.Row-1][currentField.Col - 1] = temp;
-            checkerboard.Board[currentField.Row-1][currentField.Col - 1].Row = currentField.Row;
-            checkerboard.Board[currentField.Row-1][currentField.Col - 1].Col = currentField.Col;
+                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = temp;
+                checkerboard.Board[currentField.Row - 1][currentField.Col - 1].Row = currentField.Row;
+                checkerboard.Board[currentField.Row - 1][currentField.Col - 1].Col = currentField.Col;
+            }
+
+            if (checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
+            {
+                var newField = new Field()
+                {
+                    Row = targetField.Row + 1,
+                    Col = targetField.Col + 1,
+                    Figure = currentField.Figure,
+                    IsUsed = currentField.IsUsed
+                };
+
+                checkerboard.Board[targetField.Row][targetField.Col] = newField;
+
+                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = new Field(false, new Empty(0, "Empty"),currentField.Row,currentField.Col);
+            }
+
+
+
         }
 
 
