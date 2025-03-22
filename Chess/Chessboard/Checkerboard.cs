@@ -13,14 +13,14 @@ public class Checkerboard
     {
         Board = new List<List<Field>>() {
             new List<Field>() {
-                new Field(true, new Pawn(true, 1, "Field"), 1, 1),
+                new Field(true, new Rook(true, 5, "Rook"), 1, 1),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 2),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 3),
-                new Field(true, new King(true, 1, "King"), 1, 4),
+                new Field(true, new King(true, 1000, "King"), 1, 4),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 5),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 6),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 7),
-                new Field(true, new Pawn(true, 1, "Field"), 1, 8),
+                new Field(true, new Rook(true, 5, "Rook"), 1, 8),
             },
             new List<Field>() {
                 new Field(true, new Pawn(true, 1, "Pawn"), 2, 1),
