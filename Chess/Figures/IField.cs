@@ -12,8 +12,11 @@ namespace Chess.Figures
     {
         string Name { get; }
         bool IsWhite { get; }
+
+        List<Field> AttackedFields { get; }
         HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
         void Move(Checkerboard checkerboard, Field currentField, Position targetField);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
+        bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);
     }
 }

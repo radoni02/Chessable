@@ -137,6 +137,9 @@ Position CalculateTargetPosition(string position) // in format "a2" to format en
 
 void UsedFields()
 {
+    board.Board.SelectMany(fl => fl)// to increase performace shadowProperty = true should be applied only when figure is used and based on that .Where(field => field.figure.wasUsedInCurrentMove)
+        .ToList()
+        .ForEach(field => field.Figure.AttackedFields.Clear());
     var usedWhiteFields = board.Board.SelectMany(f => f)
     .Where(field => field.IsUsed && field.Figure.IsWhite);
     foreach(var field in usedWhiteFields)

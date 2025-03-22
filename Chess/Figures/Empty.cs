@@ -21,7 +21,14 @@ namespace Chess.Figures
         public string Name { get; set; }
         public bool IsWhite { get; }
 
+        List<Field> IField.AttackedFields => new List<Field>();
+
         public void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol)
         {
             throw new NotImplementedException();
         }

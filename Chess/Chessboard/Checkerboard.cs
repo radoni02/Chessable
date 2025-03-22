@@ -16,7 +16,7 @@ public class Checkerboard
                 new Field(true, new Pawn(true, 1, "Field"), 1, 1),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 2),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 3),
-                new Field(true, new Pawn(true, 1, "Field"), 1, 4),
+                new Field(true, new King(true, 1, "King"), 1, 4),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 5),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 6),
                 new Field(true, new Pawn(true, 1, "Field"), 1, 7),

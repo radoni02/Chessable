@@ -30,18 +30,6 @@ namespace Chess.Figures
             }
         }
 
-        private bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol)
-        {
-            try
-            {
-                var exists = checkerboard.Board[targetRow][targetCol].IsUsed;
-                return false;
-            }
-            catch(Exception ex)
-            {
-                return true;
-            }
-        }
 
         private void CheckIfShloudAddToAttackedFields(Checkerboard checkerboard, Field currentField,int adjustValueCol, int adjustValueRow)
         {
@@ -70,51 +58,16 @@ namespace Chess.Figures
             }
         }
 
-        public override void Move(Checkerboard checkerboard,Field currentField,Position targetField)
-        {
-            if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
-            {
-                var newField = new Field()
-                {
-                    Row = targetField.Row + 1,
-                    Col = targetField.Col + 1,
-                    Figure = currentField.Figure,
-                    IsUsed = currentField.IsUsed
-                };
-
-                var temp = checkerboard.Board[targetField.Row][targetField.Col];
-
-                checkerboard.Board[targetField.Row][targetField.Col] = newField;
-
-                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = temp;
-                checkerboard.Board[currentField.Row - 1][currentField.Col - 1].Row = currentField.Row;
-                checkerboard.Board[currentField.Row - 1][currentField.Col - 1].Col = currentField.Col;
-            }
-
-            if (checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
-            {
-                var newField = new Field()
-                {
-                    Row = targetField.Row + 1,
-                    Col = targetField.Col + 1,
-                    Figure = currentField.Figure,
-                    IsUsed = currentField.IsUsed
-                };
-
-                checkerboard.Board[targetField.Row][targetField.Col] = newField;
-
-                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = new Field(false, new Empty(0, "Empty"),currentField.Row,currentField.Col);
-            }
-
-
-
-        }
-
 
         public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            
-            if(currentField.Figure.IsWhite)
+            var additionalPosiibleMoves = currentField.Figure.AttackedFields.Where(f => f.IsUsed)
+                .Select(filed =>
+                {
+                    return $"{filed.Row - 1}{filed.Col - 1}";
+                })
+                .ToHashSet();
+            if (currentField.Figure.IsWhite)
             {
                 var possibleWhiteMoves = new HashSet<string>();
                 var forwardMove = ForwardMoveWhite(checkerboard, currentField);
@@ -127,7 +80,9 @@ namespace Chess.Figures
                 {
                     possibleWhiteMoves.Add(moveByTwo);
                 }
-                return possibleWhiteMoves;  
+                return possibleWhiteMoves.Union(additionalPosiibleMoves)
+                    .ToHashSet();
+                
             }
 
             if(!currentField.Figure.IsWhite)
@@ -143,7 +98,8 @@ namespace Chess.Figures
                 {
                     possibleBlackMoves.Add(moveByTwo);
                 }
-                return possibleBlackMoves;
+                return possibleBlackMoves.Union(additionalPosiibleMoves)
+                    .ToHashSet();
             }
 
             return new HashSet<string>();
