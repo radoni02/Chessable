@@ -80,6 +80,11 @@ namespace Chess.Figures
                 return true;
             }
         }
+        protected List<string> AdjustForPossibleMoves(List<Field> fields)
+        {
+            return fields.Select(field => $"{field.Row - 1}{field.Col - 1}")
+                                .ToList();
+        }
 
 
     }

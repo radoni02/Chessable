@@ -34,10 +34,10 @@ namespace Chess.Figures
         public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             List<List<string>> directions = new List<List<string>>();
-            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, true),currentField));
-            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, false), currentField));
-            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, true),currentField));
-            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, false), currentField));
+            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, true)));
+            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, false)));
+            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, true)));
+            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, false)));
 
             var hashSet = new HashSet<string>();
             foreach (var direction in directions) 
@@ -48,12 +48,6 @@ namespace Chess.Figures
                 }
             }
             return hashSet;
-        }
-
-        private List<string> AdjustForPossibleMoves(List<Field> fields, Field currentField)
-        {
-            return fields.Select(field => $"{field.Row - 1}{field.Col - 1}")
-                                .ToList();
         }
 
         private List<Field> GetRowFields(Checkerboard checkerboard, Field currentField,bool left)

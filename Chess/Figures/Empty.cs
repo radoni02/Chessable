@@ -30,7 +30,15 @@ namespace Chess.Figures
 
         public bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var exists = checkerboard.Board[targetRow][targetCol].IsUsed;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
         }
 
         public void Move(Checkerboard checkerboard, Field currentField, Position targetField)

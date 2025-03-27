@@ -15,8 +15,8 @@ namespace Chess.Figures
 
         List<Field> AttackedFields { get; }
         HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
-        void Move(Checkerboard checkerboard, Field currentField, Position targetField);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
+        void Move(Checkerboard checkerboard, Field currentField, Position targetField);
         bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);
     }
 }
