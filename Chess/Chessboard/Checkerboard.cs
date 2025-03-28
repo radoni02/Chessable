@@ -17,7 +17,7 @@ public class Checkerboard
                 new Field(true, new Knight(true, 3, "Knight"), 1, 2),
                 new Field(true, new Bishop(true, 3, "Bishop"), 1, 3),
                 new Field(true, new King(true, 1000, "King"), 1, 4),
-                new Field(true, new Pawn(true, 1, "Field"), 1, 5),
+                new Field(true, new Queen(true, 10, "Queen"), 1, 5),
                 new Field(true, new Bishop(true, 1, "Bishop"), 1, 6),
                 new Field(true, new Knight(true, 3, "Knight"), 1, 7),
                 new Field(true, new Rook(true, 5, "Rook"), 1, 8),
@@ -87,10 +87,10 @@ public class Checkerboard
             new List<Field>() {
                 new Field(true, new Rook(false, 5, "Rook"), 8, 1),
                 new Field(true, new Knight(false, 3, "Knight"), 8, 2),
-                new Field(true, new Pawn(false, 1, "Field"), 8, 3),
-                new Field(true, new Pawn(false, 1, "Field"), 8, 4),
+                new Field(true, new Bishop(false, 1, "Bishop"), 8, 3),
+                new Field(true, new Queen(false, 10, "Queen"), 8, 4),
                 new Field(true, new King(false, 1000, "King"), 8, 5),
-                new Field(true, new Pawn(false, 1, "Field"), 8, 6),
+                new Field(true, new Bishop(false, 1, "Bishop"), 8, 6),
                 new Field(true, new Knight(false, 3, "Knight"), 8, 7),
                 new Field(true, new Rook(false, 5, "Rook"), 8, 8),
             }
