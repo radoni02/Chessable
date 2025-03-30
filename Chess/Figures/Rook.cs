@@ -1,4 +1,5 @@
 ﻿using Chess.Chessboard;
+using Chess.Figures.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,120 +10,35 @@ namespace Chess.Figures
 {
     public class Rook : Figure
     {
+        private StraightFigureMovment StraightFigureMovment { get; } = new StraightFigureMovment();
         public Rook(bool isWhite, int value, string name) : base(isWhite, value, name)
         {
         }
 
         public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
         {
-            List<List<Field>> directions = new List<List<Field>>();
-            directions.Add(GetRowFields(checkerboard, currentField, true));
-            directions.Add(GetRowFields(checkerboard, currentField, false));
-            directions.Add(GetColFields(checkerboard, currentField, true));
-            directions.Add(GetColFields(checkerboard, currentField, false));
+            var selectedFields = new List<Field>();
 
-            foreach (var direction in directions)
-            {
-                foreach (var value in direction)
-                {
-                    AttackedFields.Add(value);
-                }
-            }
+            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true);
+            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false));
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true));
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false));
 
+            AttackedFields = selectedFields;
         }
 
         public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            List<List<string>> directions = new List<List<string>>();
-            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, true)));
-            directions.Add(AdjustForPossibleMoves(GetRowFields(checkerboard, currentField, false)));
-            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, true)));
-            directions.Add(AdjustForPossibleMoves(GetColFields(checkerboard, currentField, false)));
+            var selectedFields = new List<Field>();
 
-            var hashSet = new HashSet<string>();
-            foreach (var direction in directions) 
-            {
-                foreach(var value in direction)
-                {
-                    hashSet.Add(value);
-                }
-            }
-            return hashSet;
-        }
+            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true);
+            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false));
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true));
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false));
 
-        private List<Field> GetRowFields(Checkerboard checkerboard, Field currentField,bool left)
-        {
-            var fieldsInSameRow = checkerboard.Board[currentField.Row - 1];
-            List<Field> selectedFields = new List<Field>();
-
-            if (left)
-            {
-                selectedFields = fieldsInSameRow
-                                .Where(field => field.Col < currentField.Col)
-                                .OrderByDescending(f => f.Col)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
-                CheckFirstOmittedField(fieldsInSameRow.Where(f => f.Col < currentField.Col).ToList());
-            }
-
-            if(!left)
-            {
-                selectedFields = fieldsInSameRow
-                                .Where(field => field.Col > currentField.Col)
-                                .OrderBy(f => f.Col)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
-                CheckFirstOmittedField(fieldsInSameRow.Where(f => f.Col > currentField.Col).ToList());
-            }
-
-            return selectedFields;
-
-            void CheckFirstOmittedField(List<Field> selectedFields)
-            {
-                var firstOmittedField = fieldsInSameRow
-                                           .Skip(selectedFields.Count)
-                                           .FirstOrDefault();
-                if (firstOmittedField != null && firstOmittedField.IsUsed && firstOmittedField.Figure.IsWhite != currentField.Figure.IsWhite)
-                    selectedFields.Add(firstOmittedField);
-            }
-        }
-
-        private List<Field> GetColFields(Checkerboard checkerboard, Field currentField, bool down)
-        {
-            var fieldsInSameColumn = checkerboard.Board
-                .SelectMany(row => row)
-                .Where(field => field.Col == currentField.Col && field.Row != currentField.Row);
-            List<Field> selectedFields = new List<Field>();
-
-            if(down)
-            {
-                selectedFields = fieldsInSameColumn
-                                .Where(field => field.Row < currentField.Row)
-                                .OrderByDescending(f => f.Row)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
-                CheckFirstOmittedField(fieldsInSameColumn.Where(f => f.Row < currentField.Row).ToList());
-            }
-            if(!down)
-            {
-                selectedFields = fieldsInSameColumn
-                                .Where(field => field.Row > currentField.Row)
-                                .OrderBy(f => f.Row)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
-                CheckFirstOmittedField(fieldsInSameColumn.Where(f => f.Row > currentField.Row).ToList());
-            }
-            
-            return selectedFields;
-
-            void CheckFirstOmittedField(List<Field> fieldsInSameColumnInValidDirection)
-            {
-                var firstOmittedField = fieldsInSameColumnInValidDirection
-                                           .Skip(selectedFields.Count)
-                                           .FirstOrDefault();
-                if (firstOmittedField != null && firstOmittedField.IsUsed && firstOmittedField.Figure.IsWhite != currentField.Figure.IsWhite)
-                    selectedFields.Add(firstOmittedField);
-            }
+            return selectedFields
+                        .Select(field => $"{field.Row - 1}{field.Col - 1}")
+                        .ToHashSet();
         }
     }
 }
