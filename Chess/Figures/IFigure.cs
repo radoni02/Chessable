@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public interface IField
+    public interface IFigure
     {
         string Name { get; }
         bool IsWhite { get; }
+        int MoveConut { get; set; }
 
         List<Field> AttackedFields { get; }
         HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);

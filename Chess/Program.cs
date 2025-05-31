@@ -73,14 +73,18 @@ void ShowNewPosition()
     {
         foreach (var inner in field)
         {
-            var gap = valueBeetwenFields - inner.Figure.Name.Length;
-            Console.Write($"{inner.Figure.Name}{ConvertIntoGap(gap)}");
+            var gap = valueBeetwenFields - (CheckFigure(inner).Length);
+            Console.Write($"{CheckFigure(inner)}{ConvertIntoGap(gap)}");
         }
         Console.WriteLine();
     }
+
+    string CheckFigure(Field inner)
+        => inner.Figure != null ? inner.Figure.Name : "Empty";
+
 }
 
- string ConvertIntoGap(int length)
+string ConvertIntoGap(int length)
 {
     StringBuilder sb = new StringBuilder();
     while(length > 0)
@@ -138,6 +142,7 @@ Position CalculateTargetPosition(string position) // in format "a2" to format en
 void UsedFields()
 {
     board.Board.SelectMany(fl => fl)// to increase performace shadowProperty = true should be applied only when figure is used and based on that .Where(field => field.figure.wasUsedInCurrentMove)
+        .Where(field => field.Figure != null)
         .ToList()
         .ForEach(field => field.Figure.AttackedFields.Clear());
     var usedWhiteFields = board.Board.SelectMany(f => f)

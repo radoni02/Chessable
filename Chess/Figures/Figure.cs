@@ -8,7 +8,7 @@ using Chess.Utils;
 
 namespace Chess.Figures
 {
-    public abstract class Figure : IField
+    public abstract class Figure : IFigure
     {
         protected Figure(bool isWhite, int value, string name)
         {
@@ -28,6 +28,7 @@ namespace Chess.Figures
         public bool IsWhite { get; set; }
         public int Value { get; set; }
         public string Name { get; set; }
+        public int MoveConut { get; set; } = 0;
         public abstract HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
         public void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
@@ -62,8 +63,9 @@ namespace Chess.Figures
 
                 checkerboard.Board[targetField.Row][targetField.Col] = newField;
 
-                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = new Field(false, new Empty(0, "Empty"), currentField.Row, currentField.Col);
+                checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = new Field(false, currentField.Row, currentField.Col);
             }
+            currentField.Figure.MoveConut++;
         }
 
         public abstract void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);

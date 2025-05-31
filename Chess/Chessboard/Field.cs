@@ -10,10 +10,17 @@ namespace Chess.Chessboard
 {
     public class Field
     {
-        public Field(bool isUsed, IField figure, int row, int col)
+        public Field(bool isUsed, IFigure figure, int row, int col)
         {
             IsUsed = isUsed;
             Figure = figure;
+            Row = row;
+            Col = col;
+        }
+        public Field(bool isUsed, int row, int col)
+        {
+            IsUsed = isUsed;
+            Figure = null;
             Row = row;
             Col = col;
         }
@@ -32,7 +39,7 @@ namespace Chess.Chessboard
 
         public bool IsUsed { get; set; } = false;
 
-        public IField Figure { get; set; }
+        public IFigure? Figure { get; set; }
         public int Row { get; set; }
         public int Col { get; set; }
 
