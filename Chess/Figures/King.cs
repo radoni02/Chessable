@@ -17,7 +17,10 @@ public class King : Figure
 
     public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
     {
-        Console.WriteLine("Mocked");
+        AttackedFields =  checkerboard.Board.SelectMany(fl => fl)
+                                        .Where(field => Math.Abs(currentField.Row - field.Row) <= 1 && Math.Abs(currentField.Col - field.Col) <= 1)
+                                        .Where(field => !field.IsUsed || field.Figure.IsWhite != currentField.Figure.IsWhite)
+                                        .ToList();
     }
 
     public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
@@ -37,6 +40,17 @@ public class King : Figure
                                                             .Select(field => field.Figure)
                                                             .SelectMany(s => s.AttackedFields)
                                                             .Distinct();
+
+        if(currentField.Figure.MoveConut == 0)
+        {
+            var possibleCastling = checkerboard.Board.SelectMany(fl => fl)
+                                                        .Where(field => field.Figure.Name.Equals("Rook")
+                                                            && field.Figure.IsWhite == currentField.Figure.IsWhite
+                                                            && field.Figure.MoveConut == 0);
+            //need to check if all field between is empty and also if it is not attacked
+        }
+
+        
 
         return checkerboard.Board.SelectMany(fl => fl)
                                     .Select(field =>
