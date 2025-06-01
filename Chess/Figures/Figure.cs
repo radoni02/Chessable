@@ -30,7 +30,7 @@ namespace Chess.Figures
         public string Name { get; set; }
         public int MoveConut { get; set; } = 0;
         public abstract HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
-        public void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+        public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
             {

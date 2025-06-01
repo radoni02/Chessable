@@ -15,6 +15,34 @@ public class King : Figure
     {
     }
 
+    public override void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+    {
+        base.Move(checkerboard, currentField, targetField);
+        int moveDistance = Math.Abs(targetField.Col - (currentField.Col - 1));
+        
+        if (moveDistance == 2)
+        {
+            HandleCastling(checkerboard, currentField, targetField);
+        }
+    }
+
+    private void HandleCastling(Checkerboard checkerboard, Field currentField, Position targetField)
+    {
+        bool isKingsideCastling = targetField.Col > (currentField.Col - 1);
+
+        var rook = checkerboard.Board.SelectMany(ff => ff)
+        .FirstOrDefault(field =>
+            field.Figure?.Name == "Rook"
+            && field.Figure.IsWhite == currentField.Figure.IsWhite
+            && field.Row == currentField.Row
+            && ((isKingsideCastling && field.Col == 8)    
+                || (!isKingsideCastling && field.Col == 1)));
+
+        int rookTargetCol = isKingsideCastling ? 6 : 4;
+
+        base.Move(checkerboard, rook, new Position(currentField.Row - 1, rookTargetCol - 1));
+    }
+
     public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
     {
         AttackedFields =  checkerboard.Board.SelectMany(fl => fl)
@@ -36,9 +64,9 @@ public class King : Figure
     {
         var forbiddenFieldsForKing = checkerboard.Board.SelectMany(fl => fl)
                                                         .Where(f => f.IsUsed && f.Figure?.IsWhite != currentField.Figure.IsWhite)
-                                                            .Select(field => field.Figure)
-                                                            .SelectMany(s => s.AttackedFields)
-                                                            .Distinct();
+                                                        .Select(field => field.Figure)
+                                                        .SelectMany(s => s.AttackedFields)
+                                                        .Distinct();
 
         var possibleMoves = GetBasicKingMoves(checkerboard, currentField, forbiddenFieldsForKing);
 
@@ -48,11 +76,11 @@ public class King : Figure
             foreach (var move in castlingMoves)
             {
                 possibleMoves.Add(move);
-        }
+            }
         }
 
         return possibleMoves;
-        
+
         HashSet<string> GetBasicKingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
         {
             return board.Board.SelectMany(fl => fl)
@@ -64,7 +92,7 @@ public class King : Figure
         }
 
         HashSet<string> GetCastlingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
-                                    {
+        {
             var castlingMoves = new HashSet<string>();
             var possibleCastling = board.Board.SelectMany(fl => fl)
                                              .Where(field => field.Figure?.Name == "Rook"
@@ -72,18 +100,18 @@ public class King : Figure
                                                           && field.Figure.MoveConut == 0);
 
             foreach (var rook in possibleCastling)
-                                        {
+            {
                 if (IsCastlingValid(board, current, rook, forbidden))
                 {
                     int castlingCol = rook.Col < current.Col ? current.Col - 2 : current.Col + 2;
                     castlingMoves.Add($"{current.Row - 1}{castlingCol - 1}");
-                                        }
+                }
             }
             return castlingMoves;
         }
 
         bool IsCastlingValid(Checkerboard board, Field king, Field rook, IEnumerable<Field> forbidden)
-                                    {
+        {
             var minCol = Math.Min(king.Col, rook.Col);
             var maxCol = Math.Max(king.Col, rook.Col);
 
@@ -100,7 +128,7 @@ public class King : Figure
                 forbidden.Any(ff => ff.Row == king.Row && ff.Col == col));
 
             return allFieldsEmpty && !pathUnderAttack;
-                                        }
+        }
     }
 
 
