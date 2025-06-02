@@ -14,6 +14,13 @@ namespace Chess.Figures
         {
         }
 
+        public override async void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+        {
+            base.Move(checkerboard, currentField, targetField);
+            CheckAndPromote(checkerboard,currentField);
+
+        }
+
         public override void CalculateAtackedFields(Checkerboard checkerboard,Field currentField)
         {
 
@@ -143,7 +150,7 @@ namespace Chess.Figures
         private string ForwardMove(Checkerboard checkerboard, Field currentField,int moveByValue)
         {
             return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? $"{currentField.Row + moveByValue}{currentField.Col - 1}" : string.Empty;
-        }
+        }//there is some problem when pawn comes to last row, need to implement test case for that
 
         public void CheckAndPromote(Checkerboard checkerboard, Field currentField)
         {
