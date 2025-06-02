@@ -144,5 +144,33 @@ namespace Chess.Figures
         {
             return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? $"{currentField.Row + moveByValue}{currentField.Col - 1}" : string.Empty;
         }
+
+        public void CheckAndPromote(Checkerboard checkerboard, Field currentField)
+        {
+            if (CanPromote(currentField))
+            {
+                PromotePawn(checkerboard, currentField, "Queen");
+            }
+        }
+
+        private bool CanPromote(Field currentField)
+        {
+            return (IsWhite && currentField.Row == 8) || (!IsWhite && currentField.Row == 1);
+        }
+
+        public void PromotePawn(Checkerboard checkerboard, Field currentField, string figureType)
+        {
+            Figure newFigure = figureType.ToLower() switch
+            {
+                "queen" => new Queen(IsWhite, 9, "Queen"),
+                "rook" => new Rook(IsWhite, 5, "Rook"),
+                "bishop" => new Bishop(IsWhite, 3, "Bishop"),
+                "knight" => new Knight(IsWhite, 3, "Knight"),
+                _ => new Queen(IsWhite, 9, "Queen") // Default to Queen
+            };
+
+            newFigure.MoveConut = this.MoveConut;
+            currentField.Figure = newFigure;
+        }
     }
 }
