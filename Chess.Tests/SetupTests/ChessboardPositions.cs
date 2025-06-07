@@ -105,5 +105,15 @@ namespace Chess.Tests.SetupTests
             chessboard.Board[5][5].IsUsed = true;
             return chessboard;
         }
+
+        public Checkerboard SetPawnWithAllPossibleMoves()
+        {
+            var chessboard = GetDefaultPosition();
+            chessboard.Board[6][5].Figure = new Pawn(true, 1, "Pawn");
+            chessboard.Board[6][5].IsUsed= true;
+            chessboard.Board[7][5].Figure = null;
+            chessboard.Board[7][5].IsUsed = false;
+            return chessboard;
+        }
     }
 }
