@@ -17,7 +17,8 @@ namespace Chess.Figures
         public override async void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             base.Move(checkerboard, currentField, targetField);
-            CheckAndPromote(checkerboard,currentField);
+            var newCurrent = checkerboard.Board[targetField.Row][targetField.Col];
+            CheckAndPromote(checkerboard, newCurrent);
 
         }
 
@@ -115,7 +116,7 @@ namespace Chess.Figures
         private string ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row + 1, currentField.Col);
-            if ((currentField.Row == 7 || currentField.Row == 2) &&
+            if ( currentField.Row == 2 &&
                 ForwardMoveWhite(checkerboard, tempField) is string moveResult && 
                 moveResult is not "")
             {
@@ -127,7 +128,7 @@ namespace Chess.Figures
         private string ForwardMoveByTwoBlack(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row - 1, currentField.Col);
-            if ((currentField.Row == 7 || currentField.Row == 2) &&
+            if (currentField.Row == 7 &&
                 ForwardMoveBlack(checkerboard, tempField) is string moveResult &&
                 moveResult is not "")
             {
