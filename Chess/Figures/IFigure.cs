@@ -13,6 +13,7 @@ namespace Chess.Figures
         string Name { get; }
         bool IsWhite { get; }
         int MoveConut { get; set; }
+        int Value { get; set; }
 
         List<Field> AttackedFields { get; }
         HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);

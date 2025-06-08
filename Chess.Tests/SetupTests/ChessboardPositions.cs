@@ -10,7 +10,7 @@ namespace Chess.Tests.SetupTests
 {
     internal class ChessboardPositions
     {
-        private Chessboard.Checkerboard GetDefaultPosition()
+        public Chessboard.Checkerboard GetDefaultPosition()
         {
             var chessboard = new Chessboard.Checkerboard();
             chessboard.Board = new List<List<Field>>() {
