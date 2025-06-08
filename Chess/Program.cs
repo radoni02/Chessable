@@ -57,8 +57,11 @@ while(true)
     {
         if (possibleMove.Equals(targetMove))
         {
-
             currentField.Figure.Move(board, currentField, targetPosition);
+
+            var oppKing = currentField.Figure.GetOppositKing(board,currentField);
+            var isKingCheked = oppKing.CheckIfKingIsChecked(board);
+
             changePlayer.TryGetValue(currentPlayer,out currentPlayer);
             break;
         }

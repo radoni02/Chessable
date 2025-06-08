@@ -43,6 +43,19 @@ public class King : Figure
         base.Move(checkerboard, rook, new Position(currentField.Row - 1, rookTargetCol - 1));
     }
 
+    public bool CheckIfKingIsChecked(Checkerboard checkerboard)
+    {
+        var oppFields = checkerboard.Board.SelectMany(ff => ff)
+            .Where(field => field.Figure is not null && field.Figure.IsWhite != IsWhite)
+            .ToList();
+        foreach (var relevantField in oppFields)
+        {
+            relevantField.Figure.CalculateAtackedFields(checkerboard, relevantField);
+        }
+        var uniqueAttackedFields = oppFields.SelectMany(f => f.Figure.AttackedFields).Distinct().ToList();
+        return uniqueAttackedFields.Any(field => field.Figure is not null && field.Figure.Equals(this));
+    }
+
     public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
     {
         AttackedFields =  checkerboard.Board.SelectMany(fl => fl)

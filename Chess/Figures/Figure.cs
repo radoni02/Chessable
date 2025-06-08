@@ -67,6 +67,15 @@ namespace Chess.Figures
             }
             currentField.Figure.MoveConut++;
         }
+        public King GetOppositKing(Checkerboard checkerboard,Field currentField)
+        {
+            var oppositeKing = checkerboard.Board
+                .SelectMany(ff => ff)
+                .FirstOrDefault(field => field.Figure is not null
+                                && field.Figure.IsWhite != currentField.Figure.IsWhite
+                                && field.Figure.Name.Equals("King"));
+            return oppositeKing.Figure as King;
+        }
 
         public abstract void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
 
