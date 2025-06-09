@@ -67,14 +67,40 @@ namespace Chess.Figures
             }
             currentField.Figure.MoveConut++;
         }
-        public Field GetOppositKing(Checkerboard checkerboard,Field currentField)
+        public Field GetOppositKing(Checkerboard checkerboard)
         {
             var oppositeKing = checkerboard.Board
                 .SelectMany(ff => ff)
                 .FirstOrDefault(field => field.Figure is not null
-                                && field.Figure.IsWhite != currentField.Figure.IsWhite
+                                && field.Figure.IsWhite != this.IsWhite
                                 && field.Figure.Name.Equals("King"));
             return oppositeKing;
+        }
+
+        public virtual List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard)
+        {
+            var allOppFields = checkerboard.Board.SelectMany(ff => ff)
+                .Where(field => field.Figure is not null && field.Figure.IsWhite != this.IsWhite)
+                .ToList();
+
+            return allOppFields.Where(field => field.Figure.AttackedFields.Any(f => f.Figure != null && f.Figure.Equals(this)))
+                .Select(field => field.Figure)
+                .ToList();
+        }
+
+        public virtual bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard)
+        {
+            var oppFields = checkerboard.Board.SelectMany(ff => ff)
+                .Where(field => field.Figure is not null && field.Figure.IsWhite != this.IsWhite)
+                .ToList();
+
+            foreach (var relevantField in oppFields)
+            {
+                relevantField.Figure.CalculateAtackedFields(checkerboard, relevantField);
+            }
+
+            var uniqueAttackedFields = oppFields.SelectMany(f => f.Figure.AttackedFields).Distinct().ToList();
+            return uniqueAttackedFields.Any(field => field.Figure is not null && field.Figure.Equals(this));
         }
 
         public abstract void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);

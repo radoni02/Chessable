@@ -59,12 +59,11 @@ while(true)
         {
             currentField.Figure.Move(board, currentField, targetPosition);
 
-            var oppKingField = currentField.Figure.GetOppositKing(board,currentField);
-            var isKingCheked = (oppKingField.Figure as King).CheckIfKingIsChecked(board);
-            if(isKingCheked)
+            var oppKingField = currentField.Figure.GetOppositKing(board);
+            if(oppKingField.Figure.CheckIfFigureIsUnderAttack(board))
             {
                 var possibileCheckmateRescueFields = oppKingField.Figure.PossibleMoves(board, oppKingField);
-                //here need to check if some figure can block checkmate
+                var figuresThatAttackKing = oppKingField.Figure.GetListOfFiguresAttackingTarget(board);
             }
 
             changePlayer.TryGetValue(currentPlayer,out currentPlayer);

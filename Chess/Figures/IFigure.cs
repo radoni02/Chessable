@@ -20,6 +20,8 @@ namespace Chess.Figures
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
         void Move(Checkerboard checkerboard, Field currentField, Position targetField);
         bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);
-        Field GetOppositKing(Checkerboard checkerboard, Field currentField);
+        Field GetOppositKing(Checkerboard checkerboard);
+        bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
+        List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard);
     }
 }
