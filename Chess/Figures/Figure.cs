@@ -88,12 +88,14 @@ namespace Chess.Figures
                 .ToList();
         }
 
-        public virtual List<IFigure> GetSameColorFigureThatCanMoveToField(Checkerboard checkerboard,Field targetField)
+        public virtual List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard,Field targetField, bool isWhite)
         {
             var selectedFigures = new List<IFigure>();
             var allianceFields = checkerboard.Board
                 .SelectMany(ff => ff)
-                .Where(field => field.Figure is not null && field.Figure.IsWhite == this.IsWhite)
+                .Where(field => field.Figure is not null 
+                    && field.Figure.IsWhite == isWhite
+                    && field.Figure.Name != "King")
                 .ToList();
 
             foreach (var field in allianceFields)

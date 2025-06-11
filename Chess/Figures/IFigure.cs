@@ -23,6 +23,6 @@ namespace Chess.Figures
         Field GetOppositKing(Checkerboard checkerboard);
         bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
         List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard);
-        List<IFigure> GetSameColorFigureThatCanMoveToField(Checkerboard checkerboard, Field targetField);
+        List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
     }
 }
