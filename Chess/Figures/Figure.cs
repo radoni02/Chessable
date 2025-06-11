@@ -88,6 +88,23 @@ namespace Chess.Figures
                 .ToList();
         }
 
+        public virtual List<IFigure> GetSameColorFigureThatCanMoveToField(Checkerboard checkerboard,Field targetField)
+        {
+            var selectedFigures = new List<IFigure>();
+            var allianceFields = checkerboard.Board
+                .SelectMany(ff => ff)
+                .Where(field => field.Figure is not null && field.Figure.IsWhite == this.IsWhite)
+                .ToList();
+
+            foreach (var field in allianceFields)
+            {
+                field.Figure.CalculateAtackedFields(checkerboard,field);
+                if (field.Figure.AttackedFields.Any(field => field.Equals(targetField)))
+                    selectedFigures.Add(field.Figure);
+            }
+            return selectedFigures;
+        }
+
         public virtual bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard)
         {
             var oppFields = checkerboard.Board.SelectMany(ff => ff)
