@@ -24,5 +24,6 @@ namespace Chess.Figures
         bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
         List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard);
         List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
+        List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard, Field currentFIeld, Field targetField);
     }
 }

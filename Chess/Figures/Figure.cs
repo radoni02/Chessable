@@ -107,6 +107,16 @@ namespace Chess.Figures
             return selectedFigures;
         }
 
+        public virtual List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard,Field currentFIeld,Field targetField)
+        {
+            targetField.Figure.CalculateAtackedFields(checkerboard,targetField);
+            return targetField.Figure.AttackedFields.Where(field => field.Row < Math.Max(currentFIeld.Row,targetField.Row) 
+                                                        && field.Row > Math.Min(currentFIeld.Row,targetField.Row)
+                                                        && field.Col < Math.Max(currentFIeld.Col, targetField.Col)
+                                                        && field.Col > Math.Min(currentFIeld.Col, targetField.Col))
+                                                        .ToList();
+        }
+
         public virtual bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard)
         {
             var oppFields = checkerboard.Board.SelectMany(ff => ff)
