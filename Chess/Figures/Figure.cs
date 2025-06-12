@@ -116,6 +116,52 @@ namespace Chess.Figures
                                                         .ToList();
         }
 
+        public virtual bool CheckIfFigureIsImmobilized(Checkerboard checkerboard)
+        {
+            var currentField = checkerboard.Board
+                .SelectMany(ff => ff)
+                .FirstOrDefault(field => field.Figure != null && field.Figure.Equals(this));
+
+            var fieldsThatAttackCurrentFigure = this.GetListOfFieldsAttackingTarget(checkerboard);
+            if (fieldsThatAttackCurrentFigure.Count is 0)
+                return false;
+
+            var king = checkerboard.Board
+                    .SelectMany(ff => ff)
+                    .FirstOrDefault(field => field.Figure is not null
+                            && field.Figure.IsWhite == this.IsWhite
+                            && field.Figure.Name.Equals("King"));
+            if (king == null)
+                return false;
+            var originalFigure = currentField.Figure;
+            var originalIsUsed = currentField.IsUsed;
+
+            try
+            {
+                // Temporarily remove the figure
+                currentField.Figure = null;
+                currentField.IsUsed = false;
+
+                foreach (var attackingField in fieldsThatAttackCurrentFigure)
+                {
+                    attackingField.Figure.CalculateAtackedFields(checkerboard, attackingField);
+                    if (attackingField.Figure.AttackedFields.Any(field =>
+                        attackingField.Row == king.Row && field.Col == king.Col))
+                        return true;
+                }
+                return false;
+            }
+            finally
+            {
+                currentField.Figure = originalFigure;
+                currentField.IsUsed = originalIsUsed;
+                foreach (var field in fieldsThatAttackCurrentFigure)
+                {
+                    field.Figure.CalculateAtackedFields(checkerboard, field);
+                }
+            }
+        }
+
         public virtual bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard)
         {
             var oppFields = checkerboard.Board.SelectMany(ff => ff)

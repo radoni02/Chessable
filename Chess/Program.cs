@@ -64,9 +64,10 @@ while(true)
             {
                 var possibileCheckmateRescueFields = oppKingField.Figure.PossibleMoves(board, oppKingField);
                 var figuresThatAttackKing = oppKingField.Figure.GetListOfFieldsAttackingTarget(board);
-                foreach(var figure in figuresThatAttackKing)
+                foreach(var field in figuresThatAttackKing)
                 {
-                    oppKingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, oppKingField, figure);
+                    //other for knight and pawn
+                    oppKingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, oppKingField, field);
                 }
             }
 
