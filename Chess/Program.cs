@@ -63,7 +63,11 @@ while(true)
             if(oppKingField.Figure.CheckIfFigureIsUnderAttack(board))
             {
                 var possibileCheckmateRescueFields = oppKingField.Figure.PossibleMoves(board, oppKingField);
-                var figuresThatAttackKing = oppKingField.Figure.GetListOfFiguresAttackingTarget(board);
+                var figuresThatAttackKing = oppKingField.Figure.GetListOfFieldsAttackingTarget(board);
+                foreach(var figure in figuresThatAttackKing)
+                {
+                    oppKingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, oppKingField, figure);
+                }
             }
 
             changePlayer.TryGetValue(currentPlayer,out currentPlayer);

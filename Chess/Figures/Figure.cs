@@ -77,14 +77,13 @@ namespace Chess.Figures
             return oppositeKing;
         }
 
-        public virtual List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard)
+        public virtual List<Field> GetListOfFieldsAttackingTarget(Checkerboard checkerboard)
         {
             var allOppFields = checkerboard.Board.SelectMany(ff => ff)
                 .Where(field => field.Figure is not null && field.Figure.IsWhite != this.IsWhite)
                 .ToList();
 
             return allOppFields.Where(field => field.Figure.AttackedFields.Any(f => f.Figure != null && f.Figure.Equals(this)))
-                .Select(field => field.Figure)
                 .ToList();
         }
 

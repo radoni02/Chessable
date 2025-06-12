@@ -22,7 +22,7 @@ namespace Chess.Figures
         bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);
         Field GetOppositKing(Checkerboard checkerboard);
         bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
-        List<IFigure> GetListOfFiguresAttackingTarget(Checkerboard checkerboard);
+        List<Field> GetListOfFieldsAttackingTarget(Checkerboard checkerboard);
         List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
         List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard, Field currentFIeld, Field targetField);
     }
