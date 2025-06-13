@@ -122,40 +122,56 @@ namespace Chess.Figures
                 .SelectMany(ff => ff)
                 .FirstOrDefault(field => field.Figure != null && field.Figure.Equals(this));
 
+            if (currentField == null) return false;
+
             var fieldsThatAttackCurrentFigure = this.GetListOfFieldsAttackingTarget(checkerboard);
-            if (fieldsThatAttackCurrentFigure.Count is 0)
+            if (fieldsThatAttackCurrentFigure.Count == 0)
                 return false;
 
             var king = checkerboard.Board
-                    .SelectMany(ff => ff)
-                    .FirstOrDefault(field => field.Figure is not null
-                            && field.Figure.IsWhite == this.IsWhite
-                            && field.Figure.Name.Equals("King"));
-            if (king == null)
-                return false;
-            var originalFigure = currentField.Figure;
-            var originalIsUsed = currentField.IsUsed;
+                .SelectMany(ff => ff)
+                .FirstOrDefault(field => field.Figure is not null
+                        && field.Figure.IsWhite == this.IsWhite
+                        && field.Figure.Name.Equals("King"));
 
-            try
+            if (king == null) return false;
+
+            bool kingWouldBeAttacked = false;
+
+            MakeTempMove(checkerboard, fieldsThatAttackCurrentFigure, (tempBoard) =>
             {
-                // Temporarily remove the figure
-                currentField.Figure = null;
-                currentField.IsUsed = false;
-
                 foreach (var attackingField in fieldsThatAttackCurrentFigure)
                 {
-                    attackingField.Figure.CalculateAtackedFields(checkerboard, attackingField);
                     if (attackingField.Figure.AttackedFields.Any(field =>
-                        attackingField.Row == king.Row && field.Col == king.Col))
-                        return true;
+                        field.Row == king.Row && field.Col == king.Col))
+                    {
+                        kingWouldBeAttacked = true;
+                        break;
+                    }
                 }
-                return false;
+            });
+
+            return kingWouldBeAttacked;
+        }
+
+        public void MakeTempMove(Checkerboard checkerboard,List<Field> fieldsToRecalculate,Action<Checkerboard> calculations)
+        {
+            var currentField = checkerboard.Board
+                .SelectMany(ff => ff)
+                .FirstOrDefault(field => field.Figure != null && field.Figure.Equals(this));
+            var originalFigure = currentField.Figure;
+            var originalIsUsed = currentField.IsUsed;
+            try
+            {
+                currentField.Figure = null;
+                currentField.IsUsed = false;
+                calculations.Invoke(checkerboard);
             }
             finally
             {
                 currentField.Figure = originalFigure;
                 currentField.IsUsed = originalIsUsed;
-                foreach (var field in fieldsThatAttackCurrentFigure)
+                foreach (var field in fieldsToRecalculate)
                 {
                     field.Figure.CalculateAtackedFields(checkerboard, field);
                 }
