@@ -64,10 +64,35 @@ while(true)
             {
                 var possibileCheckmateRescueFields = oppKingField.Figure.PossibleMoves(board, oppKingField);
                 var figuresThatAttackKing = oppKingField.Figure.GetListOfFieldsAttackingTarget(board);
-                foreach(var field in figuresThatAttackKing)
+                foreach(var attackingField in figuresThatAttackKing)
                 {
-                    //other for knight and pawn
-                    oppKingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, oppKingField, field);
+                    if(attackingField.Figure is Pawn || attackingField.Figure is Knight)
+                    {
+                        var alliedPiecesThatCanCaptureAttacker = attackingField.Figure.GetListOfFieldsAttackingTarget(board);
+                        foreach(var alliedPiece in alliedPiecesThatCanCaptureAttacker)
+                        {
+                            if (alliedPiece.Figure.CheckIfFigureIsImmobilized(board))
+                                continue;
+                            alliedPiece.Figure.MakeTempMove(board,board.Board.SelectMany(ff => ff).Where(field => field.Figure is not null && field.Figure.IsWhite).ToList(), (tempBoard) =>
+                            {
+                                if (oppKingField.Figure.CheckIfFigureIsUnderAttack(board))
+                                    possibileCheckmateRescueFields.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                            });
+                        }
+                        
+                    }
+                    var possibileTargetsToBlockAttack = oppKingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, oppKingField, attackingField);
+                    var alliedPiecesThatCanBlock = board.Board.SelectMany(ff => ff)
+                        .Where(field => field.Figure != null && field.Figure.IsWhite == oppKingField.Figure.IsWhite)
+                        .Where(field => !field.Figure.CheckIfFigureIsImmobilized(board))
+                        .Where(field =>
+                        {
+                            return possibileTargetsToBlockAttack.Any(blockingField =>
+                                field.Figure.AttackedFields.Any(attackedField =>
+                                    attackedField.Row == blockingField.Row &&
+                                    attackedField.Col == blockingField.Col));
+                        })
+                        .ToList();
                 }
             }
 
