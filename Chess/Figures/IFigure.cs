@@ -26,5 +26,6 @@ namespace Chess.Figures
         List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
         List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard, Field currentFIeld, Field targetField);
         bool CheckIfFigureIsImmobilized(Checkerboard checkerboard);
+        void MakeTempMove(Checkerboard checkerboard, List<Field> fieldsToRecalculate, Action<Checkerboard> calculations);
     }
 }

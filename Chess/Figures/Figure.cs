@@ -165,6 +165,10 @@ namespace Chess.Figures
             {
                 currentField.Figure = null;
                 currentField.IsUsed = false;
+                foreach (var field in fieldsToRecalculate)
+                {
+                    field.Figure.CalculateAtackedFields(checkerboard, field);
+                }
                 calculations.Invoke(checkerboard);
             }
             finally
