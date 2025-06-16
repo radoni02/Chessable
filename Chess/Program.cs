@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 var board = new Checkerboard();
-
+CheckmateAnalysisResult? checkmateAnalysisResult = new CheckmateAnalysisResult();
 var whitePlayer = new Player(0, true,true);
 var blackPlayer = new Player(0, false,false);
 
@@ -31,6 +31,12 @@ while(true)
     var currentField = board.Board.SelectMany(f => f)
         .FirstOrDefault(field => field.Col == currPosition.Col && field.Row == currPosition.Row);
 
+    if (checkmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
+    {
+        Console.WriteLine("your King is in check");
+        continue;
+    }
+
     if(!currentField.IsUsed)
     {
         Console.WriteLine("Choosen empty field");
@@ -49,7 +55,13 @@ while(true)
         continue;
     }
 
-    var possibleMoves = currentField.Figure.PossibleMoves(board, currentField);
+    List<string> possibleMoves = new List<string>();
+    if(checkmateAnalysisResult.IsInCheck)
+    {
+        possibleMoves.AddRange(checkmateAnalysisResult.PossibleCaptureRescues);
+        possibleMoves.AddRange(checkmateAnalysisResult.PossibleBlockingMoves);
+    }
+    possibleMoves.AddRange(currentField.Figure.PossibleMoves(board, currentField));
 
     var targetPosition = CalculateTargetPosition(parsedInput.Item2);
     var targetMove = targetPosition.ToString();
@@ -60,7 +72,7 @@ while(true)
             currentField.Figure.Move(board, currentField, targetPosition);
 
             var oppKingField = currentField.Figure.GetOppositKing(board);
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board,oppKingField);
+            checkmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(board,oppKingField);
 
             changePlayer.TryGetValue(currentPlayer,out currentPlayer);
             break;
