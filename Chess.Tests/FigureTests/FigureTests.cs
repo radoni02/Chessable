@@ -88,9 +88,47 @@ namespace Chess.Tests.FigureTests
             Assert.All(expectedFields, expectedField =>
                 Assert.Contains(attackingFields, field =>
                     field.Row == expectedField.Row && field.Col == expectedField.Col));
+        }
 
+        [Fact]
+        public void CheckIfFigureIsImmobilized_ShouldReturns_False_WhenFigureIsNotImmobilized()
+        {
+            //Arange
+            var board = _chessboardPositions.GetTacticalPosition();
+            var notImmobiliedFigure = board.Board[6][6].Figure;
+            foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
+            {
+                field.Figure.CalculateAtackedFields(board, field);
+            }
 
+            //Act
+            var result = notImmobiliedFigure.CheckIfFigureIsImmobilized(board);
 
+            // Assert
+            Assert.False(result);
+            Assert.Equal("Rook", notImmobiliedFigure.Name);
+            Assert.False(notImmobiliedFigure.IsWhite);
+        }
+        [Fact]
+        public void CheckIfFigureIsImmobilized_ShouldReturns_True_WhenFigureIsImmobilized()
+        {
+            // Arrange
+            var board = _chessboardPositions.GetTacticalPosition();
+            var immobilizedFigure = board.Board[1][3].Figure; // White bishop on d2 (should be pinned)
+
+            foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
+            {
+                field.Figure.CalculateAtackedFields(board, field);
+            }
+
+            // Act
+            var result = immobilizedFigure.CheckIfFigureIsImmobilized(board);
+
+            // Assert
+            Assert.True(result);
+            Assert.NotNull(immobilizedFigure);
+            Assert.Equal("Bishop", immobilizedFigure.Name);
+            Assert.True(immobilizedFigure.IsWhite);
         }
     }
 }

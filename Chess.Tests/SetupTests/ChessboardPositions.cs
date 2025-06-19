@@ -115,5 +115,77 @@ namespace Chess.Tests.SetupTests
             chessboard.Board[7][5].IsUsed = false;
             return chessboard;
         }
+
+        public Checkerboard GetMidGamePosition()
+        {
+            var chessboard = new Checkerboard();
+            chessboard.Board = new List<List<Field>>();
+
+            for (int row = 1; row <= 8; row++)
+            {
+                var boardRow = new List<Field>();
+                for (int col = 1; col <= 8; col++)
+                {
+                    boardRow.Add(new Field(false, row, col));
+                }
+                chessboard.Board.Add(boardRow);
+            }
+
+            // White pieces
+            chessboard.Board[0][4] = new Field(true, new King(true, 1000, "King"), 1, 5); // e1
+            chessboard.Board[0][7] = new Field(true, new Rook(true, 5, "Rook"), 1, 8); // h1
+            chessboard.Board[2][2] = new Field(true, new Bishop(true, 3, "Bishop"), 3, 3); // c3
+            chessboard.Board[3][3] = new Field(true, new Knight(true, 3, "Knight"), 4, 4); // d4
+            chessboard.Board[4][4] = new Field(true, new Pawn(true, 1, "Pawn"), 5, 5); // e5
+            chessboard.Board[1][5] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 6); // f2
+            chessboard.Board[1][6] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 7); // g2
+            chessboard.Board[1][7] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 8); // h2
+
+            // Black pieces
+            chessboard.Board[7][4] = new Field(true, new King(false, 1000, "King"), 8, 5); // e8
+            chessboard.Board[7][0] = new Field(true, new Rook(false, 5, "Rook"), 8, 1); // a8
+            chessboard.Board[5][1] = new Field(true, new Bishop(false, 3, "Bishop"), 6, 2); // b6
+            chessboard.Board[4][5] = new Field(true, new Knight(false, 3, "Knight"), 5, 6); // f5
+            chessboard.Board[3][4] = new Field(true, new Pawn(false, 1, "Pawn"), 4, 5); // e4
+            chessboard.Board[6][0] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 1); // a7
+            chessboard.Board[6][1] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 2); // b7
+            chessboard.Board[6][7] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 8); // h7
+
+            return chessboard;
+        }
+
+        public Checkerboard GetTacticalPosition()
+        {
+            var chessboard = new Checkerboard();
+            chessboard.Board = new List<List<Field>>();
+
+            for (int row = 1; row <= 8; row++)
+            {
+                var boardRow = new List<Field>();
+                for (int col = 1; col <= 8; col++)
+                {
+                    boardRow.Add(new Field(false, row, col));
+                }
+                chessboard.Board.Add(boardRow);
+            }
+
+            // White pieces
+            chessboard.Board[0][4] = new Field(true, new King(true, 1000, "King"), 1, 5);
+            chessboard.Board[0][7] = new Field(true, new Rook(true, 5, "Rook"), 1, 8);
+            chessboard.Board[1][3] = new Field(true, new Bishop(true, 3, "Bishop"), 2, 4);
+            chessboard.Board[2][4] = new Field(true, new Pawn(true, 1, "Pawn"), 3, 5);
+            chessboard.Board[1][5] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 6);
+            chessboard.Board[1][6] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 7);
+
+            // Black pieces
+            chessboard.Board[7][6] = new Field(true, new King(false, 1000, "King"), 8, 7);
+            chessboard.Board[6][6] = new Field(true, new Rook(false, 5, "Rook"), 7, 7);
+            chessboard.Board[3][1] = new Field(true, new Bishop(false, 3, "Bishop"), 4, 2);
+            chessboard.Board[5][7] = new Field(true, new Queen(false, 10, "Queen"), 6, 8);
+            chessboard.Board[6][5] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 6);
+            chessboard.Board[6][7] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 8);
+
+            return chessboard;
+        }
     }
 }
