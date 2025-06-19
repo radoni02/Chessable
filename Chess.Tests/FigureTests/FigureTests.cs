@@ -1,4 +1,5 @@
-﻿using Chess.Figures;
+﻿using Chess.Chessboard;
+using Chess.Figures;
 using Chess.Tests.SetupTests;
 using Chess.Utils;
 using System;
@@ -63,6 +64,33 @@ namespace Chess.Tests.FigureTests
 
             // Assert
             Assert.Empty(attackingFields);
+        }
+
+        [Fact]
+        public void GetListOfFieldsAttackingTarget_ShouldReturn_MultipleFields()
+        {
+            //Arange
+            var board = _chessboardPositions.GetDefaultPosition();
+            board.Board[2][2] = new Field(true, new Pawn(false, 1, "Pawn"), 3, 3);
+            var targetField = board.Board[2][2];
+            var expectedFields = new List<Field> { new Field(1,2), new Field(2,2),new Field(2,4) };
+            foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
+            {
+                field.Figure.CalculateAtackedFields(board, field);
+            }
+
+            //Act
+            var attackingFields = targetField.Figure.GetListOfFieldsAttackingTarget(board);
+
+            // Assert
+            Assert.NotEmpty(attackingFields);
+            Assert.Equal(expectedFields.Count, attackingFields.Count);
+            Assert.All(expectedFields, expectedField =>
+                Assert.Contains(attackingFields, field =>
+                    field.Row == expectedField.Row && field.Col == expectedField.Col));
+
+
+
         }
     }
 }
