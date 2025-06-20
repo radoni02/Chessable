@@ -14,6 +14,12 @@ namespace Chess.Utils
         {
             var result = new CheckmateAnalysisResult();
 
+            if (kingField.Figure is null || kingField.Figure is not King)
+            {
+                result.WrongFigureSelected = true;
+                return result;
+            }
+
             if (!kingField.Figure.CheckIfFigureIsUnderAttack(board))
             {
                 result.IsInCheck = false;
@@ -99,6 +105,7 @@ namespace Chess.Utils
 
     public class CheckmateAnalysisResult
     {
+        public bool WrongFigureSelected { get; set; } = false;
         public bool IsInCheck { get; set; }
         public bool IsCheckmate { get; set; }
         public HashSet<string> PossibleKingMoves { get; set; } = new HashSet<string>();
