@@ -122,7 +122,37 @@ namespace Chess.Tests.SetupTests
             return chessboard;
         }
 
-        public Checkerboard GetEmptyBoard()
+        //need to add visualization for this position
+        public Checkerboard GetCheckmatePosition()
+        {
+            var chessboard = GetEmptyBoard();
+
+            // White pieces 
+            chessboard.Board[0][6] = new Field(true, new King(true, 1000, "King"), 1, 7); 
+            chessboard.Board[1][5] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 6);
+            chessboard.Board[1][6] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 7);
+            chessboard.Board[1][7] = new Field(true, new Pawn(true, 1, "Pawn"), 2, 8);
+            chessboard.Board[2][4] = new Field(true, new Rook(true, 5, "Rook"), 3, 5);
+
+            // Black pieces
+            chessboard.Board[7][4] = new Field(true, new King(false, 1000, "King"), 8, 5);
+            chessboard.Board[6][3] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 4);
+            chessboard.Board[6][4] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 5);
+            chessboard.Board[6][5] = new Field(true, new Pawn(false, 1, "Pawn"), 7, 6);
+            chessboard.Board[5][4] = new Field(true, new Queen(false, 10, "Queen"), 6, 5);
+            chessboard.Board[4][4] = new Field(true, new Rook(false, 5, "Rook"), 5, 5); 
+
+            // e1 - White queen checking black king
+            chessboard.Board[0][4] = new Field(true, new Queen(true, 10, "Queen"), 1, 5);
+
+            // Black pieces creating checkmate on white king
+            chessboard.Board[0][5] = new Field(true, new Rook(false, 5, "Rook"), 1, 6);
+            chessboard.Board[1][4] = new Field(true, new Queen(false, 10, "Queen"), 2, 5);
+
+            return chessboard;
+        }
+
+            public Checkerboard GetEmptyBoard()
         {
             var chessboard = new Checkerboard();
             chessboard.Board = new List<List<Field>>();
