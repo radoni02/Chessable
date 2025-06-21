@@ -5,18 +5,11 @@ using Chess.Utils;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-var board = new Checkerboard();
-CheckmateAnalysisResult? checkmateAnalysisResult = new CheckmateAnalysisResult();
-var whitePlayer = new Player(0, true,true);
-var blackPlayer = new Player(0, false,false);
-
-var changePlayer = new Dictionary<Player, Player>()
-{ 
-    {whitePlayer,blackPlayer },
-    {blackPlayer,whitePlayer } 
-};
-
-var currentPlayer = whitePlayer;
+var chessGame = new ChessGame();
+var board = chessGame.Board;
+var checkmateAnalysisResult = chessGame.CheckmateAnalysisResult;
+var currentPlayer = chessGame.CurrentPlayer;
+var changePlayer = chessGame.ChangePlayer;
 
 while(true)
 {
