@@ -11,26 +11,43 @@ namespace Chess.Figures.Abstractions
     {
         public List<Field> GetRowFields(Checkerboard checkerboard, Field currentField, bool left)
         {
+            var result = new MovmentResult();
             var fieldsInSameRow = checkerboard.Board[currentField.Row - 1];
             List<Field> selectedFields = new List<Field>();
 
             if (left)
             {
-                selectedFields = fieldsInSameRow
+                var orderedFields = fieldsInSameRow
                                 .Where(field => field.Col < currentField.Col)
-                                .OrderByDescending(f => f.Col)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
+                                .OrderByDescending(f => f.Col);
+                result.AtackedFields = orderedFields
+                            .TakeWhile(field => !field.IsUsed 
+                                    || (field.Figure is not null 
+                                            && field.Figure is King 
+                                            && field.Figure.IsWhite != currentField.Figure.IsWhite))
+                            .ToList();
+                result.PossibleMoves = orderedFields
+                            .TakeWhile(field => !field.IsUsed)
+                            .ToList();
+
                 CheckFirstOmittedField(fieldsInSameRow.Where(f => f.Col < currentField.Col).OrderByDescending(f => f.Col).ToList());
             }
 
             if (!left)
             {
-                selectedFields = fieldsInSameRow
+                var orderedFields = fieldsInSameRow
                                 .Where(field => field.Col > currentField.Col)
-                                .OrderBy(f => f.Col)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
+                                .OrderBy(f => f.Col);
+                result.AtackedFields = orderedFields
+                            .TakeWhile(field => !field.IsUsed
+                                    || (field.Figure is not null
+                                            && field.Figure is King
+                                            && field.Figure.IsWhite != currentField.Figure.IsWhite))
+                            .ToList();
+                result.PossibleMoves = orderedFields
+                            .TakeWhile(field => !field.IsUsed)
+                            .ToList();
+
                 CheckFirstOmittedField(fieldsInSameRow.Where(f => f.Col > currentField.Col).ToList());
             }
 
@@ -39,14 +56,19 @@ namespace Chess.Figures.Abstractions
             void CheckFirstOmittedField(List<Field> fieldsInSameColumnInValidDirection)
             {
                 var firstOmittedField = fieldsInSameColumnInValidDirection
-                                           .Skip(selectedFields.Count)
+                                           .Skip(result.PossibleMoves.Count)
                                            .FirstOrDefault();
                 if (firstOmittedField != null && firstOmittedField.IsUsed && firstOmittedField.Figure.IsWhite != currentField.Figure.IsWhite)
-                    selectedFields.Add(firstOmittedField);
+                {
+                    result.PossibleMoves.Add(firstOmittedField);
+                    result.AtackedFields.Add(firstOmittedField);
+                    result.AtackedFields = result.AtackedFields.DistinctBy(field => (field.Row,field.Col)).ToList();
+                }
             }
         }
         public List<Field> GetColFields(Checkerboard checkerboard, Field currentField, bool down)
         {
+            var result = new MovmentResult();
             var fieldsInSameColumn = checkerboard.Board
                 .SelectMany(row => row)
                 .Where(field => field.Col == currentField.Col && field.Row != currentField.Row);
@@ -54,20 +76,38 @@ namespace Chess.Figures.Abstractions
 
             if (down)
             {
-                selectedFields = fieldsInSameColumn
+                var orderedFields = fieldsInSameColumn
                                 .Where(field => field.Row < currentField.Row)
-                                .OrderByDescending(f => f.Row)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
+                                .OrderByDescending(f => f.Row);
+
+                result.AtackedFields = orderedFields
+                            .TakeWhile(field => !field.IsUsed
+                                    || (field.Figure is not null
+                                            && field.Figure is King
+                                            && field.Figure.IsWhite != currentField.Figure.IsWhite))
+                            .ToList();
+                result.PossibleMoves = orderedFields
+                            .TakeWhile(field => !field.IsUsed)
+                            .ToList();
+
                 CheckFirstOmittedField(fieldsInSameColumn.Where(f => f.Row < currentField.Row).OrderByDescending(f => f.Row).ToList());
             }
             if (!down)
             {
-                selectedFields = fieldsInSameColumn
+                var orderedFields = fieldsInSameColumn
                                 .Where(field => field.Row > currentField.Row)
-                                .OrderBy(f => f.Row)
-                                .TakeWhile(field => !field.IsUsed)
-                                .ToList();
+                                .OrderBy(f => f.Row);
+
+                result.AtackedFields = orderedFields
+                            .TakeWhile(field => !field.IsUsed
+                                    || (field.Figure is not null
+                                            && field.Figure is King
+                                            && field.Figure.IsWhite != currentField.Figure.IsWhite))
+                            .ToList();
+                result.PossibleMoves = orderedFields
+                            .TakeWhile(field => !field.IsUsed)
+                            .ToList();
+
                 CheckFirstOmittedField(fieldsInSameColumn.Where(f => f.Row > currentField.Row).ToList());
             }
 
@@ -76,10 +116,14 @@ namespace Chess.Figures.Abstractions
             void CheckFirstOmittedField(List<Field> fieldsInSameColumnInValidDirection)
             {
                 var firstOmittedField = fieldsInSameColumnInValidDirection
-                                           .Skip(selectedFields.Count)
+                                           .Skip(result.PossibleMoves.Count)
                                            .FirstOrDefault();
                 if (firstOmittedField != null && firstOmittedField.IsUsed && firstOmittedField.Figure.IsWhite != currentField.Figure.IsWhite)
-                    selectedFields.Add(firstOmittedField);
+                {
+                    result.PossibleMoves.Add(firstOmittedField);
+                    result.AtackedFields.Add(firstOmittedField);
+                    result.AtackedFields = result.AtackedFields.DistinctBy(field => (field.Row, field.Col)).ToList();
+                }
             }
         }
     }
