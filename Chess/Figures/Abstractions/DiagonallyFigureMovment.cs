@@ -42,8 +42,13 @@ namespace Chess.Figures.Abstractions
                     result.PossibleMoves.Add(targetField);
                     break;
                 }
+                if(targetField.IsUsed && targetField.Figure.IsWhite == currentField.Figure.IsWhite && !possibleMovesLock)
+                {
+                    result.AtackedFields.Add(targetField);
+                    break;
+                }
                 if ((targetField.IsUsed && targetField.Figure.IsWhite != currentField.Figure.IsWhite && possibleMovesLock)
-                        || (targetField.IsUsed && targetField.Figure.IsWhite == currentField.Figure.IsWhite))
+                        || (targetField.IsUsed && targetField.Figure.IsWhite == currentField.Figure.IsWhite && possibleMovesLock))
                 {
                     break;
                 }
