@@ -122,7 +122,6 @@ namespace Chess.Tests.SetupTests
             return chessboard;
         }
 
-        //need to add visualization for this position
         public Checkerboard GetCheckmatePosition()
         {
             var chessboard = GetEmptyBoard();
@@ -148,6 +147,19 @@ namespace Chess.Tests.SetupTests
             // Black pieces creating checkmate on white king
             chessboard.Board[0][5] = new Field(true, new Rook(false, 5, "Rook"), 1, 6);
             chessboard.Board[1][4] = new Field(true, new Queen(false, 10, "Queen"), 2, 5);
+
+            return chessboard;
+        }
+
+        public Checkerboard GetDiagonallPosition()
+        {
+            var chessboard = GetEmptyBoard();
+
+            chessboard.Board[0][6] = new Field(true, new Bishop(false, 5, "Bishop"), 1, 7);
+            chessboard.Board[2][4] = new Field(true, new King(true, 1000, "King"), 3, 5);
+            chessboard.Board[4][2] = new Field(true, new Pawn(true, 1, "Pawn"), 5, 3);
+
+
 
             return chessboard;
         }
