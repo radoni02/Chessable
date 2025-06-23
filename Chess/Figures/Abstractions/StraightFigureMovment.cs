@@ -9,11 +9,10 @@ namespace Chess.Figures.Abstractions
 {
     public class StraightFigureMovment
     {
-        public List<Field> GetRowFields(Checkerboard checkerboard, Field currentField, bool left)
+        public MovmentResult GetRowFields(Checkerboard checkerboard, Field currentField, bool left)
         {
             var result = new MovmentResult();
             var fieldsInSameRow = checkerboard.Board[currentField.Row - 1];
-            List<Field> selectedFields = new List<Field>();
 
             if (left)
             {
@@ -51,7 +50,7 @@ namespace Chess.Figures.Abstractions
                 CheckFirstOmittedField(fieldsInSameRow.Where(f => f.Col > currentField.Col).ToList());
             }
 
-            return selectedFields;
+            return result;
 
             void CheckFirstOmittedField(List<Field> fieldsInSameColumnInValidDirection)
             {
@@ -66,13 +65,12 @@ namespace Chess.Figures.Abstractions
                 }
             }
         }
-        public List<Field> GetColFields(Checkerboard checkerboard, Field currentField, bool down)
+        public MovmentResult GetColFields(Checkerboard checkerboard, Field currentField, bool down)
         {
             var result = new MovmentResult();
             var fieldsInSameColumn = checkerboard.Board
                 .SelectMany(row => row)
                 .Where(field => field.Col == currentField.Col && field.Row != currentField.Row);
-            List<Field> selectedFields = new List<Field>();
 
             if (down)
             {
@@ -111,7 +109,7 @@ namespace Chess.Figures.Abstractions
                 CheckFirstOmittedField(fieldsInSameColumn.Where(f => f.Row > currentField.Row).ToList());
             }
 
-            return selectedFields;
+            return result;
 
             void CheckFirstOmittedField(List<Field> fieldsInSameColumnInValidDirection)
             {

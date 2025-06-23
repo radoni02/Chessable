@@ -19,10 +19,10 @@ namespace Chess.Figures
         {
             var selectedFields = new List<Field>();
 
-            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true);
-            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false));
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true));
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false));
+            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).AtackedFields;
+            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).AtackedFields);
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).AtackedFields);
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).AtackedFields);
 
             AttackedFields = selectedFields;
         }
@@ -31,10 +31,10 @@ namespace Chess.Figures
         {
             var selectedFields = new List<Field>();
 
-            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true);
-            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false));
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true));
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false));
+            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).PossibleMoves;
+            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).PossibleMoves);
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).PossibleMoves);
+            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).PossibleMoves);
 
             return selectedFields
                         .Select(field => $"{field.Row - 1}{field.Col - 1}")

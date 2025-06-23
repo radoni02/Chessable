@@ -9,10 +9,9 @@ namespace Chess.Figures.Abstractions
 {
     public class DiagonallyFigureMovment
     {
-        public List<Field> SelectValidFieldsOnTheDiagonals(Checkerboard checkerboard, Field currentField, int reverserRow, int reverserCol)
+        public MovmentResult SelectValidFieldsOnTheDiagonals(Checkerboard checkerboard, Field currentField, int reverserRow, int reverserCol)
         {
             var result = new MovmentResult();
-            List<Field> selectedFields = new List<Field>();
             var possibleMovesLock = false;
 
             for (int i = 1; i < 9; i++)
@@ -43,12 +42,13 @@ namespace Chess.Figures.Abstractions
                     result.PossibleMoves.Add(targetField);
                     break;
                 }
-                if (targetField.IsUsed && targetField.Figure.IsWhite == currentField.Figure.IsWhite)
+                if ((targetField.IsUsed && targetField.Figure.IsWhite != currentField.Figure.IsWhite && possibleMovesLock)
+                        || (targetField.IsUsed && targetField.Figure.IsWhite == currentField.Figure.IsWhite))
                 {
                     break;
                 }
             }
-            return selectedFields;
+            return result;
         }
     }
 }
