@@ -118,29 +118,32 @@ namespace Chess.Figures
 
         public virtual bool CheckIfFigureIsImmobilized(Checkerboard checkerboard)
         {
-            var currentField = checkerboard.Board
-                .SelectMany(ff => ff)
-                .FirstOrDefault(field => field.Figure != null && field.Figure.Equals(this));
+            if (this == null) return false;
 
-            if (currentField == null) return false;
-
-            var fieldsThatAttackCurrentFigure = this.GetListOfFieldsAttackingTarget(checkerboard);
-            if (fieldsThatAttackCurrentFigure.Count == 0)
-                return false;
+            if (this is King) return false;
 
             var king = checkerboard.Board
-                .SelectMany(ff => ff)
-                .FirstOrDefault(field => field.Figure is not null
-                        && field.Figure.IsWhite == this.IsWhite
-                        && field.Figure.Name.Equals("King"));
+               .SelectMany(ff => ff)
+               .FirstOrDefault(field => field.Figure is not null
+                       && field.Figure.IsWhite == this.IsWhite
+                       && field.Figure.Name.Equals("King"));
 
             if (king == null) return false;
 
+            var fieldsThatAttackCurrentFigure = this.GetListOfFieldsAttackingTarget(checkerboard);
+            var fieldsThatAttackCurrentFigureButNotOppKing = fieldsThatAttackCurrentFigure
+                                                                .Where(field => field.Figure != null
+                                                                                && !field.Figure.AttackedFields
+                                                                                                    .Any(attackField => attackField.Equals(king)))
+                                                                .ToList();
+            if (fieldsThatAttackCurrentFigureButNotOppKing.Count == 0)
+                return false;
+
             bool kingWouldBeAttacked = false;
 
-            MakeTempMove(checkerboard, fieldsThatAttackCurrentFigure, (tempBoard) =>
+            MakeTempMove(checkerboard, fieldsThatAttackCurrentFigureButNotOppKing, (tempBoard) =>
             {
-                foreach (var attackingField in fieldsThatAttackCurrentFigure)
+                foreach (var attackingField in fieldsThatAttackCurrentFigureButNotOppKing)
                 {
                     if (attackingField.Figure.AttackedFields.Any(field =>
                         field.Row == king.Row && field.Col == king.Col))

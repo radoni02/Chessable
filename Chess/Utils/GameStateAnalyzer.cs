@@ -57,16 +57,20 @@ namespace Chess.Utils
 
             foreach (var alliedPiece in alliedPiecesThatCanCaptureAttacker)
             {
+                if(alliedPiece.Figure is King 
+                    && !board.Board
+                                .SelectMany(ff => ff)
+                                .Where(field => field.Figure != null && field.Figure.IsWhite != alliedPiece.Figure.IsWhite)
+                                .Any(field => field.Figure.AttackedFields
+                                                            .Any(at => at == attackingField)))
+                {
+                    captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                    continue;
+                }
                 if (alliedPiece.Figure.CheckIfFigureIsImmobilized(board))
                     continue;
 
-                alliedPiece.Figure.MakeTempMove(board,
-                    board.Board.SelectMany(ff => ff).Where(field => field.Figure is not null && field.Figure.IsWhite).ToList(),
-                    (tempBoard) =>
-                    {
-                        if (!kingField.Figure.CheckIfFigureIsUnderAttack(board))
-                            captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
-                    });
+                captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
             }
 
             return captureOptions;
