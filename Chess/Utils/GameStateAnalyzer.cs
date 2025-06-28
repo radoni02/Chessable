@@ -32,14 +32,15 @@ namespace Chess.Utils
 
             foreach (var attackingField in figuresThatAttackKing)
             {
-                if (attackingField.Figure is Pawn || attackingField.Figure is Knight)
+                if (attackingField.Figure is not Pawn || attackingField.Figure is not Knight)
                 {
-                    var captureOptions = GetCaptureOptions(board, attackingField, kingField);
-                    result.PossibleCaptureRescues.AddRange(captureOptions);
+                    var blockingOptions = GetBlockingOptions(board, kingField, attackingField);
+                    result.PossibleBlockingMoves.AddRange(blockingOptions);
                 }
 
-                var blockingOptions = GetBlockingOptions(board, kingField, attackingField);
-                result.PossibleBlockingMoves.AddRange(blockingOptions);
+                var captureOptions = GetCaptureOptions(board, attackingField, kingField);
+                result.PossibleCaptureRescues.AddRange(captureOptions);
+                
             }
 
             result.IsCheckmate = result.PossibleKingMoves.Count == 0 &&
