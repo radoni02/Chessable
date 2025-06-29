@@ -141,9 +141,6 @@ namespace Chess.Tests.SetupTests
             chessboard.Board[5][4] = new Field(true, new Queen(false, 10, "Queen"), 6, 5);
             chessboard.Board[4][4] = new Field(true, new Rook(false, 5, "Rook"), 5, 5); 
 
-            // e1 - White queen checking black king
-            chessboard.Board[0][4] = new Field(true, new Queen(true, 10, "Queen"), 1, 5);
-
             // Black pieces creating checkmate on white king
             chessboard.Board[0][5] = new Field(true, new Rook(false, 5, "Rook"), 1, 6);
             chessboard.Board[1][4] = new Field(true, new Queen(false, 10, "Queen"), 2, 5);

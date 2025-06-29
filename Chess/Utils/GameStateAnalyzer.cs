@@ -67,12 +67,11 @@ namespace Chess.Utils
                     captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
                     continue;
                 }
-                if (alliedPiece.Figure.CheckIfFigureIsImmobilized(board))
-                    continue;
-
-                captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                if (!alliedPiece.Figure.CheckIfFigureIsImmobilized(board) && alliedPiece.Figure is not King)
+                {
+                    captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                }
             }
-
             return captureOptions;
         }
 
