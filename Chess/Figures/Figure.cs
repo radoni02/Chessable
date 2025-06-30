@@ -106,14 +106,36 @@ namespace Chess.Figures
             return selectedFigures;
         }
 
-        public virtual List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard,Field currentFIeld,Field targetField)
+        public virtual List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard,Field currentField, Field targetField)
         {
-            targetField.Figure.CalculateAtackedFields(checkerboard,targetField);
-            return targetField.Figure.AttackedFields.Where(field => field.Row < Math.Max(currentFIeld.Row,targetField.Row) 
-                                                        && field.Row > Math.Min(currentFIeld.Row,targetField.Row)
-                                                        && field.Col < Math.Max(currentFIeld.Col, targetField.Col)
-                                                        && field.Col > Math.Min(currentFIeld.Col, targetField.Col))
-                                                        .ToList();
+            var fieldsBetween = new List<Field>();
+
+            int rowDiff = targetField.Row - currentField.Row;
+            int colDiff = targetField.Col - currentField.Col;
+
+            if (rowDiff != 0 && colDiff != 0 && Math.Abs(rowDiff) != Math.Abs(colDiff))
+            {
+                return fieldsBetween;
+            }
+
+            int rowStep = rowDiff == 0 ? 0 : (rowDiff > 0 ? 1 : -1);
+            int colStep = colDiff == 0 ? 0 : (colDiff > 0 ? 1 : -1);
+
+            int currentRow = currentField.Row + rowStep;
+            int currentCol = currentField.Col + colStep;
+
+            while (currentRow != targetField.Row || currentCol != targetField.Col)
+            {
+                if (!CheckIfFieldIsOutOfTheBoard(checkerboard, currentRow - 1, currentCol - 1))
+                {
+                    fieldsBetween.Add(checkerboard.Board[currentRow - 1][currentCol - 1]);
+                }
+
+                currentRow += rowStep;
+                currentCol += colStep;
+            }
+
+            return fieldsBetween;
         }
 
         public virtual bool CheckIfFigureIsImmobilized(Checkerboard checkerboard)
