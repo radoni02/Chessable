@@ -67,7 +67,7 @@ namespace Chess.Figures
         }
 
 
-        public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             var additionalPosiibleMoves = currentField.Figure.AttackedFields.Where(f => f.IsUsed)
                 .Select(filed =>

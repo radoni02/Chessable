@@ -75,7 +75,7 @@ namespace Chess.Tests.FigureTests
             var rookField = chessboard.Board[3][3];
 
             // Act
-            var possibleMoves = rookField.Figure.PossibleMoves(chessboard, rookField);
+            var possibleMoves = rookField.Figure.CalculatePossibleMoves(chessboard, rookField);
 
             // Assert
             Assert.Contains("30", possibleMoves);

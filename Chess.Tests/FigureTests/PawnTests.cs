@@ -28,7 +28,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.PossibleMoves(chessboard, currentField);
+            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
 
             // Assert
             Assert.NotNull(pawn);
@@ -49,7 +49,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.PossibleMoves(chessboard, currentField);
+            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
             pawn.Move(chessboard,currentField,new Utils.Position(7,5));
 
             // Assert
@@ -79,7 +79,7 @@ namespace Chess.Tests.FigureTests
             whitePawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = whitePawn.PossibleMoves(chessboard, currentField);
+            var results = whitePawn.CalculatePossibleMoves(chessboard, currentField);
 
             // Assert
             Assert.NotNull(results);
@@ -98,7 +98,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.PossibleMoves(chessboard, currentField);
+            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
 
             // Assert
             Assert.NotNull(results);
@@ -117,7 +117,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.PossibleMoves(chessboard, currentField);
+            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
             var originalPawnType = pawn.GetType();
 
             pawn.Move(chessboard, currentField, new Position(7, 5));

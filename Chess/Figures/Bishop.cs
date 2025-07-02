@@ -27,7 +27,7 @@ namespace Chess.Figures
             AttackedFields = selectedFields;
         }
 
-        public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             var selectedFields = new List<Field>();
 

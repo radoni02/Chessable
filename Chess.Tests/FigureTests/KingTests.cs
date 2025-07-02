@@ -98,7 +98,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.PossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
 
             // Assert
             Assert.Contains("02", possibleMoves);
@@ -123,7 +123,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.PossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
 
             // Assert
             Assert.DoesNotContain("02", possibleMoves);
@@ -145,7 +145,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.PossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
 
             // Assert
             Assert.DoesNotContain("23", possibleMoves); 

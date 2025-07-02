@@ -20,7 +20,7 @@ namespace Chess.Figures
 
         }
 
-        public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
 
             return ValidKnightFields(checkerboard, currentField)

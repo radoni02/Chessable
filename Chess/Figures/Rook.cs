@@ -17,17 +17,13 @@ namespace Chess.Figures
 
         public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
         {
-            var selectedFields = new List<Field>();
-
-            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).AtackedFields;
-            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).AtackedFields);
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).AtackedFields);
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).AtackedFields);
-
-            AttackedFields = selectedFields;
+            AttackedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).AtackedFields;
+            AttackedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).AtackedFields);
+            AttackedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).AtackedFields);
+            AttackedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).AtackedFields);
         }
 
-        public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             var selectedFields = new List<Field>();
 

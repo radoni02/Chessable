@@ -51,7 +51,7 @@ public class King : Figure
                                         .ToList();
     }
 
-    public override HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField)
+    public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
     {
 
         var possibleKingMoves = new HashSet<string>();

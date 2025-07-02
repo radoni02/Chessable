@@ -74,7 +74,7 @@ namespace Chess.Chessboard
                     possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
                     possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
                 }
-                possibleMoves.AddRange(currentField.Figure.PossibleMoves(Board, currentField));
+                possibleMoves.AddRange(currentField.Figure.CalculatePossibleMoves(Board, currentField));
 
                 var targetPosition = CalculateTargetPosition(parsedInput.Item2);
                 var targetMove = targetPosition.ToString();

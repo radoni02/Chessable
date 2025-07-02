@@ -29,7 +29,7 @@ namespace Chess.Figures
         public int Value { get; set; }
         public string Name { get; set; }
         public int MoveConut { get; set; } = 0;
-        public abstract HashSet<string> PossibleMoves(Checkerboard checkerboard, Field currentField);
+        public abstract HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
         public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
