@@ -81,7 +81,9 @@ namespace Chess.Utils
             var possibleTargetsToBlockAttack = kingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, kingField, attackingField);
 
             var alliedPiecesThatCanBlock = board.Board.SelectMany(ff => ff)
-                .Where(field => field.Figure != null && field.Figure.IsWhite == kingField.Figure.IsWhite)
+                .Where(field => field.Figure != null &&
+                         field.Figure.IsWhite == kingField.Figure.IsWhite &&
+                         field.Figure is not King)
                 .Where(field => !field.Figure.CheckIfFigureIsImmobilized(board))
                 .Where(field =>
                 {

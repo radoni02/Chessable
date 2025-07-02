@@ -70,13 +70,13 @@ namespace Chess.Tests.FigureTests
         {
             //Arange
             var board = _chessboardPositions.GetCheckmatePosition();
-            var KingField = board.Board[0][6];
+            var kingField = board.Board[0][6];
             foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
             {
                 field.Figure.CalculateAtackedFields(board, field);
             }
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, KingField);
+            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);
@@ -93,13 +93,13 @@ namespace Chess.Tests.FigureTests
             //Arange
             var board = _chessboardPositions.GetCheckmatePosition();
             board.Board[0][4] = new Field(true, new Queen(true, 10, "Queen"), 1, 5);
-            var KingField = board.Board[0][6];
+            var kingField = board.Board[0][6];
             foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
             {
                 field.Figure.CalculateAtackedFields(board, field);
             }
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, KingField);
+            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);
@@ -109,5 +109,53 @@ namespace Chess.Tests.FigureTests
             Assert.Empty(result.PossibleKingMoves);
             Assert.Contains<string>("15-16", result.PossibleCaptureRescues);
         }
+
+        [Fact]
+        public void AnalyzeForCheckmate_ShouldReturns_KingHasValidMoves()
+        {
+            //Arange
+            var board = _chessboardPositions.GetCheckPosition();
+            var kingField = board.Board[0][6];
+            foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
+            {
+                field.Figure.CalculateAtackedFields(board, field);
+            }
+
+            //Act
+            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+
+            //Assert
+            Assert.True(result.IsInCheck);
+            Assert.False(result.IsCheckmate);
+            Assert.False(result.WrongFigureSelected);
+            Assert.Empty(result.PossibleBlockingMoves);
+            Assert.Empty(result.PossibleCaptureRescues);
+            Assert.Contains<string>("17", result.PossibleKingMoves);
+        }
+
+        [Fact]
+        public void AnalyzeForCheckmate_ShouldReturns_BlockingMovesAreAvaiable()
+        {
+            //Arange
+            var board = _chessboardPositions.GetBlockingMovesPosition();
+            var kingField = board.Board[0][6];
+            foreach (var field in board.Board.SelectMany(f => f).Where(f => f.Figure != null))
+            {
+                field.Figure.CalculateAtackedFields(board, field);
+            }
+
+            //Act
+            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+
+            //Assert
+            Assert.True(result.IsInCheck);
+            Assert.False(result.IsCheckmate);
+            Assert.False(result.WrongFigureSelected);
+            Assert.Empty(result.PossibleCaptureRescues);
+            Assert.Contains<string>("33-13", result.PossibleBlockingMoves);
+            Assert.Contains<string>("35-15", result.PossibleBlockingMoves);
+        }
+
+
     }
 }
