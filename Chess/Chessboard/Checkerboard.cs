@@ -1,4 +1,5 @@
 ﻿using Chess.Figures;
+using Chess.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,91 @@ public class Checkerboard
             return true;
         }
         
+    }
+
+    public void UsedFields()
+    {
+        this.Board.SelectMany(fl => fl)
+            .Where(field => field.Figure != null)
+            .ToList()
+            .ForEach(field => field.Figure.AttackedFields.Clear());
+        var usedWhiteFields = this.Board.SelectMany(f => f)
+        .Where(field => field.IsUsed && field.Figure.IsWhite);
+        foreach (var field in usedWhiteFields)
+        {
+            field.Figure.CalculateAtackedFields(this, field);
+        }
+
+        var usedBlackFields = this.Board.SelectMany(f => f)
+        .Where(field => field.IsUsed && !field.Figure.IsWhite);
+        foreach (var field in usedBlackFields)
+        {
+            field.Figure.CalculateAtackedFields(this, field);
+        }
+    }
+
+    public void ShowNewPosition()
+    {
+        var valueBeetwenFields = 10;
+        foreach (var field in this.Board)
+        {
+            foreach (var inner in field)
+            {
+                var gap = valueBeetwenFields - (CheckFigure(inner).Length);
+                Console.Write($"{CheckFigure(inner)}{ConvertIntoGap(gap)}");
+            }
+            Console.WriteLine();
+        }
+
+        string CheckFigure(Field inner)
+            => inner.Figure != null ? inner.Figure.Name : "Empty";
+    }
+    public string ConvertIntoGap(int length)
+    {
+        StringBuilder sb = new StringBuilder();
+        while (length > 0)
+        {
+            sb.Append(" ");
+            length--;
+        }
+        return sb.ToString();
+    }
+
+    public Field CalculatePositionOnChessboard(string position) // in format "a2" to format enumerable from 1  custom => (col, row)
+    {
+        var dict = new Dictionary<char, int>()
+            {
+            {'a',1},
+            {'b',2},
+            {'c',3},
+            {'d',4},
+            {'e',5},
+            {'f',6},
+            {'g',7},
+            {'h',8}
+            };
+        dict.TryGetValue(position.First(), out var col);
+        var row = (int)char.GetNumericValue(position.Last());
+        return this.Board.SelectMany(f => f)
+               .FirstOrDefault(field => field.Col == col && field.Row == row);
+    }
+
+    public Position CalculateTargetPosition(string position) // in format "a2" to format enumerable from 0 default table => [col][row]
+    {
+        var dict = new Dictionary<char, int>()
+            {
+            {'a',0},
+            {'b',1},
+            {'c',2},
+            {'d',3},
+            {'e',4},
+            {'f',5},
+            {'g',6},
+            {'h',7}
+            };
+        dict.TryGetValue(position.First(), out var value);
+        var row = (int)char.GetNumericValue(position.Last());
+        return new Position(row - 1, value);
     }
 
     public List<List<Field>> Board { get; set; }
