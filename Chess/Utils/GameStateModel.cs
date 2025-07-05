@@ -54,5 +54,10 @@ namespace Chess.Utils
             ErrorMessage = "Choosen wrong color figure";
             ChoosenWrongColorFigure = true;
         }
+        public void SetInvalidInputError()
+        {
+            IsValidMove = false;
+            ErrorMessage = "Invalid input data";
+        }
     }
 }

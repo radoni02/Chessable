@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Chess.Chessboard
@@ -49,8 +50,13 @@ namespace Chess.Chessboard
         {
             var gameState = new GameStateModel(Board);
             var parsedInput = ParseMoveInput(move);
+            if(!parsedInput.Valid)
+            {
+                gameState.SetInvalidInputError();
+                return gameState;
+            }
 
-            var currentField = Board.CalculatePositionOnChessboard(parsedInput.Item1);
+            var currentField = Board.CalculatePositionOnChessboard(parsedInput.CurrentPosition);
 
             if (CheckmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
             {
@@ -79,7 +85,7 @@ namespace Chess.Chessboard
             }
             possibleMoves.AddRange(currentField.Figure.CalculatePossibleMoves(Board, currentField));
 
-            var targetPosition = Board.CalculateTargetPosition(parsedInput.Item2);
+            var targetPosition = Board.CalculateTargetPosition(parsedInput.TargetPosition);
             var targetMove = targetPosition.ToString();
             foreach (var possibleMove in possibleMoves)
             {
@@ -99,12 +105,14 @@ namespace Chess.Chessboard
             return gameState;
         }
 
-        public (string, string) ParseMoveInput(string input)
+        public ParseInputResult ParseMoveInput(string input)
         {
+            if (!Regex.IsMatch(input, "^[a-h][1-8]-[a-h][1-8]$"))
+                return new ParseInputResult(false);
             var positions = input.Split('-');
-            var currentPossition = positions[0];
+            var currentPosition = positions[0];
             var targetPosition = positions[1];
-            return (currentPossition, targetPosition);
+            return new ParseInputResult(currentPosition,targetPosition,true);
         }
     }
 }
