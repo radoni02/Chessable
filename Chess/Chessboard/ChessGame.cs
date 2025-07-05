@@ -38,54 +38,65 @@ namespace Chess.Chessboard
 
                 Console.WriteLine("Provide move in format \"a2-a3\":");
                 var move = Console.ReadLine();
-                var parsedInput = ParseMoveInput(move);
 
-                var currentField = Board.CalculatePositionOnChessboard(parsedInput.Item1);
+                var gameState = Move(move);
+                if(!gameState.IsValidMove)
+                    Console.WriteLine(gameState.ErrorMessage);
+            }
+        }
 
-                if (CheckmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
+        public GameStateModel Move(string move)
+        {
+            var gameState = new GameStateModel(Board);
+            var parsedInput = ParseMoveInput(move);
+
+            var currentField = Board.CalculatePositionOnChessboard(parsedInput.Item1);
+
+            if (CheckmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
+            {
+                gameState.SetKingInCheckError();
+                return gameState;
+            }
+
+            if (!currentField.IsUsed)
+            {
+                gameState.SetEmptyFieldError();
+                return gameState;
+            }
+
+            if ((CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite) ||
+                (!CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite))
+            {
+                gameState.SetWrongColorFigureError();
+                return gameState;
+            }
+
+            List<string> possibleMoves = new List<string>();
+            if (CheckmateAnalysisResult.IsInCheck)
+            {
+                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
+                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
+            }
+            possibleMoves.AddRange(currentField.Figure.CalculatePossibleMoves(Board, currentField));
+
+            var targetPosition = Board.CalculateTargetPosition(parsedInput.Item2);
+            var targetMove = targetPosition.ToString();
+            foreach (var possibleMove in possibleMoves)
+            {
+                if (possibleMove.Equals(targetMove))
                 {
-                    Console.WriteLine("your King is in check");
-                    continue;
-                }
+                    currentField.Figure.Move(Board, currentField, targetPosition);
 
-                if (!currentField.IsUsed)
-                {
-                    Console.WriteLine("Choosen empty field");
-                    continue;
-                }
+                    var oppKingField = currentField.Figure.GetOppositKing(Board);
+                    CheckmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(Board, oppKingField);
 
-                if ((CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite) ||
-                    (!CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite))
-                {
-                    Console.WriteLine("Choosen wrong color figure");
-                    continue;
-                }
-
-                List<string> possibleMoves = new List<string>();
-                if (CheckmateAnalysisResult.IsInCheck)
-                {
-                    possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
-                    possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
-                }
-                possibleMoves.AddRange(currentField.Figure.CalculatePossibleMoves(Board, currentField));
-
-                var targetPosition = Board.CalculateTargetPosition(parsedInput.Item2);
-                var targetMove = targetPosition.ToString();
-                foreach (var possibleMove in possibleMoves)
-                {
-                    if (possibleMove.Equals(targetMove))
-                    {
-                        currentField.Figure.Move(Board, currentField, targetPosition);
-
-                        var oppKingField = currentField.Figure.GetOppositKing(Board);
-                        CheckmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(Board, oppKingField);
-
-                        ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
-                        CurrentPlayer = currentPlayer;
-                        break;
-                    }
+                    ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
+                    CurrentPlayer = currentPlayer;
+                    break;
                 }
             }
+            gameState.IsValidMove = true;
+            return gameState;
         }
 
         public (string, string) ParseMoveInput(string input)
