@@ -9,7 +9,30 @@ namespace Chess.Figures.Abstractions
 {
     public class DiagonallyFigureMovment
     {
-        public MovmentResult SelectValidFieldsOnTheDiagonals(Checkerboard checkerboard, Field currentField, int reverserRow, int reverserCol)
+        public MovmentResult GetFieldsFromDiagonalFigureMovment(Checkerboard checkerboard, Field currentField)
+        {
+            var result = new MovmentResult();
+
+            var upperLeft = SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, -1);
+            result.AtackedFields.AddRange(upperLeft.AtackedFields);
+            result.PossibleMoves.AddRange(upperLeft.PossibleMoves);
+
+            var upperRight = SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, 1);
+            result.AtackedFields.AddRange(upperRight.AtackedFields);
+            result.PossibleMoves.AddRange(upperRight.PossibleMoves);
+
+            var lowerLeft = SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, -1);
+            result.AtackedFields.AddRange(lowerLeft.AtackedFields);
+            result.PossibleMoves.AddRange(lowerLeft.PossibleMoves);
+
+            var lowerRight = SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, 1);
+            result.AtackedFields.AddRange(lowerRight.AtackedFields);
+            result.PossibleMoves.AddRange(lowerRight.PossibleMoves);
+
+            return result;
+        }
+
+        private MovmentResult SelectValidFieldsOnTheDiagonals(Checkerboard checkerboard, Field currentField, int reverserRow, int reverserCol)
         {
             var result = new MovmentResult();
             var possibleMovesLock = false;

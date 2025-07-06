@@ -20,10 +20,7 @@ namespace Chess.Figures
         {
             AttackedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).AtackedFields;
 
-            AttackedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, 1).AtackedFields);
-            AttackedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, -1).AtackedFields);
-            AttackedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, 1).AtackedFields);
-            AttackedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, -1).AtackedFields);
+            AttackedFields.AddRange(DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).AtackedFields);
         }
 
         public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
@@ -31,10 +28,7 @@ namespace Chess.Figures
             var selectedFields = new List<Field>();
             selectedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).PossibleMoves;
 
-            selectedFields.AddRange( DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, 1).PossibleMoves);
-            selectedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, -1).PossibleMoves);
-            selectedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, 1).PossibleMoves);
-            selectedFields.AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, -1, -1).PossibleMoves);
+            selectedFields.AddRange(DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).PossibleMoves);
 
             return selectedFields
                         .Select(field => $"{field.Row - 1}{field.Col - 1}")
