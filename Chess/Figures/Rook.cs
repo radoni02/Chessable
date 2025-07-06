@@ -17,20 +17,14 @@ namespace Chess.Figures
 
         public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
         {
-            AttackedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).AtackedFields;
-            AttackedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).AtackedFields);
-            AttackedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).AtackedFields);
-            AttackedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).AtackedFields);
+            AttackedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).AtackedFields;
         }
 
         public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             var selectedFields = new List<Field>();
 
-            selectedFields = StraightFigureMovment.GetRowFields(checkerboard, currentField, true).PossibleMoves;
-            selectedFields.AddRange(StraightFigureMovment.GetRowFields(checkerboard, currentField, false).PossibleMoves);
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, true).PossibleMoves);
-            selectedFields.AddRange(StraightFigureMovment.GetColFields(checkerboard, currentField, false).PossibleMoves);
+            selectedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).PossibleMoves;
 
             return selectedFields
                         .Select(field => $"{field.Row - 1}{field.Col - 1}")
