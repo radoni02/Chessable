@@ -1,5 +1,6 @@
 ﻿using Chess.Chessboard;
 using Chess.Figures.Abstractions;
+using Chess.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,15 +21,17 @@ namespace Chess.Figures
             AttackedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).AtackedFields;
         }
 
-        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            var selectedFields = new List<Field>();
+            var selectedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).PossibleMoves;
 
-            selectedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).PossibleMoves;
+            PossibleMoves = selectedFields
+                .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+                .ToList();
 
-            return selectedFields
-                        .Select(field => $"{field.Row - 1}{field.Col - 1}")
-                        .ToHashSet();
+            //return selectedFields
+            //            .Select(field => $"{field.Row - 1}{field.Col - 1}")
+            //            .ToHashSet();
         }
     }
 }

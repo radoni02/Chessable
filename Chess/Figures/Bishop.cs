@@ -18,24 +18,22 @@ namespace Chess.Figures
 
         public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)
         {
-            var selectedFields = new List<Field>();
-
-            selectedFields = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).AtackedFields;
-
-            AttackedFields = selectedFields;
+            AttackedFields = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).AtackedFields;
         }
 
-        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            //PossibleMoves
-            //    .AddRange(DiagonallyFigureMovment.SelectValidFieldsOnTheDiagonals(checkerboard, currentField, 1, 1).PossibleMoves.Select(x => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(x.Row, x.Col))));
-            var selectedFields = new List<Field>();
+            //var selectedFields = new List<Field>();
+            var result = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField);
+            PossibleMoves = result.PossibleMoves
+                .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+                .ToList();
 
-            selectedFields = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).PossibleMoves;
+            //selectedFields = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).PossibleMoves;
 
-            return selectedFields
-                            .Select(field => $"{field.Row - 1}{field.Col - 1}")
-                            .ToHashSet();
+            //return selectedFields
+            //                .Select(field => $"{field.Row - 1}{field.Col - 1}")
+            //                .ToHashSet();
         }
         
     }

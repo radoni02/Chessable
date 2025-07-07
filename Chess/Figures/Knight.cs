@@ -1,4 +1,5 @@
 ﻿using Chess.Chessboard;
+using Chess.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,15 @@ namespace Chess.Figures
 
         }
 
-        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-
-            return ValidKnightFields(checkerboard, currentField)
-                                .Select(field => $"{field.Row-1}{field.Col-1}")
-                                .ToHashSet();
+            var possibleTargets = ValidKnightFields(checkerboard, currentField);
+            PossibleMoves = possibleTargets
+                .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+                .ToList();
+            //return ValidKnightFields(checkerboard, currentField)
+            //                    .Select(field => $"{field.Row-1}{field.Col-1}")
+            //                    .ToHashSet();
 
         }
 
