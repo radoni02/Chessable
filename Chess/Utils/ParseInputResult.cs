@@ -13,15 +13,15 @@ namespace Chess.Utils
             Valid = valid;
         }
 
-        public ParseInputResult(string currentPosition,string targetPosition,bool valid)
+        public ParseInputResult(Position currentPosition,Position targetPosition,bool valid)
         {
             CurrentPosition = currentPosition;
             TargetPosition = targetPosition;
             Valid = valid;
         }
 
-        public string? CurrentPosition { get; set; }
-        public string? TargetPosition { get; set; }
+        public Position? CurrentPosition { get; set; }
+        public Position? TargetPosition { get; set; }
         public bool Valid { get; set; }
     }
 }

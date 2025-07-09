@@ -14,7 +14,7 @@ namespace Chess.Figures
         bool IsWhite { get; }
         int MoveConut { get; set; }
         int Value { get; set; }
-
+        List<PossibleMove> PossibleMoves { get; set; }
         List<Field> AttackedFields { get; }
         void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);

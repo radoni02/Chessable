@@ -29,7 +29,6 @@ namespace Chess.Chessboard
 
             CurrentPlayer = whitePlayer;
         }
-
         public void StartGame()
         {
             while (true)
@@ -56,7 +55,8 @@ namespace Chess.Chessboard
                 return gameState;
             }
 
-            var currentField = Board.CalculatePositionOnChessboard(parsedInput.CurrentPosition);
+            //var currentField = Board.CalculatePositionOnChessboard(parsedInput.CurrentPosition);
+            var currentField = Board.GetCurrentField(parsedInput.CurrentPosition);
 
             if (CheckmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
             {
@@ -77,21 +77,21 @@ namespace Chess.Chessboard
                 return gameState;
             }
 
-            List<string> possibleMoves = new List<string>();
+            //List<string> possibleMoves = new List<string>();
+            var possibleMoves = new List<PossibleMove>();
             if (CheckmateAnalysisResult.IsInCheck)
             {
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
             }
-            possibleMoves.AddRange(currentField.Figure.CalculatePossibleMoves(Board, currentField));
-
-            var targetPosition = Board.CalculateTargetPosition(parsedInput.TargetPosition);
-            var targetMove = targetPosition.ToString();
+            currentField.Figure.CalculatePossibleMoves(Board, currentField);
+            possibleMoves.AddRange(currentField.Figure.PossibleMoves);
             foreach (var possibleMove in possibleMoves)
             {
-                if (possibleMove.Equals(targetMove))
+                if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
-                    currentField.Figure.Move(Board, currentField, targetPosition);
+                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row-1, parsedInput.TargetPosition.Col-1);
+                    currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
                     CheckmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(Board, oppKingField);
@@ -101,6 +101,25 @@ namespace Chess.Chessboard
                     break;
                 }
             }
+            //possibleMoves.AddRange(currentField.Figure.PossibleMoves);
+
+            ////var targetPosition = Board.CalculatePosition(parsedInput.TargetPosition);
+            //var targetPosition = Board.CalculateTargetPosition(parsedInput.TargetPosition);
+            //var targetMove = targetPosition.ToString();
+            //foreach (var possibleMove in possibleMoves)
+            //{
+            //    if (possibleMove.Equals(targetMove))
+            //    {
+            //        currentField.Figure.Move(Board, currentField, targetPosition);
+
+            //        var oppKingField = currentField.Figure.GetOppositKing(Board);
+            //        CheckmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(Board, oppKingField);
+
+            //        ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
+            //        CurrentPlayer = currentPlayer;
+            //        break;
+            //    }
+            //}
             gameState.IsValidMove = true;
             return gameState;
         }
@@ -110,9 +129,12 @@ namespace Chess.Chessboard
             if (!Regex.IsMatch(input, "^[a-h][1-8]-[a-h][1-8]$"))
                 return new ParseInputResult(false);
             var positions = input.Split('-');
-            var currentPosition = positions[0];
-            var targetPosition = positions[1];
-            return new ParseInputResult(currentPosition,targetPosition,true);
+            //var currentPosition = positions[0];
+            var currentPosition = Board.CalculatePosition(positions[0]);
+            var TargetPosition = Board.CalculatePosition(positions[1]);
+            //var currentMove = new Move(new Position(,), new Position(,));
+           // var targetPosition = positions[1];
+            return new ParseInputResult(currentPosition, TargetPosition, true);
         }
     }
 }

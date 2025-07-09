@@ -17,6 +17,14 @@ public class Position
     public int Col { get; set; }
     public int Row { get; set; }
 
+    public override bool Equals(object? obj)
+    {
+        var pos = obj as Position;
+        if (this.Row.Equals(pos.Row) && this.Col.Equals(pos.Col))
+            return true;
+        return false;
+    }
+
     public override string ToString()
     {
         return $"{Row}{Col}";

@@ -3,6 +3,7 @@ using Chess.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,6 +95,12 @@ public class Checkerboard
         }
     }
 
+    public Field GetCurrentField(Position position)
+        => Board
+            .SelectMany(ff => ff)
+            .FirstOrDefault(field => field.Col == position.Col &&
+                                        field.Row == position.Row);
+
     public void ShowNewPosition()
     {
         var valueBeetwenFields = 10;
@@ -121,7 +128,44 @@ public class Checkerboard
         return sb.ToString();
     }
 
-    public Field CalculatePositionOnChessboard(string position) // in format "a2" to format enumerable from 1  custom => (col, row)
+    //public Field CalculatePositionOnChessboard(string position) // in format "a2" to format enumerable from 1  custom => (col, row)
+    //{
+    //    var dict = new Dictionary<char, int>()
+    //        {
+    //        {'a',1},
+    //        {'b',2},
+    //        {'c',3},
+    //        {'d',4},
+    //        {'e',5},
+    //        {'f',6},
+    //        {'g',7},
+    //        {'h',8}
+    //        };
+    //    dict.TryGetValue(position.First(), out var col);
+    //    var row = (int)char.GetNumericValue(position.Last());
+    //    return this.Board.SelectMany(f => f)
+    //           .FirstOrDefault(field => field.Col == col && field.Row == row);
+    //}
+
+    //public Position CalculateTargetPosition(string position) // in format "a2" to format enumerable from 0 default table => [col][row]
+    //{
+    //    var dict = new Dictionary<char, int>()
+    //        {
+    //        {'a',0},
+    //        {'b',1},
+    //        {'c',2},
+    //        {'d',3},
+    //        {'e',4},
+    //        {'f',5},
+    //        {'g',6},
+    //        {'h',7}
+    //        };
+    //    dict.TryGetValue(position.First(), out var value);
+    //    var row = (int)char.GetNumericValue(position.Last());
+    //    return new Position(row - 1, value);
+    //}
+
+    public Position CalculatePosition(string position)
     {
         var dict = new Dictionary<char, int>()
             {
@@ -134,28 +178,9 @@ public class Checkerboard
             {'g',7},
             {'h',8}
             };
-        dict.TryGetValue(position.First(), out var col);
-        var row = (int)char.GetNumericValue(position.Last());
-        return this.Board.SelectMany(f => f)
-               .FirstOrDefault(field => field.Col == col && field.Row == row);
-    }
-
-    public Position CalculateTargetPosition(string position) // in format "a2" to format enumerable from 0 default table => [col][row]
-    {
-        var dict = new Dictionary<char, int>()
-            {
-            {'a',0},
-            {'b',1},
-            {'c',2},
-            {'d',3},
-            {'e',4},
-            {'f',5},
-            {'g',6},
-            {'h',7}
-            };
         dict.TryGetValue(position.First(), out var value);
         var row = (int)char.GetNumericValue(position.Last());
-        return new Position(row - 1, value);
+        return new Position(row, value);
     }
 
     public List<List<Field>> Board { get; set; }
