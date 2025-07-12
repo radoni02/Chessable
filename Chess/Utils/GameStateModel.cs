@@ -35,6 +35,11 @@ namespace Chess.Utils
             BoardState = checkerboard;
         }
 
+        public void SetMoveIsValid()
+        {
+            IsValidMove = true;
+        }
+
         public void SetKingInCheckError()
         {
             IsValidMove = false;
