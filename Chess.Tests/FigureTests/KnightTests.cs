@@ -50,14 +50,14 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
-
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
             // Assert
             Assert.NotNull(results);
             Assert.Equal(8, results.Count);
 
-            var expectedMoves = new HashSet<string> { "12", "14", "21", "25", "41", "45", "52", "54" };
-            Assert.Equal(expectedMoves, results);
+            var expectedMoves = new HashSet<string> { "23", "25", "32", "36", "52", "56", "63", "65" };
+            Assert.Equal(expectedMoves, results.Select(r => r.TargetPosition.ToString()));
         }
 
         [Fact]
@@ -70,14 +70,15 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
 
             // Assert
             Assert.NotNull(results);
             Assert.Equal(2, results.Count);
 
-            var expectedMoves = new HashSet<string> { "12", "21" };
-            Assert.Equal(expectedMoves, results);
+            var expectedMoves = new HashSet<string> { "23", "32" };
+            Assert.Equal(expectedMoves, results.Select(r => r.TargetPosition.ToString()));
         }
 
         [Fact]
@@ -96,7 +97,8 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
 
             // Assert
             Assert.NotNull(results);
@@ -117,13 +119,16 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
             Assert.NotNull(results);
-            Assert.Equal(6, results.Count); 
-            Assert.DoesNotContain("13", results); 
-            Assert.DoesNotContain("14", results); 
+            Assert.Equal(6, results.Count);
+
+            Assert.DoesNotContain("24", targets);
+            Assert.DoesNotContain("25", targets);
         }
 
         [Fact]
@@ -141,14 +146,16 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
             Assert.NotNull(results);
             Assert.Equal(8, results.Count);
-            Assert.Contains("12", results); 
-            Assert.Contains("14", results);
-            Assert.Contains("52", results);
+            Assert.Contains("23", targets);
+            Assert.Contains("25", targets);
+            Assert.Contains("63", targets);
         }
 
         [Fact]
@@ -161,14 +168,15 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            var results = knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            var results = knightField.Figure.PossibleMoves;
 
             // Assert
             Assert.NotNull(results);
             Assert.Equal(4, results.Count);
 
-            var expectedMoves = new HashSet<string> { "22", "24", "11","15" };
-            Assert.Equal(expectedMoves, results);
+            var expectedMoves = new HashSet<string> { "22", "26", "33", "35" };
+            Assert.Equal(expectedMoves, results.Select(r => r.TargetPosition.ToString()));
         }
     }
 }

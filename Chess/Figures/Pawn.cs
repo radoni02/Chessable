@@ -82,7 +82,9 @@ namespace Chess.Figures
                 {
                     possibleWhiteMoves.Add(moveByTwo);
                 }
-                possibleWhiteMoves.Union(this.AttackedFields);
+                possibleWhiteMoves = possibleWhiteMoves
+                    .Union(this.AttackedFields)
+                    .ToList();
                 PossibleMoves = possibleWhiteMoves
                     .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                     .ToList();
@@ -101,7 +103,9 @@ namespace Chess.Figures
                 {
                     possibleBlackMoves.Add(moveByTwo);
                 }
-                possibleBlackMoves.Union(this.AttackedFields);
+                possibleBlackMoves = possibleBlackMoves
+                    .Union(this.AttackedFields)
+                    .ToList();
                 PossibleMoves = possibleBlackMoves
                     .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                     .ToList();

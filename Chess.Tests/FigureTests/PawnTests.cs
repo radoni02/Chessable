@@ -28,7 +28,9 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CalculatePossibleMoves(chessboard, currentField);
+            var results = pawn.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
             Assert.NotNull(pawn);
@@ -36,7 +38,7 @@ namespace Chess.Tests.FigureTests
             Assert.True(pawn.IsWhite);
             Assert.NotNull(chessboard);
             Assert.NotNull(results);
-            Assert.Equal(new HashSet<string>() { "64", "66" }, results);
+            Assert.Equal(new HashSet<string>() { "75", "77" }, targets);
         }
 
         [Fact]
@@ -49,8 +51,10 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
-            pawn.Move(chessboard,currentField,new Utils.Position(7,5));
+            pawn.CalculatePossibleMoves(chessboard, currentField);
+            var results = pawn.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
+            pawn.Move(chessboard, currentField, new Utils.Position(7, 5));
 
             // Assert
             Assert.NotNull(pawn);
@@ -58,8 +62,8 @@ namespace Chess.Tests.FigureTests
             Assert.True(pawn.IsWhite);
             Assert.NotNull(chessboard);
             Assert.NotNull(results);
-            Assert.Equal(new HashSet<string>() { "74", "75","76" }, results);
-            
+            Assert.Equal(new HashSet<string>() { "86", "85", "87" }, targets);
+
         }
 
         [Fact]
@@ -72,20 +76,22 @@ namespace Chess.Tests.FigureTests
             var blackPawn1 = new Pawn(false, 1, "Pawn");
             var blackPawn2 = new Pawn(false, 1, "Pawn");
 
-            chessboard.Board[5][2] = new Field(true, blackPawn1, 6, 3); 
+            chessboard.Board[5][2] = new Field(true, blackPawn1, 6, 3);
             chessboard.Board[5][4] = new Field(true, blackPawn2, 6, 5);
 
             var currentField = chessboard.Board[4][3];
             whitePawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = whitePawn.CalculatePossibleMoves(chessboard, currentField);
+            whitePawn.CalculatePossibleMoves(chessboard, currentField);
+            var results = whitePawn.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
             Assert.NotNull(results);
-            Assert.Contains("52", results);
-            Assert.Contains("54", results);
-            Assert.Contains("53", results);
+            Assert.Contains("63", targets);
+            Assert.Contains("65", targets);
+            Assert.Contains("64", targets);
         }
 
         [Fact]
@@ -98,13 +104,15 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CalculatePossibleMoves(chessboard, currentField);
+            var results = pawn.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
             Assert.NotNull(results);
-            Assert.Contains("23", results);
-            Assert.Contains("33", results);
-            Assert.Equal(2, results.Count);
+            Assert.Contains("34", targets);
+            Assert.Contains("44", targets);
+            Assert.Equal(4, results.Count);
         }
 
         [Fact]
@@ -117,15 +125,16 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            var results = pawn.CalculatePossibleMoves(chessboard, currentField);
-            var originalPawnType = pawn.GetType();
+            pawn.CalculatePossibleMoves(chessboard, currentField);
+            var results = pawn.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             pawn.Move(chessboard, currentField, new Position(7, 5));
             var promotedPiece = chessboard.Board[7][5].Figure;
 
             // Assert
             Assert.NotNull(results);
-            Assert.Equal(new HashSet<string>() { "74", "75", "76" }, results);
+            Assert.Equal(new HashSet<string>() {"86","85", "87" }, targets);
             Assert.IsType<Queen>(promotedPiece);
             Assert.True(promotedPiece.IsWhite);
             Assert.Equal("Queen", promotedPiece.Name);

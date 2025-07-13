@@ -109,7 +109,7 @@ public class King : Figure
                 if (IsCastlingValid(board, current, rook, forbidden))
                 {
                     int castlingCol = rook.Col < current.Col ? current.Col - 2 : current.Col + 2;
-                    yield return new Field(current.Row,castlingCol - 1);
+                    yield return new Field(current.Row,castlingCol);
                     //castlingMoves.Add($"{current.Row - 1}{castlingCol - 1}");
                 }
             }

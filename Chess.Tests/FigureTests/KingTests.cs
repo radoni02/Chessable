@@ -98,11 +98,13 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.PossibleMoves;
+            var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 
             // Assert
-            Assert.Contains("02", possibleMoves);
-            Assert.Contains("06", possibleMoves);
+            Assert.Contains("13", targetMoves);
+            Assert.Contains("17", targetMoves);
         }
 
         [Fact]
@@ -123,11 +125,13 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.PossibleMoves;
+            var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 
             // Assert
-            Assert.DoesNotContain("02", possibleMoves);
-            Assert.DoesNotContain("06", possibleMoves);
+            Assert.DoesNotContain("13", targetMoves);
+            Assert.DoesNotContain("17", targetMoves);
         }
 
         [Fact]
@@ -145,11 +149,13 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            var possibleMoves = kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            var possibleMoves = kingField.Figure.PossibleMoves;
+            var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 
             // Assert
-            Assert.DoesNotContain("23", possibleMoves); 
-            Assert.DoesNotContain("43", possibleMoves);
+            Assert.DoesNotContain("34", targetMoves);
+            Assert.DoesNotContain("54", targetMoves);
         }
     }
 }
