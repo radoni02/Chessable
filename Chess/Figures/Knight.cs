@@ -27,9 +27,6 @@ namespace Chess.Figures
             PossibleMoves = possibleTargets
                 .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                 .ToList();
-            //return ValidKnightFields(checkerboard, currentField)
-            //                    .Select(field => $"{field.Row-1}{field.Col-1}")
-            //                    .ToHashSet();
 
         }
 

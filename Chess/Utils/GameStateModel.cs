@@ -21,7 +21,6 @@ namespace Chess.Utils
         public bool EmptyField { get; set; }
         public bool ChoosenWrongColorFigure { get; set; }
         public Checkerboard BoardState { get; set; }
-        //public CheckmateAnalysisResult CheckmateAnalysis { get; set; }
 
         public GameStateModel(Checkerboard checkerboard)
         {

@@ -53,11 +53,6 @@ public class King : Figure
 
     public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
     {
-
-        //var possibleKingMoves = new HashSet<string>();
-        //possibleKingMoves = KingPossibleMoves(checkerboard,currentField);
-        //return possibleKingMoves;
-
         var possibleTargets = KingPossibleMoves(checkerboard, currentField);
 
         PossibleMoves = possibleTargets
@@ -80,10 +75,6 @@ public class King : Figure
         {
             var castlingMoves = GetCastlingMoves(checkerboard, currentField, forbiddenFieldsForKing);
             possibleMoves.AddRange(castlingMoves);
-            //foreach (var move in castlingMoves)
-            //{
-            //    possibleMoves.Add(move);
-            //}
         }
 
         return possibleMoves;
@@ -110,10 +101,8 @@ public class King : Figure
                 {
                     int castlingCol = rook.Col < current.Col ? current.Col - 2 : current.Col + 2;
                     yield return new Field(current.Row,castlingCol);
-                    //castlingMoves.Add($"{current.Row - 1}{castlingCol - 1}");
                 }
             }
-            //return castlingMoves;
         }
 
         bool IsCastlingValid(Checkerboard board, Field king, Field rook, IEnumerable<Field> forbidden)

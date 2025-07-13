@@ -28,10 +28,6 @@ namespace Chess.Figures
             PossibleMoves = selectedFields
                 .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                 .ToList();
-
-            //return selectedFields
-            //            .Select(field => $"{field.Row - 1}{field.Col - 1}")
-            //            .ToHashSet();
         }
     }
 }

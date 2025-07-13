@@ -65,13 +65,11 @@ namespace Chess.Utils
                                 .Any(field => field.Figure.AttackedFields
                                                             .Any(at => at == attackingField)))
                 {
-                    //captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
                     captureOptions.Add(new PossibleMove(new Position(alliedPiece.Row, alliedPiece.Col), new Position(attackingField.Row, attackingField.Col)));
                     continue;
                 }
                 if (!alliedPiece.Figure.CheckIfFigureIsImmobilized(board) && alliedPiece.Figure is not King)
                 {
-                    //captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
                     captureOptions.Add(new PossibleMove(new Position(alliedPiece.Row, alliedPiece.Col), new Position(attackingField.Row, attackingField.Col)));
                 }
             }
@@ -103,7 +101,6 @@ namespace Chess.Utils
                 {
                     if (piece.Figure.AttackedFields.Any(f => f.Row == target.Row && f.Col == target.Col))
                     {
-                        //blockingOptions.Add($"{piece.Row}{piece.Col}-{target.Row}{target.Col}");
                         blockingOptions.Add(new PossibleMove(new Position(piece.Row,piece.Col),new Position(target.Row,target.Col)));
                     }
                 }

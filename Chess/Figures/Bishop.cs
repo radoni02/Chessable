@@ -23,17 +23,10 @@ namespace Chess.Figures
 
         public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            //var selectedFields = new List<Field>();
             var result = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField);
             PossibleMoves = result.PossibleMoves
                 .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                 .ToList();
-
-            //selectedFields = DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).PossibleMoves;
-
-            //return selectedFields
-            //                .Select(field => $"{field.Row - 1}{field.Col - 1}")
-            //                .ToHashSet();
         }
         
     }

@@ -110,48 +110,6 @@ namespace Chess.Figures
                     .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                     .ToList();
             }
-            //var additionalPosiibleMoves = currentField.Figure.AttackedFields.Where(f => f.IsUsed)
-            //    .Select(filed =>
-            //    {
-            //        return $"{filed.Row - 1}{filed.Col - 1}";
-            //    })
-            //    .ToHashSet();
-            //if (currentField.Figure.IsWhite)
-            //{
-            //    var possibleWhiteMoves = new HashSet<string>();
-            //    var forwardMove = ForwardMoveWhite(checkerboard, currentField);
-            //    if (forwardMove is not "")
-            //    {
-            //        possibleWhiteMoves.Add(forwardMove);
-            //    }
-            //    var moveByTwo = ForwardMoveByTwoWhite(checkerboard, currentField);
-            //    if (moveByTwo is not "")
-            //    {
-            //        possibleWhiteMoves.Add(moveByTwo);
-            //    }
-            //    return possibleWhiteMoves.Union(additionalPosiibleMoves)
-            //        .ToHashSet();
-
-            //}
-
-            //if (!currentField.Figure.IsWhite)
-            //{
-            //    var possibleBlackMoves = new HashSet<string>();
-            //    var forwardMove = ForwardMoveBlack(checkerboard, currentField);
-            //    if (forwardMove is not "")
-            //    {
-            //        possibleBlackMoves.Add(forwardMove);
-            //    }
-            //    var moveByTwo = ForwardMoveByTwoBlack(checkerboard, currentField);
-            //    if (moveByTwo is not "")
-            //    {
-            //        possibleBlackMoves.Add(moveByTwo);
-            //    }
-            //    return possibleBlackMoves.Union(additionalPosiibleMoves)
-            //        .ToHashSet();
-            //}
-
-            //return new HashSet<string>();
         }
 
         private Field ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
@@ -188,11 +146,6 @@ namespace Chess.Figures
         {
             return ForwardMove(checkerboard, currentField, -2);
         }
-
-        //private string ForwardMove(Checkerboard checkerboard, Field currentField,int moveByValue)
-        //{
-        //    return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? $"{currentField.Row + moveByValue}{currentField.Col - 1}" : string.Empty;
-        //}//there is some problem when pawn comes to last row, need to implement test case for that
 
         private Field ForwardMove(Checkerboard checkerboard, Field currentField, int moveByValue)
         {

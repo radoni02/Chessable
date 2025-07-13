@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Chessboard
 {
-    public class Field        //possible moves zrobic sprawdzanie czy figura nie jest immobilized, dodac sprawdzanie pata
-        //w gameStateAnalizer podmienic string na PossibleMoves i sprawidzc Union w Pawn move bo chyba nie działa
+    public class Field//possible moves zrobic sprawdzanie czy figura nie jest immobilized, dodac sprawdzanie pata
     {
         public Field(bool isUsed, IFigure figure, int row, int col)
         {
