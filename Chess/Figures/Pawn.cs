@@ -67,90 +67,89 @@ namespace Chess.Figures
         }
 
 
-        public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
-            var additionalPosiibleMoves = currentField.Figure.AttackedFields.Where(f => f.IsUsed)
-                .Select(filed =>
-                {
-                    return $"{filed.Row - 1}{filed.Col - 1}";
-                })
-                .ToHashSet();
-            if (currentField.Figure.IsWhite)
+            if (this.IsWhite)
             {
-                var possibleWhiteMoves = new HashSet<string>();
+                var possibleWhiteMoves = new List<Field>();
                 var forwardMove = ForwardMoveWhite(checkerboard, currentField);
-                if (forwardMove is not "")
+                if (forwardMove is not null)
                 {
                     possibleWhiteMoves.Add(forwardMove);
                 }
                 var moveByTwo = ForwardMoveByTwoWhite(checkerboard, currentField);
-                if (moveByTwo is not "")
+                if (moveByTwo is not null)
                 {
                     possibleWhiteMoves.Add(moveByTwo);
                 }
-                return possibleWhiteMoves.Union(additionalPosiibleMoves)
-                    .ToHashSet();
-                
-            }
+                possibleWhiteMoves = possibleWhiteMoves
+                    .Union(this.AttackedFields)
+                    .ToList();
+                PossibleMoves = possibleWhiteMoves
+                    .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+                    .ToList();
 
-            if(!currentField.Figure.IsWhite)
+            }
+            if (!this.IsWhite)
             {
-                var possibleBlackMoves = new HashSet<string>();
+                var possibleBlackMoves = new List<Field>(); ;
                 var forwardMove = ForwardMoveBlack(checkerboard, currentField);
-                if (forwardMove is not "")
+                if (forwardMove is not null)
                 {
                     possibleBlackMoves.Add(forwardMove);
                 }
                 var moveByTwo = ForwardMoveByTwoBlack(checkerboard, currentField);
-                if (moveByTwo is not "")
+                if (moveByTwo is not null)
                 {
                     possibleBlackMoves.Add(moveByTwo);
                 }
-                return possibleBlackMoves.Union(additionalPosiibleMoves)
-                    .ToHashSet();
+                possibleBlackMoves = possibleBlackMoves
+                    .Union(this.AttackedFields)
+                    .ToList();
+                PossibleMoves = possibleBlackMoves
+                    .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+                    .ToList();
             }
-
-            return new HashSet<string>();
         }
 
-        private string ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
+        private Field ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row + 1, currentField.Col);
             if ( currentField.Row == 2 &&
-                ForwardMoveWhite(checkerboard, tempField) is string moveResult && 
-                moveResult is not "")
+                ForwardMoveWhite(checkerboard, tempField) is Field moveResult && 
+                moveResult is not null)
             {
                 return moveResult;
             }
-            return "";
+            return null;
         }
 
-        private string ForwardMoveByTwoBlack(Checkerboard checkerboard, Field currentField)
+        private Field ForwardMoveByTwoBlack(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row - 1, currentField.Col);
             if (currentField.Row == 7 &&
-                ForwardMoveBlack(checkerboard, tempField) is string moveResult &&
-                moveResult is not "")
+                ForwardMoveBlack(checkerboard, tempField) is Field moveResult &&
+                moveResult is not null)
             {
                 return moveResult;
             }
-            return "";
+            return null;
         }
 
 
-        private string ForwardMoveWhite(Checkerboard checkerboard, Field currentField)
+        private Field ForwardMoveWhite(Checkerboard checkerboard, Field currentField)
         {
             return ForwardMove(checkerboard, currentField,0);
         }
 
-        private string ForwardMoveBlack(Checkerboard checkerboard, Field currentField)
+        private Field ForwardMoveBlack(Checkerboard checkerboard, Field currentField)
         {
             return ForwardMove(checkerboard, currentField, -2);
         }
 
-        private string ForwardMove(Checkerboard checkerboard, Field currentField,int moveByValue)
+        private Field ForwardMove(Checkerboard checkerboard, Field currentField, int moveByValue)
         {
-            return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? $"{currentField.Row + moveByValue}{currentField.Col - 1}" : string.Empty;
+            return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1] : null;
         }//there is some problem when pawn comes to last row, need to implement test case for that
 
         public void CheckAndPromote(Checkerboard checkerboard, Field currentField)

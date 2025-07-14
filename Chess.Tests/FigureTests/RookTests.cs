@@ -75,17 +75,19 @@ namespace Chess.Tests.FigureTests
             var rookField = chessboard.Board[3][3];
 
             // Act
-            var possibleMoves = rookField.Figure.CalculatePossibleMoves(chessboard, rookField);
+            rookField.Figure.CalculatePossibleMoves(chessboard, rookField);
+            var results = rookField.Figure.PossibleMoves;
+            var targets = results.Select(r => r.TargetPosition.ToString());
 
             // Assert
-            Assert.Contains("30", possibleMoves);
-            Assert.Contains("36", possibleMoves);
-            Assert.Contains("13", possibleMoves);
-            Assert.Contains("53", possibleMoves);
+            Assert.Contains("41", targets);
+            Assert.Contains("47", targets);
+            Assert.Contains("24", targets);
+            Assert.Contains("64", targets);
 
             // Should not contain diagonal moves
-            Assert.DoesNotContain("22", possibleMoves);
-            Assert.DoesNotContain("44", possibleMoves);
+            Assert.DoesNotContain("33", targets);
+            Assert.DoesNotContain("44", targets);
         }
     }
 }

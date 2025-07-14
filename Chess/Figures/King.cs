@@ -51,16 +51,17 @@ public class King : Figure
                                         .ToList();
     }
 
-    public override HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+    public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
     {
+        var possibleTargets = KingPossibleMoves(checkerboard, currentField);
 
-        var possibleKingMoves = new HashSet<string>();
-        possibleKingMoves = KingPossibleMoves(checkerboard,currentField);
-        return possibleKingMoves;
+        PossibleMoves = possibleTargets
+            .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
+            .ToList();
 
     }
 
-    private HashSet<string> KingPossibleMoves(Checkerboard checkerboard, Field currentField)
+    private IEnumerable<Field> KingPossibleMoves(Checkerboard checkerboard, Field currentField)
     {
         var forbiddenFieldsForKing = checkerboard.Board.SelectMany(fl => fl)
                                                         .Where(f => f.IsUsed && f.Figure?.IsWhite != currentField.Figure.IsWhite)
@@ -68,30 +69,25 @@ public class King : Figure
                                                         .SelectMany(s => s.AttackedFields)
                                                         .Distinct();
 
-        var possibleMoves = GetBasicKingMoves(checkerboard, currentField, forbiddenFieldsForKing);
+        var possibleMoves = GetBasicKingMoves(checkerboard, currentField, forbiddenFieldsForKing).ToList();
 
         if (currentField.Figure.MoveConut == 0)
         {
             var castlingMoves = GetCastlingMoves(checkerboard, currentField, forbiddenFieldsForKing);
-            foreach (var move in castlingMoves)
-            {
-                possibleMoves.Add(move);
-            }
+            possibleMoves.AddRange(castlingMoves);
         }
 
         return possibleMoves;
 
-        HashSet<string> GetBasicKingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
+        IEnumerable<Field> GetBasicKingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
         {
             return board.Board.SelectMany(fl => fl)
                               .Where(field => PotentialFieldIsInKingMoveRange(field, current)
                                            && ((field.IsUsed && field.Figure?.IsWhite != current.Figure.IsWhite) || !field.IsUsed))
-                              .Where(field => !forbidden.Any(ff => ff.Row == field.Row && ff.Col == field.Col))
-                              .Select(field => $"{field.Row - 1}{field.Col - 1}")
-                              .ToHashSet();
+                              .Where(field => !forbidden.Any(ff => ff.Row == field.Row && ff.Col == field.Col));
         }
 
-        HashSet<string> GetCastlingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
+        IEnumerable<Field> GetCastlingMoves(Checkerboard board, Field current, IEnumerable<Field> forbidden)
         {
             var castlingMoves = new HashSet<string>();
             var possibleCastling = board.Board.SelectMany(fl => fl)
@@ -104,10 +100,9 @@ public class King : Figure
                 if (IsCastlingValid(board, current, rook, forbidden))
                 {
                     int castlingCol = rook.Col < current.Col ? current.Col - 2 : current.Col + 2;
-                    castlingMoves.Add($"{current.Row - 1}{castlingCol - 1}");
+                    yield return new Field(current.Row,castlingCol);
                 }
             }
-            return castlingMoves;
         }
 
         bool IsCastlingValid(Checkerboard board, Field king, Field rook, IEnumerable<Field> forbidden)

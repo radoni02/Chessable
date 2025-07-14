@@ -25,11 +25,12 @@ namespace Chess.Figures
         }
 
         public List<Field> AttackedFields { get; set; }
+        public List<PossibleMove> PossibleMoves { get; set; }
         public bool IsWhite { get; set; }
         public int Value { get; set; }
         public string Name { get; set; }
         public int MoveConut { get; set; } = 0;
-        public abstract HashSet<string> CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
+        public abstract void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
         public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)

@@ -98,6 +98,8 @@ namespace Chess.Tests.FigureTests
             {
                 field.Figure.CalculateAtackedFields(board, field);
             }
+            var expectedResult = new PossibleMove(new Position(1, 5), new Position(1, 6));
+
             //Act
             var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
 
@@ -107,7 +109,7 @@ namespace Chess.Tests.FigureTests
             Assert.False(result.WrongFigureSelected);
             Assert.Empty(result.PossibleBlockingMoves);
             Assert.Empty(result.PossibleKingMoves);
-            Assert.Contains<string>("15-16", result.PossibleCaptureRescues);
+            Assert.Contains<PossibleMove>(expectedResult, result.PossibleCaptureRescues);
         }
 
         [Fact]
@@ -120,6 +122,7 @@ namespace Chess.Tests.FigureTests
             {
                 field.Figure.CalculateAtackedFields(board, field);
             }
+            var expectedResult = new PossibleMove(new Position(1,7), new Position(2, 8));
 
             //Act
             var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
@@ -130,7 +133,7 @@ namespace Chess.Tests.FigureTests
             Assert.False(result.WrongFigureSelected);
             Assert.Empty(result.PossibleBlockingMoves);
             Assert.Empty(result.PossibleCaptureRescues);
-            Assert.Contains<string>("17", result.PossibleKingMoves);
+            Assert.Contains<PossibleMove>(expectedResult, result.PossibleKingMoves);
         }
 
         [Fact]
@@ -143,6 +146,8 @@ namespace Chess.Tests.FigureTests
             {
                 field.Figure.CalculateAtackedFields(board, field);
             }
+            var firstExpectedResult = new PossibleMove(new Position(3, 3), new Position(1, 3));
+            var secondExpectedResult = new PossibleMove(new Position(3, 5), new Position(1, 5));
 
             //Act
             var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
@@ -152,10 +157,8 @@ namespace Chess.Tests.FigureTests
             Assert.False(result.IsCheckmate);
             Assert.False(result.WrongFigureSelected);
             Assert.Empty(result.PossibleCaptureRescues);
-            Assert.Contains<string>("33-13", result.PossibleBlockingMoves);
-            Assert.Contains<string>("35-15", result.PossibleBlockingMoves);
+            Assert.Contains<PossibleMove>(firstExpectedResult, result.PossibleBlockingMoves);
+            Assert.Contains<PossibleMove>(secondExpectedResult, result.PossibleBlockingMoves);
         }
-
-
     }
 }

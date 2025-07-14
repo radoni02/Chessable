@@ -27,7 +27,8 @@ namespace Chess.Utils
             }
 
             result.IsInCheck = true;
-            result.PossibleKingMoves = kingField.Figure.CalculatePossibleMoves(board, kingField);
+            kingField.Figure.CalculatePossibleMoves(board, kingField);
+            result.PossibleKingMoves = kingField.Figure.PossibleMoves;
             var figuresThatAttackKing = kingField.Figure.GetListOfFieldsAttackingTarget(board);
 
             foreach (var attackingField in figuresThatAttackKing)
@@ -50,9 +51,9 @@ namespace Chess.Utils
             return result;
         }
 
-        private static List<string> GetCaptureOptions(Checkerboard board, Field attackingField, Field kingField)
+        private static List<PossibleMove> GetCaptureOptions(Checkerboard board, Field attackingField, Field kingField)
         {
-            var captureOptions = new List<string>();
+            var captureOptions = new List<PossibleMove>();
             var alliedPiecesThatCanCaptureAttacker = attackingField.Figure.GetListOfFieldsAttackingTarget(board);
 
             foreach (var alliedPiece in alliedPiecesThatCanCaptureAttacker)
@@ -64,20 +65,20 @@ namespace Chess.Utils
                                 .Any(field => field.Figure.AttackedFields
                                                             .Any(at => at == attackingField)))
                 {
-                    captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                    captureOptions.Add(new PossibleMove(new Position(alliedPiece.Row, alliedPiece.Col), new Position(attackingField.Row, attackingField.Col)));
                     continue;
                 }
                 if (!alliedPiece.Figure.CheckIfFigureIsImmobilized(board) && alliedPiece.Figure is not King)
                 {
-                    captureOptions.Add($"{alliedPiece.Row}{alliedPiece.Col}-{attackingField.Row}{attackingField.Col}");
+                    captureOptions.Add(new PossibleMove(new Position(alliedPiece.Row, alliedPiece.Col), new Position(attackingField.Row, attackingField.Col)));
                 }
             }
             return captureOptions;
         }
 
-        private static List<string> GetBlockingOptions(Checkerboard board, Field kingField, Field attackingField)
+        private static List<PossibleMove> GetBlockingOptions(Checkerboard board, Field kingField, Field attackingField)
         {
-            var blockingOptions = new List<string>();
+            var blockingOptions = new List<PossibleMove>();
             var possibleTargetsToBlockAttack = kingField.Figure.GetListOfFieldsThatAreBetweenCurrentAndTarget(board, kingField, attackingField);
 
             var alliedPiecesThatCanBlock = board.Board.SelectMany(ff => ff)
@@ -100,7 +101,7 @@ namespace Chess.Utils
                 {
                     if (piece.Figure.AttackedFields.Any(f => f.Row == target.Row && f.Col == target.Col))
                     {
-                        blockingOptions.Add($"{piece.Row}{piece.Col}-{target.Row}{target.Col}");
+                        blockingOptions.Add(new PossibleMove(new Position(piece.Row,piece.Col),new Position(target.Row,target.Col)));
                     }
                 }
             }
@@ -114,8 +115,8 @@ namespace Chess.Utils
         public bool WrongFigureSelected { get; set; } = false;
         public bool IsInCheck { get; set; }
         public bool IsCheckmate { get; set; }
-        public HashSet<string> PossibleKingMoves { get; set; } = new HashSet<string>();
-        public List<string> PossibleCaptureRescues { get; set; } = new List<string>();
-        public List<string> PossibleBlockingMoves { get; set; } = new List<string>();
+        public List<PossibleMove> PossibleKingMoves { get; set; } = new List<PossibleMove>();
+        public List<PossibleMove> PossibleCaptureRescues { get; set; } = new List<PossibleMove>();
+        public List<PossibleMove> PossibleBlockingMoves { get; set; } = new List<PossibleMove>();
     }
 }
