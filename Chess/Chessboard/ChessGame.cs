@@ -98,8 +98,7 @@ namespace Chess.Chessboard
                     break;
                 }
             }
-
-            gameState.IsValidMove = true;
+            gameState.SetMoveIsValid();
             return gameState;
         }
 
