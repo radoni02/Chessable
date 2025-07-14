@@ -130,5 +130,20 @@ namespace Chess.Tests.FigureTests
             Assert.Equal("Bishop", immobilizedFigure.Name);
             Assert.True(immobilizedFigure.IsWhite);
         }
+
+        [Fact]
+        public void CheckIfFigureIsImmobilized_ShouldReturns_False_WhenFigureIsKing()
+        {
+            // Arrange
+            var board = _chessboardPositions.GetTacticalPosition();
+            var kingField = board.Board[0][4];
+
+            // Act
+            var result = kingField.Figure.CheckIfFigureIsImmobilized(board);
+
+            // Assert
+            Assert.False(result);
+            Assert.NotNull(kingField);
+        }
     }
 }
