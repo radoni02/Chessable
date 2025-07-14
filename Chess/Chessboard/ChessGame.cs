@@ -81,7 +81,7 @@ namespace Chess.Chessboard
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
             }
-            currentField.Figure.CalculatePossibleMoves(Board, currentField);
+            currentField.Figure.CheckPossibleMoves(Board, currentField);
             possibleMoves.AddRange(currentField.Figure.PossibleMoves);
             foreach (var possibleMove in possibleMoves)
             {
