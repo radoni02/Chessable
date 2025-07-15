@@ -31,7 +31,7 @@ namespace Chess.Tests.FigureTests
             }
 
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, kingField);
 
             //Assert
             Assert.False(result.IsInCheck);
@@ -54,7 +54,7 @@ namespace Chess.Tests.FigureTests
             }
 
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, wrongKingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, wrongKingField);
 
             //Assert
             Assert.False(result.IsInCheck);
@@ -76,7 +76,7 @@ namespace Chess.Tests.FigureTests
                 field.Figure.CalculateAtackedFields(board, field);
             }
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);
@@ -101,7 +101,7 @@ namespace Chess.Tests.FigureTests
             var expectedResult = new PossibleMove(new Position(1, 5), new Position(1, 6));
 
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);
@@ -125,7 +125,7 @@ namespace Chess.Tests.FigureTests
             var expectedResult = new PossibleMove(new Position(1,7), new Position(2, 8));
 
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);
@@ -150,7 +150,7 @@ namespace Chess.Tests.FigureTests
             var secondExpectedResult = new PossibleMove(new Position(3, 5), new Position(1, 5));
 
             //Act
-            var result = GameStateAnalyzer.AnalyzeForCheckmate(board, kingField);
+            var result = GameStateAnalyzer.AnalizeGameState(board, kingField);
 
             //Assert
             Assert.True(result.IsInCheck);

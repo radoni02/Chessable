@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Chessboard
 {
-    public class Field//possible moves zrobic sprawdzanie czy figura nie jest immobilized, dodac sprawdzanie pata
+    public class Field
     {
         public Field(bool isUsed, IFigure figure, int row, int col)
         {

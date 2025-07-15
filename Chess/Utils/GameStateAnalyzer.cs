@@ -2,6 +2,7 @@
 using Chess.Figures;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,20 +11,35 @@ namespace Chess.Utils
 {
     public class GameStateAnalyzer
     {
-        public static CheckmateAnalysisResult AnalyzeForCheckmate(Checkerboard board, Field kingField)
+        public static CheckmateAnalysisResult AnalizeGameState(Checkerboard board, Field kingField)
         {
             var result = new CheckmateAnalysisResult();
 
+            if (!ValidateKingField(kingField, ref result))
+                return result;
+
+            AnalyzeForCheckmate(board, kingField, ref result);
+            if(!result.IsCheckmate)
+                AnalyzeForStalemate(board, kingField, ref result);
+            return result;
+        }
+
+        private static bool ValidateKingField(Field kingField, ref CheckmateAnalysisResult result)
+        {
             if (kingField.Figure is null || kingField.Figure is not King)
             {
                 result.WrongFigureSelected = true;
-                return result;
+                return false;
             }
+            return true;
+        }
 
+        private static void AnalyzeForCheckmate(Checkerboard board, Field kingField, ref CheckmateAnalysisResult result)
+        {
             if (!kingField.Figure.CheckIfFigureIsUnderAttack(board))
             {
                 result.IsInCheck = false;
-                return result;
+                return;
             }
 
             result.IsInCheck = true;
@@ -48,7 +64,29 @@ namespace Chess.Utils
                                 result.PossibleCaptureRescues.Count == 0 &&
                                 result.PossibleBlockingMoves.Count == 0;
 
-            return result;
+            return;
+        }
+
+        private static void AnalyzeForStalemate(Checkerboard board, Field kingField, ref CheckmateAnalysisResult result)
+        {
+            var kingColorFields = board.Board
+                .SelectMany(ff => ff)
+                .Where(field => 
+                        field.IsUsed is true &&
+                        field.Figure is not null &&
+                        field.Figure.IsWhite
+                            .Equals(kingField.Figure.IsWhite));
+
+            var isAnyMoveAvailable = kingColorFields
+                .SelectMany(field =>
+                {
+                    field.Figure.CheckPossibleMoves(board, field);
+                    return field.Figure.PossibleMoves;
+                })
+                .Any();
+
+            if(!isAnyMoveAvailable)
+                result.IsInStalemate = true;
         }
 
         private static List<PossibleMove> GetCaptureOptions(Checkerboard board, Field attackingField, Field kingField)
@@ -115,6 +153,7 @@ namespace Chess.Utils
         public bool WrongFigureSelected { get; set; } = false;
         public bool IsInCheck { get; set; }
         public bool IsCheckmate { get; set; }
+        public bool IsInStalemate { get; set; }
         public List<PossibleMove> PossibleKingMoves { get; set; } = new List<PossibleMove>();
         public List<PossibleMove> PossibleCaptureRescues { get; set; } = new List<PossibleMove>();
         public List<PossibleMove> PossibleBlockingMoves { get; set; } = new List<PossibleMove>();

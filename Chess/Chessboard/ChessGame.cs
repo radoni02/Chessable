@@ -91,7 +91,13 @@ namespace Chess.Chessboard
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
-                    CheckmateAnalysisResult = GameStateAnalyzer.AnalyzeForCheckmate(Board, oppKingField);
+                    CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(Board, oppKingField);
+
+                    if (CheckmateAnalysisResult.IsInStalemate)
+                    {
+                        gameState.SetIsInStalemate();
+                        return gameState;
+                    } 
 
                     ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
                     CurrentPlayer = currentPlayer;
