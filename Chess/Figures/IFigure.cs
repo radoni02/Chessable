@@ -16,7 +16,7 @@ namespace Chess.Figures
         int Value { get; set; }
         List<PossibleMove> PossibleMoves { get; set; }
         List<Field> AttackedFields { get; }
-        void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
+        //void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
         void CheckPossibleMoves(Checkerboard checkerboard, Field currentField);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
         void Move(Checkerboard checkerboard, Field currentField, Position targetField);

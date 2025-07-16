@@ -75,7 +75,7 @@ namespace Chess.Tests.FigureTests
             var rookField = chessboard.Board[3][3];
 
             // Act
-            rookField.Figure.CalculatePossibleMoves(chessboard, rookField);
+            rookField.Figure.CheckPossibleMoves(chessboard, rookField);
             var results = rookField.Figure.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 

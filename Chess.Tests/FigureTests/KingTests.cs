@@ -98,7 +98,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CheckPossibleMoves(chessboard, kingField);
             var possibleMoves = kingField.Figure.PossibleMoves;
             var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 
@@ -125,7 +125,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CheckPossibleMoves(chessboard, kingField);
             var possibleMoves = kingField.Figure.PossibleMoves;
             var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 
@@ -149,7 +149,7 @@ namespace Chess.Tests.FigureTests
             }
 
             // Act
-            kingField.Figure.CalculatePossibleMoves(chessboard, kingField);
+            kingField.Figure.CheckPossibleMoves(chessboard, kingField);
             var possibleMoves = kingField.Figure.PossibleMoves;
             var targetMoves = possibleMoves.Select(r => r.TargetPosition.ToString());
 

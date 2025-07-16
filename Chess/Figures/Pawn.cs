@@ -67,7 +67,7 @@ namespace Chess.Figures
         }
 
 
-        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             if (this.IsWhite)
             {

@@ -30,7 +30,7 @@ namespace Chess.Figures
         public int Value { get; set; }
         public string Name { get; set; }
         public int MoveConut { get; set; } = 0;
-        public abstract void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
+        protected abstract void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
 
         public void CheckPossibleMoves(Checkerboard checkerboard, Field currentField)
         {

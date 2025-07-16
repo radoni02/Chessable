@@ -50,7 +50,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
             // Assert
             Assert.NotNull(results);
@@ -70,7 +70,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
 
             // Assert
@@ -97,7 +97,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
 
             // Assert
@@ -119,7 +119,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
@@ -146,7 +146,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
@@ -168,7 +168,7 @@ namespace Chess.Tests.FigureTests
             knightField.Figure.CalculateAtackedFields(chessboard, knightField);
 
             // Act
-            knightField.Figure.CalculatePossibleMoves(chessboard, knightField);
+            knightField.Figure.CheckPossibleMoves(chessboard, knightField);
             var results = knightField.Figure.PossibleMoves;
 
             // Assert

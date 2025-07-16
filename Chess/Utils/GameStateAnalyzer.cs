@@ -43,7 +43,7 @@ namespace Chess.Utils
             }
 
             result.IsInCheck = true;
-            kingField.Figure.CalculatePossibleMoves(board, kingField);
+            kingField.Figure.CheckPossibleMoves(board, kingField);
             result.PossibleKingMoves = kingField.Figure.PossibleMoves;
             var figuresThatAttackKing = kingField.Figure.GetListOfFieldsAttackingTarget(board);
 

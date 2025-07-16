@@ -51,7 +51,7 @@ public class King : Figure
                                         .ToList();
     }
 
-    public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+    protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
     {
         var possibleTargets = KingPossibleMoves(checkerboard, currentField);
 

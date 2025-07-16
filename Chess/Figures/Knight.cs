@@ -21,7 +21,7 @@ namespace Chess.Figures
 
         }
 
-        public override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
         {
             var possibleTargets = ValidKnightFields(checkerboard, currentField);
             PossibleMoves = possibleTargets

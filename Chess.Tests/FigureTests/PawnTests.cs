@@ -28,7 +28,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CheckPossibleMoves(chessboard, currentField);
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
@@ -51,7 +51,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CheckPossibleMoves(chessboard, currentField);
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
             pawn.Move(chessboard, currentField, new Utils.Position(7, 5));
@@ -83,7 +83,7 @@ namespace Chess.Tests.FigureTests
             whitePawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            whitePawn.CalculatePossibleMoves(chessboard, currentField);
+            whitePawn.CheckPossibleMoves(chessboard, currentField);
             var results = whitePawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
@@ -104,7 +104,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CheckPossibleMoves(chessboard, currentField);
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
@@ -125,7 +125,7 @@ namespace Chess.Tests.FigureTests
             pawn.CalculateAtackedFields(chessboard, currentField);
 
             // Act
-            pawn.CalculatePossibleMoves(chessboard, currentField);
+            pawn.CheckPossibleMoves(chessboard, currentField);
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
