@@ -53,7 +53,7 @@ This library is currently under active development. The following features are i
 - ✅ Attack pattern detection
 - ✅ Special moves (castling, en passant)
 - ✅ Check/checkmate detection
-- 🚧 Game state management
+- ✅ Game state management
 - 🚧 Move history and undo functionality
 - 📋 Planned: AI integration support
 - 📋 Planned: PGN notation support
