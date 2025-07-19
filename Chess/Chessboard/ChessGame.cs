@@ -49,31 +49,20 @@ namespace Chess.Chessboard
         {
             var gameState = new GameStateModel(Board);
             var parsedInput = ParseMoveInput(move);
-            if(!parsedInput.Valid)
-            {
-                gameState.SetInvalidInputError();
+
+            if (!MoveValidation.ValidateInput(parsedInput, gameState))
                 return gameState;
-            }
+
             var currentField = Board.GetCurrentField(parsedInput.CurrentPosition);
 
-            if (CheckmateAnalysisResult.IsInCheck && currentField.Figure is not null && !currentField.Figure.Name.Equals("King"))
-            {
-                gameState.SetKingInCheckError();
+            if (!MoveValidation.ValidateKingInCheck(CheckmateAnalysisResult, currentField, gameState))
                 return gameState;
-            }
 
-            if (!currentField.IsUsed)
-            {
-                gameState.SetEmptyFieldError();
+            if (!MoveValidation.ValidateFieldUsage(currentField, gameState))
                 return gameState;
-            }
 
-            if ((CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite) ||
-                (!CurrentPlayer.IsWhite && CurrentPlayer.IsWhite != currentField.Figure.IsWhite))
-            {
-                gameState.SetWrongColorFigureError();
+            if (!MoveValidation.ValidatePlayerTurn(CurrentPlayer, currentField, gameState))
                 return gameState;
-            }
 
             var possibleMoves = new List<PossibleMove>();
             if (CheckmateAnalysisResult.IsInCheck)
