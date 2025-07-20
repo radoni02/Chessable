@@ -28,7 +28,7 @@ namespace Chess.Utils
             return MoveValidation.ValidationTemplate(!currentField.IsUsed, gameState.SetEmptyFieldError);
         }
 
-        public static bool ValidatePlayerTurn(Player currentPlayer, Field currentField, GameStateModel gameState)
+        internal static bool ValidatePlayerTurn(Player currentPlayer, Field currentField, GameStateModel gameState)
         {
             return MoveValidation.ValidationTemplate(currentPlayer.IsWhite != currentField.Figure.IsWhite, gameState.SetWrongColorFigureError);
         }

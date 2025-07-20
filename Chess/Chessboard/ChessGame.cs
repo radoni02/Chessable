@@ -10,10 +10,10 @@ namespace Chess.Chessboard
 {
     public sealed class ChessGame
     {
-        public Player CurrentPlayer {  get; set; }
+        internal Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
         public CheckmateAnalysisResult CheckmateAnalysisResult { get; set; }
-        public Dictionary<Player, Player> ChangePlayer { get; set; }
+        internal Dictionary<Player, Player> ChangePlayer { get; set; }
         public ChessGame()
         {
             Board = new Checkerboard();

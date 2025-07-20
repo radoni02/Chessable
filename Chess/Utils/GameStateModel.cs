@@ -12,8 +12,8 @@ namespace Chess.Utils
     {
         public bool IsValidMove { get; set; }
         public string? ErrorMessage { get; set; }
-        public Player CurrentPlayer { get; set; }
-        public Player NextPlayer { get; set; }
+        internal Player CurrentPlayer { get; set; }
+        internal Player NextPlayer { get; set; }
         public bool IsInCheck { get; set; }
         public bool IsCheckmate { get; set; }
         public bool IsStalemate { get; set; }
