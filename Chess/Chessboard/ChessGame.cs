@@ -1,4 +1,5 @@
 ﻿using Chess.Utils;
+using Chess.Utils.ChessPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace Chess.Chessboard
         {
             Board = new Checkerboard();
             CheckmateAnalysisResult = new CheckmateAnalysisResult();
-            var whitePlayer = new Player(0, true, true);
-            var blackPlayer = new Player(0, false, false);
+            var whitePlayer = new Player(0, PlayerColor.White, true);
+            var blackPlayer = new Player(0, PlayerColor.Black, false);
 
             ChangePlayer = new Dictionary<Player, Player>()
             {
@@ -47,7 +48,7 @@ namespace Chess.Chessboard
 
         public GameStateModel Move(string move)
         {
-            var gameState = new GameStateModel(Board,CurrentPlayer.IsWhite? PlayerColor.White : PlayerColor.Black);
+            var gameState = new GameStateModel(Board,CurrentPlayer.Color);
             var parsedInput = ParseMoveInput(move);
 
             if (!MoveValidation.ValidateInput(parsedInput, gameState))

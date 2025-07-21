@@ -1,4 +1,5 @@
 ﻿using Chess.Chessboard;
+using Chess.Utils.ChessPlayer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
