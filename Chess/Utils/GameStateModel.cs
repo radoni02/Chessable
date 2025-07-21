@@ -12,8 +12,8 @@ namespace Chess.Utils
     {
         public bool IsValidMove { get; set; }
         public string? ErrorMessage { get; set; }
-        internal Player CurrentPlayer { get; set; }
-        internal Player NextPlayer { get; set; }
+        internal PlayerColor CurrentPlayer { get; set; }
+        internal PlayerColor NextPlayer { get; set; }
         public bool IsInCheck { get; set; }
         public bool IsCheckmate { get; set; }
         public bool IsStalemate { get; set; }
@@ -22,7 +22,7 @@ namespace Chess.Utils
         public bool ChoosenWrongColorFigure { get; set; }
         public Checkerboard BoardState { get; set; }
 
-        public GameStateModel(Checkerboard checkerboard)
+        public GameStateModel(Checkerboard checkerboard, PlayerColor currentPlayer)
         {
             IsValidMove = false;
             IsInCheck = false;
@@ -31,6 +31,8 @@ namespace Chess.Utils
             MoveMade = false;
             EmptyField = false;
             ChoosenWrongColorFigure = false;
+            CurrentPlayer = currentPlayer;
+            NextPlayer = currentPlayer == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
             BoardState = checkerboard;
         }
 

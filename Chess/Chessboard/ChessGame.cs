@@ -47,7 +47,7 @@ namespace Chess.Chessboard
 
         public GameStateModel Move(string move)
         {
-            var gameState = new GameStateModel(Board);
+            var gameState = new GameStateModel(Board,CurrentPlayer.IsWhite? PlayerColor.White : PlayerColor.Black);
             var parsedInput = ParseMoveInput(move);
 
             if (!MoveValidation.ValidateInput(parsedInput, gameState))
