@@ -14,7 +14,7 @@ namespace Chess.Figures
         {
         }
 
-        public override async void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+        public override void Move(Checkerboard checkerboard, Field currentField, Position targetField)
         {
             base.Move(checkerboard, currentField, targetField);
             var newCurrent = checkerboard.Board[targetField.Row][targetField.Col];
@@ -24,6 +24,8 @@ namespace Chess.Figures
 
         public override void CalculateAtackedFields(Checkerboard checkerboard,Field currentField)
         {
+            if (currentField.Figure is null)
+                return;
 
             if(currentField.Figure.IsWhite)
             {
@@ -41,28 +43,34 @@ namespace Chess.Figures
 
         private void CheckIfShloudAddToAttackedFields(Checkerboard checkerboard, Field currentField,int adjustValueCol, int adjustValueRow)
         {
-            if (CheckIfFieldIsOutOfTheBoard(checkerboard, currentField.Row + adjustValueRow, currentField.Col + adjustValueCol))
+            int targetRow = currentField.Row + adjustValueRow;
+            int targetCol = currentField.Col + adjustValueCol;
+
+            if (CheckIfFieldIsOutOfTheBoard(checkerboard, targetRow, targetCol))
                 return;
-            if (IsWhite && !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].IsUsed)
+
+            var targetField = checkerboard.Board[targetRow][targetCol];
+            var figure = targetField.Figure;
+
+            if (figure is null)
+                return;
+
+            if (IsWhite && !targetField.IsUsed)
             {
-                AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
+                AttackedFields.Add(targetField);
             }
-            if(IsWhite &&
-                checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].IsUsed &&
-                !checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol].Figure.IsWhite)
+            if (IsWhite && targetField.IsUsed && !figure.IsWhite)
             {
-                AttackedFields.Add(checkerboard.Board[currentField.Row][currentField.Col + adjustValueCol]);
+                AttackedFields.Add(targetField);
             }
 
-            if(!IsWhite && !checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col+ adjustValueCol].IsUsed)
+            if (!IsWhite && !targetField.IsUsed)
             {
-                AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
+                AttackedFields.Add(targetField);
             }
-            if (!IsWhite &&
-                checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].IsUsed &&
-                checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol].Figure.IsWhite)
+            if (!IsWhite && targetField.IsUsed && figure.IsWhite)
             {
-                AttackedFields.Add(checkerboard.Board[currentField.Row + adjustValueRow][currentField.Col + adjustValueCol]);
+                AttackedFields.Add(targetField);
             }
         }
 
@@ -112,7 +120,7 @@ namespace Chess.Figures
             }
         }
 
-        private Field ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
+        private Field? ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row + 1, currentField.Col);
             if ( currentField.Row == 2 &&
@@ -124,7 +132,7 @@ namespace Chess.Figures
             return null;
         }
 
-        private Field ForwardMoveByTwoBlack(Checkerboard checkerboard, Field currentField)
+        private Field? ForwardMoveByTwoBlack(Checkerboard checkerboard, Field currentField)
         {
             var tempField = new Field(currentField.Row - 1, currentField.Col);
             if (currentField.Row == 7 &&
@@ -137,17 +145,17 @@ namespace Chess.Figures
         }
 
 
-        private Field ForwardMoveWhite(Checkerboard checkerboard, Field currentField)
+        private Field? ForwardMoveWhite(Checkerboard checkerboard, Field currentField)
         {
             return ForwardMove(checkerboard, currentField,0);
         }
 
-        private Field ForwardMoveBlack(Checkerboard checkerboard, Field currentField)
+        private Field? ForwardMoveBlack(Checkerboard checkerboard, Field currentField)
         {
             return ForwardMove(checkerboard, currentField, -2);
         }
 
-        private Field ForwardMove(Checkerboard checkerboard, Field currentField, int moveByValue)
+        private Field? ForwardMove(Checkerboard checkerboard, Field currentField, int moveByValue)
         {
             return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1] : null;
         }//there is some problem when pawn comes to last row, need to implement test case for that
