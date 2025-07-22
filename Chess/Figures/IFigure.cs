@@ -14,14 +14,13 @@ namespace Chess.Figures
         bool IsWhite { get; }
         int MoveConut { get; set; }
         int Value { get; set; }
-        List<PossibleMove> PossibleMoves { get; set; }
+        List<PossibleMove>? PossibleMoves { get; set; }
         List<Field> AttackedFields { get; }
-        //void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
         void CheckPossibleMoves(Checkerboard checkerboard, Field currentField);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
         void Move(Checkerboard checkerboard, Field currentField, Position targetField);
         bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);
-        Field GetOppositKing(Checkerboard checkerboard);
+        Field? GetOppositKing(Checkerboard checkerboard);
         bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
         List<Field> GetListOfFieldsAttackingTarget(Checkerboard checkerboard);
         List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);

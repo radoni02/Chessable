@@ -18,12 +18,6 @@ namespace Chess.Figures
             AttackedFields = new List<Field>();
         }
 
-        private Figure(int value, string name)
-        {
-            Value = value;
-            Name = name;
-        }
-
         public List<Field> AttackedFields { get; set; }
         public List<PossibleMove>? PossibleMoves { get; set; }
         public bool IsWhite { get; set; }
@@ -76,7 +70,7 @@ namespace Chess.Figures
             }
             currentField.Figure.MoveConut++;
         }
-        public Field GetOppositKing(Checkerboard checkerboard)
+        public Field? GetOppositKing(Checkerboard checkerboard)
         {
             var oppositeKing = checkerboard.Board
                 .SelectMany(ff => ff)
@@ -108,9 +102,10 @@ namespace Chess.Figures
 
             foreach (var field in allianceFields)
             {
-                field.Figure.CalculateAtackedFields(checkerboard,field);
-                if (field.Figure.AttackedFields.Any(field => field.Equals(targetField)))
-                    selectedFigures.Add(field.Figure);
+                var figure = field.Figure!;
+                figure.CalculateAtackedFields(checkerboard,field);
+                if (figure.AttackedFields.Any(field => field.Equals(targetField)))
+                    selectedFigures.Add(figure);
             }
             return selectedFigures;
         }
@@ -176,7 +171,8 @@ namespace Chess.Figures
             {
                 foreach (var attackingField in fieldsThatAttackCurrentFigureButNotOppKing)
                 {
-                    if (attackingField.Figure.AttackedFields.Any(field =>
+                    if (attackingField.Figure is not null 
+                    && attackingField.Figure.AttackedFields.Any(field =>
                         field.Row == king.Row && field.Col == king.Col))
                     {
                         kingWouldBeAttacked = true;
