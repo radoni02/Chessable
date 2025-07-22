@@ -98,6 +98,7 @@ namespace Chess.Figures.Abstractions
                         .TakeWhile(field => !field.IsUsed
                                 || (field.Figure is not null
                                         && field.Figure is King
+                                        && currentField.Figure is not null
                                         && field.Figure.IsWhite != currentField.Figure.IsWhite))
                         .ToList());
 
@@ -122,6 +123,7 @@ namespace Chess.Figures.Abstractions
                         .TakeWhile(field => !field.IsUsed
                                 || (field.Figure is not null
                                         && field.Figure is King
+                                        && currentField.Figure is not null
                                         && field.Figure.IsWhite != currentField.Figure.IsWhite))
                         .ToList());
 
