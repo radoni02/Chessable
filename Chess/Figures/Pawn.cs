@@ -52,14 +52,11 @@ namespace Chess.Figures
             var targetField = checkerboard.Board[targetRow][targetCol];
             var figure = targetField.Figure;
 
-            if (figure is null)
-                return;
-
             if (IsWhite && !targetField.IsUsed)
             {
                 AttackedFields.Add(targetField);
             }
-            if (IsWhite && targetField.IsUsed && !figure.IsWhite)
+            if (IsWhite && targetField.IsUsed && !figure!.IsWhite)
             {
                 AttackedFields.Add(targetField);
             }
@@ -68,7 +65,7 @@ namespace Chess.Figures
             {
                 AttackedFields.Add(targetField);
             }
-            if (!IsWhite && targetField.IsUsed && figure.IsWhite)
+            if (!IsWhite && targetField.IsUsed && figure!.IsWhite)
             {
                 AttackedFields.Add(targetField);
             }
@@ -158,7 +155,7 @@ namespace Chess.Figures
         private Field? ForwardMove(Checkerboard checkerboard, Field currentField, int moveByValue)
         {
             return !checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1].IsUsed ? checkerboard.Board[currentField.Row + moveByValue][currentField.Col - 1] : null;
-        }//there is some problem when pawn comes to last row, need to implement test case for that
+        }
 
         public void CheckAndPromote(Checkerboard checkerboard, Field currentField)
         {
