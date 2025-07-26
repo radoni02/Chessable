@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,10 @@ public class Position
         Col = col;
         Row = row;
     }
+    [Range(1,8)]
 
     public int Col { get; set; }
+    [Range(1, 8)]
     public int Row { get; set; }
 
     public override bool Equals(object? obj)

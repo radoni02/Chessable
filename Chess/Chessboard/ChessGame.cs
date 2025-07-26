@@ -45,15 +45,26 @@ namespace Chess.Chessboard
                     Console.WriteLine(gameState.ErrorMessage);
             }
         }
-
+        public GameStateModel Move(Position from, Position to)
+        {
+            var gameState = new GameStateModel(Board, CurrentPlayer.Color);
+            this.MoveLogic(new ParseInputResult(from,to,true), gameState);
+            return gameState;
+        }
         public GameStateModel Move(string move)
         {
-            var gameState = new GameStateModel(Board,CurrentPlayer.Color);
+            var gameState = new GameStateModel(Board, CurrentPlayer.Color);
             var parsedInput = ParseMoveInput(move);
 
             if (!MoveValidation.ValidateInput(parsedInput, gameState))
                 return gameState;
 
+            this.MoveLogic(parsedInput,gameState);
+            return gameState;
+        }
+
+        private GameStateModel MoveLogic(ParseInputResult parsedInput,GameStateModel gameState)
+        {
             var currentField = Board.GetCurrentField(parsedInput.CurrentPosition);
 
             if (!MoveValidation.ValidateKingInCheck(CheckmateAnalysisResult, currentField, gameState))
@@ -77,7 +88,7 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
-                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row-1, parsedInput.TargetPosition.Col-1);
+                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row - 1, parsedInput.TargetPosition.Col - 1);
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
@@ -87,7 +98,7 @@ namespace Chess.Chessboard
                     {
                         gameState.SetIsInStalemate();
                         return gameState;
-                    } 
+                    }
 
                     ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
                     CurrentPlayer = currentPlayer;
@@ -97,6 +108,58 @@ namespace Chess.Chessboard
             gameState.SetMoveIsValid();
             return gameState;
         }
+
+        //public GameStateModel Move(string move)
+        //{
+        //    var gameState = new GameStateModel(Board,CurrentPlayer.Color);
+        //    var parsedInput = ParseMoveInput(move);
+
+        //    if (!MoveValidation.ValidateInput(parsedInput, gameState))
+        //        return gameState;
+
+        //    var currentField = Board.GetCurrentField(parsedInput.CurrentPosition);
+
+        //    if (!MoveValidation.ValidateKingInCheck(CheckmateAnalysisResult, currentField, gameState))
+        //        return gameState;
+
+        //    if (!MoveValidation.ValidateFieldUsage(currentField, gameState))
+        //        return gameState;
+
+        //    if (!MoveValidation.ValidatePlayerTurn(CurrentPlayer, currentField, gameState))
+        //        return gameState;
+
+        //    var possibleMoves = new List<PossibleMove>();
+        //    if (CheckmateAnalysisResult.IsInCheck)
+        //    {
+        //        possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
+        //        possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
+        //    }
+        //    currentField.Figure.CheckPossibleMoves(Board, currentField);
+        //    possibleMoves.AddRange(currentField.Figure.PossibleMoves);
+        //    foreach (var possibleMove in possibleMoves)
+        //    {
+        //        if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
+        //        {
+        //            var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row-1, parsedInput.TargetPosition.Col-1);
+        //            currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
+
+        //            var oppKingField = currentField.Figure.GetOppositKing(Board);
+        //            CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(Board, oppKingField);
+
+        //            if (CheckmateAnalysisResult.IsInStalemate)
+        //            {
+        //                gameState.SetIsInStalemate();
+        //                return gameState;
+        //            } 
+
+        //            ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
+        //            CurrentPlayer = currentPlayer;
+        //            break;
+        //        }
+        //    }
+        //    gameState.SetMoveIsValid();
+        //    return gameState;
+        //}
 
         public ParseInputResult ParseMoveInput(string input)
         {
