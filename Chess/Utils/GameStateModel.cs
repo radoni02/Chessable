@@ -54,6 +54,11 @@ namespace Chess.Utils
             IsStalemate = true;
         }
 
+        public void SetIsInCheckmate()
+        {
+            IsCheckmate = true;
+        }
+
         public void SetEmptyFieldError()
         {
             IsValidMove = false;

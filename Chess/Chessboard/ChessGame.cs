@@ -30,21 +30,7 @@ namespace Chess.Chessboard
 
             CurrentPlayer = whitePlayer;
         }
-        public void StartGame()
-        {
-            while (true)
-            {
-                Board.ShowNewPosition();
-                Board.UsedFields();
 
-                Console.WriteLine("Provide move in format \"a2-a3\":");
-                var move = Console.ReadLine();
-
-                var gameState = Move(move);
-                if(!gameState.IsValidMove)
-                    Console.WriteLine(gameState.ErrorMessage);
-            }
-        }
         public GameStateModel Move(Position from, Position to)
         {
             var gameState = new GameStateModel(Board, CurrentPlayer.Color);
@@ -94,9 +80,15 @@ namespace Chess.Chessboard
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
                     CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(Board, oppKingField);
 
-                    if (CheckmateAnalysisResult.IsInStalemate)
+                    if(CheckmateAnalysisResult.IsInStalemate)
                     {
                         gameState.SetIsInStalemate();
+                        return gameState;
+                    }
+
+                    if(CheckmateAnalysisResult.IsCheckmate)
+                    {
+                        gameState.SetIsInCheckmate();
                         return gameState;
                     }
 

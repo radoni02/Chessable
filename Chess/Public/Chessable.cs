@@ -25,6 +25,7 @@ namespace Chess.Public
         /// <returns>The updated game state after the move.</returns>
         public GameStateModel MakeMove(string move)
         {
+            game.Board.UsedFields();
             return game.Move(move);
         }
 
@@ -36,6 +37,7 @@ namespace Chess.Public
         /// <returns>The updated game state after the move.</returns>
         public GameStateModel MakeMove(Position from, Position to)
         {
+            game.Board.UsedFields();
             return game.Move(from, to);
         }
 
@@ -88,6 +90,28 @@ namespace Chess.Public
             }
 
             return possibleMoves;
+        }
+
+        public GameResult? GameResult(GameStateModel gameState)
+        {
+            if (gameState.IsCheckmate)
+                return new GameResult(GameResultType.Win, game.CurrentPlayer.Color);
+
+            if (gameState.IsStalemate)
+                return new GameResult(GameResultType.Draw);
+            return null;
+        }
+
+        /// <summary>
+        /// Displays the current game board state in the console.
+        /// </summary>
+        /// <remarks>
+        /// This is a helper method mainly intended for debugging or testing purposes.
+        /// It prints the current layout of the pieces on the board to the console.
+        /// </remarks>
+        public void ShowPosition()
+        {
+            game.Board.ShowNewPosition();
         }
 
         //// game state

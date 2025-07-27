@@ -80,15 +80,17 @@ public class Checkerboard
             .Where(field => field.Figure != null)
             .ToList()
             .ForEach(field => field.Figure.AttackedFields.Clear());
-        var usedWhiteFields = this.Board.SelectMany(f => f)
-        .Where(field => field.IsUsed && field.Figure.IsWhite);
+        var usedWhiteFields = this.Board
+            .SelectMany(f => f)
+            .Where(field => field.IsUsed && field.Figure.IsWhite);
         foreach (var field in usedWhiteFields)
         {
             field.Figure.CalculateAtackedFields(this, field);
         }
 
-        var usedBlackFields = this.Board.SelectMany(f => f)
-        .Where(field => field.IsUsed && !field.Figure.IsWhite);
+        var usedBlackFields = this.Board
+            .SelectMany(f => f)
+            .Where(field => field.IsUsed && !field.Figure.IsWhite);
         foreach (var field in usedBlackFields)
         {
             field.Figure.CalculateAtackedFields(this, field);
