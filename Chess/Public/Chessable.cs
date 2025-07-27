@@ -12,7 +12,7 @@ namespace Chess.Public
 {
     public class Chessable
     {
-        private readonly ChessGame game;
+        private ChessGame game;
         public Chessable()
         {
             game = new ChessGame();
@@ -64,7 +64,6 @@ namespace Chess.Public
         /// </summary>
         /// <param name="playerColor">The color of the player to get legal moves for.</param>
         /// <returns>A list of all legal <see cref="PossibleMove"/> objects available for the specified player.</returns>
-
         public List<PossibleMove> GetAllLegalMoves(PlayerColor playerColor)
         {
             var possibleMoves = new List<PossibleMove>();
@@ -97,7 +96,10 @@ namespace Chess.Public
         //public PlayerColor GetCurrentPlayer();
 
         //// game managament
-        //public void ResetToStartingPosition();
+        public void ResetToStartingPosition()
+        {
+            game = new ChessGame();
+        }
         //public Result LoadFromFEN(string fenString);
         //public string ExportToFEN();
         //public Result LoadFromPGN(string pgnString);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Chessboard
 {
-    public sealed class ChessGame
+    internal sealed class ChessGame
     {
         internal Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
