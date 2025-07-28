@@ -8,7 +8,7 @@ using Chess.Utils;
 
 namespace Chess.Figures
 {
-    public abstract class Figure : IFigure
+    internal abstract class Figure : IFigure
     {
         protected Figure(bool isWhite, int value, string name)
         {

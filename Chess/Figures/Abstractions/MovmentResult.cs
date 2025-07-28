@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures.Abstractions
 {
-    public class MovmentResult
+    internal class MovmentResult
     {
         public List<Field> AtackedFields { get; set; } = new List<Field>();
         public List<Field> PossibleMoves { get; set; } = new List<Field>();

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Chessboard;
 
-public class Checkerboard
+internal class Checkerboard : ICheckerboard
 {
     public Checkerboard()
     {

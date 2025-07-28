@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Utils
 {
-    public static class MoveValidation
+    internal static class MoveValidation
     {
         public static bool ValidateInput(ParseInputResult parsedInput, GameStateModel gameState)
         {

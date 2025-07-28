@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public class Queen : Figure
+    internal class Queen : Figure
     {
         private StraightFigureMovment StraightFigureMovment { get; } = new StraightFigureMovment();
         private DiagonallyFigureMovment DiagonallyFigureMovment { get; } = new DiagonallyFigureMovment();

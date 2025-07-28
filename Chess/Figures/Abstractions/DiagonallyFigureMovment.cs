@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures.Abstractions
 {
-    public class DiagonallyFigureMovment
+    internal class DiagonallyFigureMovment
     {
         public MovmentResult GetFieldsFromDiagonalFigureMovment(Checkerboard checkerboard, Field currentField)
         {

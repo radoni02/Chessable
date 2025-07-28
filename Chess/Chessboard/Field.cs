@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Chessboard
 {
-    public class Field
+    internal class Field
     {
         public Field(bool isUsed, IFigure figure, int row, int col)
         {

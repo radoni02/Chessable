@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures;
 
-public class King : Figure
+internal class King : Figure
 {
     public King(bool isWhite, int value, string name) : base(isWhite, value, name)
     {

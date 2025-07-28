@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public class Pawn : Figure
+    internal class Pawn : Figure
     {
         public Pawn(bool isWhite, int value, string name) : base(isWhite, value, name)
         {

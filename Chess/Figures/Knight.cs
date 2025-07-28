@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public class Knight : Figure
+    internal class Knight : Figure
     {
         public Knight(bool isWhite, int value, string name) : base(isWhite, value, name)
         {

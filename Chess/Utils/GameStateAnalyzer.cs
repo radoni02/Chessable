@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Utils
 {
-    public class GameStateAnalyzer
+    internal class GameStateAnalyzer
     {
         public static CheckmateAnalysisResult AnalizeGameState(Checkerboard board, Field kingField)
         {

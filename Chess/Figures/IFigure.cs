@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public interface IFigure
+    internal interface IFigure
     {
         string Name { get; }
         bool IsWhite { get; }

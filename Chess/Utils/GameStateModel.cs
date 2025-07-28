@@ -21,9 +21,9 @@ namespace Chess.Utils
         public bool MoveMade { get; set; }
         public bool EmptyField { get; set; }
         public bool ChoosenWrongColorFigure { get; set; }
-        public Checkerboard BoardState { get; set; }
+        public ICheckerboard BoardState { get; set; }
 
-        public GameStateModel(Checkerboard checkerboard, PlayerColor currentPlayer)
+        public GameStateModel(ICheckerboard checkerboard, PlayerColor currentPlayer)
         {
             IsValidMove = false;
             IsInCheck = false;

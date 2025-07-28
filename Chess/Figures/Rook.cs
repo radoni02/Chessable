@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public class Rook : Figure
+    internal class Rook : Figure
     {
         private StraightFigureMovment StraightFigureMovment { get; } = new StraightFigureMovment();
         public Rook(bool isWhite, int value, string name) : base(isWhite, value, name)

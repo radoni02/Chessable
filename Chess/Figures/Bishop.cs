@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Figures
 {
-    public class Bishop : Figure
+    internal class Bishop : Figure
     {
         private DiagonallyFigureMovment DiagonallyFigureMovment { get; } = new DiagonallyFigureMovment();
         public Bishop(bool isWhite, int value, string name) : base(isWhite, value, name)
