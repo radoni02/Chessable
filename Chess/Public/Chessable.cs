@@ -114,12 +114,47 @@ namespace Chess.Public
             game.Board.ShowNewPosition();
         }
 
-        //// game state
-        //public GameState GetCurrentGameState();
-        //public BoardState GetBoardState();
-        //public PlayerColor GetCurrentPlayer();
+        /// <summary>
+        /// Returns the current check status of the game, including check, checkmate, or stalemate (pat).
+        /// </summary>
+        /// <returns>
+        /// A <see cref="CheckmateAnalysisResult"/> representing the current game's state analysis.
+        /// </returns>
+        public CheckmateAnalysisResult EvaluatePosition()
+        {
+            return game.CheckmateAnalysisResult;
+        }
 
-        //// game managament
+        /// <summary>
+        /// Evaluates the game state (e.g., check, checkmate, stalemate) from the perspective of the piece
+        /// located at the specified board position.
+        /// </summary>
+        /// <param name="position">
+        /// The position on the board to analyze (1-based indexing). Must point to the king's current position.
+        /// </param>
+        /// <returns>
+        /// A <see cref="CheckmateAnalysisResult"/> representing the game state based on the specified position.
+        /// </returns>
+        public CheckmateAnalysisResult EvaluatePosition(Position position)
+        {
+            var checkedField = game.Board.Board[position.Row - 1][position.Col - 1];
+            return GameStateAnalyzer.AnalizeGameState(game.Board, checkedField);
+        }
+
+        /// <summary>
+        /// Gets the color of the player whose turn it currently is.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PlayerColor"/> of the current player (White or Black).
+        /// </returns>
+        public PlayerColor GetCurrentPlayer()
+        {
+            return game.CurrentPlayer.Color;
+        }
+
+        /// <summary>
+        /// Resets the game to the initial starting position, clearing all progress.
+        /// </summary>
         public void ResetToStartingPosition()
         {
             game = new ChessGame();
