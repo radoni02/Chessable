@@ -54,7 +54,7 @@ namespace Chess.Tests.FigureTests
             pawn.CheckPossibleMoves(chessboard, currentField);
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
-            pawn.Move(chessboard, currentField, new Utils.Position(7, 5));
+            pawn.Move(chessboard, currentField, new Utils.Position(7, 5,Formatter.MatrixFormat));
 
             // Assert
             Assert.NotNull(pawn);
@@ -129,7 +129,7 @@ namespace Chess.Tests.FigureTests
             var results = pawn.PossibleMoves;
             var targets = results.Select(r => r.TargetPosition.ToString());
 
-            pawn.Move(chessboard, currentField, new Position(7, 5));
+            pawn.Move(chessboard, currentField, new Position(7, 5, Formatter.MatrixFormat));
             var promotedPiece = chessboard.Board[7][5].Figure;
 
             // Assert

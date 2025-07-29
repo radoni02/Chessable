@@ -40,7 +40,7 @@ internal class King : Figure
 
         int rookTargetCol = isKingsideCastling ? 6 : 4;
 
-        base.Move(checkerboard, rook, new Position(currentField.Row - 1, rookTargetCol - 1));
+        base.Move(checkerboard, rook, new Position(currentField.Row - 1, rookTargetCol - 1, Formatter.MatrixFormat));
     }
 
     public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)

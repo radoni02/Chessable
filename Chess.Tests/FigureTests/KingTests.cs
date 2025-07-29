@@ -25,7 +25,7 @@ namespace Chess.Tests.FigureTests
             var chessboard = _chessboardPositions.GetEmptyBoard();
             chessboard.Board[3][3] = new Field(true, new King(true, 1000, "King"), 4, 4);
             var kingField = chessboard.Board[3][3];
-            var targetPosition = new Position(3, 4);
+            var targetPosition = new Position(3, 4, Formatter.MatrixFormat);
 
             // Act
             kingField.Figure.Move(chessboard, kingField, targetPosition);
@@ -47,7 +47,7 @@ namespace Chess.Tests.FigureTests
             chessboard.Board[0][4] = new Field(true, new King(true, 1000, "King"), 1, 5);
             chessboard.Board[0][7] = new Field(true, new Rook(true, 5, "Rook"), 1, 8);
             var kingField = chessboard.Board[0][4];
-            var targetPosition = new Position(0, 6);
+            var targetPosition = new Position(0, 6, Formatter.MatrixFormat);
 
             // Act
             kingField.Figure.Move(chessboard, kingField, targetPosition);

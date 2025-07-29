@@ -26,7 +26,7 @@ namespace Chess.Tests.FigureTests
             var chessboard = _chessboardPositions.GetEmptyBoard();
             chessboard.Board[3][3] = new Field(true, new Knight(true, 3, "Knight"), 4, 4);
             var knightField = chessboard.Board[3][3];
-            var targetPosition = new Position(5, 4);
+            var targetPosition = new Position(5, 4, Formatter.MatrixFormat);
 
             // Act
             knightField.Figure.Move(chessboard, knightField, targetPosition);

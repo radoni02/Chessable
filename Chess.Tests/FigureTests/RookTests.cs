@@ -26,7 +26,7 @@ namespace Chess.Tests.FigureTests
             var chessboard = _chessboardPositions.GetEmptyBoard();
             chessboard.Board[3][3] = new Field(true, new Rook(true, 5, "Rook"), 4, 4);
             var rookField = chessboard.Board[3][3];
-            var targetPosition = new Position(3, 6);
+            var targetPosition = new Position(3, 6, Formatter.MatrixFormat);
 
             // Act
             rookField.Figure.Move(chessboard, rookField, targetPosition);

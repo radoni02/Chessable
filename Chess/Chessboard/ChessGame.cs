@@ -68,7 +68,7 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
-                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row - 1, parsedInput.TargetPosition.Col - 1);
+                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row - 1, parsedInput.TargetPosition.Col - 1,Formatter.MatrixFormat);
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
