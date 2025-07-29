@@ -21,7 +21,7 @@ namespace Chess.Utils
         public bool MoveMade { get; set; }
         public bool EmptyField { get; set; }
         public bool ChoosenWrongColorFigure { get; set; }
-        public ICheckerboard BoardState { get; set; }
+        public string BoardState { get; set; }
 
         public GameStateModel(ICheckerboard checkerboard, PlayerColor currentPlayer)
         {
@@ -34,7 +34,7 @@ namespace Chess.Utils
             ChoosenWrongColorFigure = false;
             CurrentPlayer = currentPlayer;
             NextPlayer = currentPlayer == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
-            BoardState = checkerboard;
+            BoardState = checkerboard.GetBoard();
         }
 
         public void SetMoveIsValid()

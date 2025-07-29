@@ -62,14 +62,8 @@ namespace Chess.Chessboard
             if (!MoveValidation.ValidatePlayerTurn(CurrentPlayer, currentField, gameState))
                 return gameState;
 
-            var possibleMoves = new List<PossibleMove>();
-            if (CheckmateAnalysisResult.IsInCheck)
-            {
-                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
-                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
-            }
-            currentField.Figure.CheckPossibleMoves(Board, currentField);
-            possibleMoves.AddRange(currentField.Figure.PossibleMoves);
+            var possibleMoves = CheckPossibleMoves(currentField);
+
             foreach (var possibleMove in possibleMoves)
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
@@ -92,13 +86,31 @@ namespace Chess.Chessboard
                         return gameState;
                     }
 
-                    ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
-                    CurrentPlayer = currentPlayer;
+                    SwitchPlayer();
                     break;
                 }
             }
             gameState.SetMoveIsValid();
             return gameState;
+        }
+
+        private void SwitchPlayer()
+        {
+            ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
+            CurrentPlayer = currentPlayer;
+        }
+
+        private IEnumerable<PossibleMove> CheckPossibleMoves(Field currentField)
+        {
+            var possibleMoves = new List<PossibleMove>();
+            if (CheckmateAnalysisResult.IsInCheck)
+            {
+                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
+                possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
+            }
+            currentField.Figure.CheckPossibleMoves(Board, currentField);
+            possibleMoves.AddRange(currentField.Figure.PossibleMoves);
+            return possibleMoves;
         }
 
         public ParseInputResult ParseMoveInput(string input)

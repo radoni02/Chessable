@@ -8,5 +8,6 @@ namespace Chess.Chessboard
 {
     public interface ICheckerboard
     {
+        string GetBoard();
     }
 }

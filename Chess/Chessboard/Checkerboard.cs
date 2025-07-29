@@ -71,7 +71,6 @@ internal class Checkerboard : ICheckerboard
         {
             return true;
         }
-        
     }
 
     public void UsedFields()
@@ -119,7 +118,7 @@ internal class Checkerboard : ICheckerboard
         string CheckFigure(Field inner)
             => inner.Figure != null ? inner.Figure.Name : "Empty";
     }
-    public string ConvertIntoGap(int length)
+    private string ConvertIntoGap(int length)
     {
         StringBuilder sb = new StringBuilder();
         while (length > 0)
@@ -146,6 +145,11 @@ internal class Checkerboard : ICheckerboard
         dict.TryGetValue(position.First(), out var value);
         var row = (int)char.GetNumericValue(position.Last());
         return new Position(row, value);
+    }
+
+    public string GetBoard()
+    {
+        return "board state in FEN format";
     }
 
     public List<List<Field>> Board { get; set; }
