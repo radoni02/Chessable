@@ -13,4 +13,8 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Utils\Notations\PGN\" />
+	</ItemGroup>
+
 </Project>

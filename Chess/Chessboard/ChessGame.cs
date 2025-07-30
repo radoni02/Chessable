@@ -1,5 +1,6 @@
 ﻿using Chess.Utils;
 using Chess.Utils.ChessPlayer;
+using Chess.Utils.Notations.FEN;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,8 +97,8 @@ namespace Chess.Chessboard
 
         private void SwitchPlayer()
         {
-            ChangePlayer.TryGetValue(CurrentPlayer, out var currentPlayer);
-            CurrentPlayer = currentPlayer;
+            ChangePlayer.TryGetValue(CurrentPlayer, out var nextPlayer);
+            CurrentPlayer = nextPlayer;
         }
 
         private IEnumerable<PossibleMove> CheckPossibleMoves(Field currentField)

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chess.Chessboard;
 using Chess.Figures;
+using Chess.Utils.Notations.FEN;
 
 namespace Chess.Public
 {
@@ -160,7 +161,11 @@ namespace Chess.Public
             game = new ChessGame();
         }
         //public Result LoadFromFEN(string fenString);
-        //public string ExportToFEN();
+        public string ExportToFEN()
+        {
+            var fen = new FenNotation();
+            return fen.GetCurrentPosition(game.Board,game.CurrentPlayer);
+        }
         //public Result LoadFromPGN(string pgnString);
         //public string ExportToPGN();
 
