@@ -32,10 +32,17 @@ namespace Chess.Utils.Notations.FEN
             CalculatePiecePlacement(checkerboard);
             CalculateNextMove(nextPlayer);
             CalculatePossibleCastlings(checkerboard);
-            return "";
+            var builder = new StringBuilder();
+            builder.AppendJoin('/', Rows);
+            builder.Append(' ');
+            builder.Append(NextMove);
+            builder.Append(' ');
+            builder.Append(PossibleCastling);
+            //next parts will be added
+            return builder.ToString(); ;
         }
 
-        public void CalculatePossibleCastlings(Checkerboard checkerboard)
+        private void CalculatePossibleCastlings(Checkerboard checkerboard)
         {
             var castlingDict = new CastlingDict();
             var rookFields = checkerboard.GetPossibleCastlings()
