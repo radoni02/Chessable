@@ -63,6 +63,13 @@ public class Position
     /// <value>The format determining the valid coordinate ranges.</value>
     public Formatter? Format { get;private set; }
 
+    public Position SwitchFormat()
+    {
+        if(Format == Formatter.ChessFormat)
+            return new Position(Row - 1, Col - 1, Formatter.MatrixFormat);
+
+        return new Position(Row + 1, Col + 1);
+    }
 
     private void Validate()
     {

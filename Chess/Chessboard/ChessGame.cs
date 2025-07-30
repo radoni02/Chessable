@@ -11,10 +11,10 @@ namespace Chess.Chessboard
 {
     internal sealed class ChessGame
     {
-        internal Player CurrentPlayer {  get; set; }
+        public Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
         public CheckmateAnalysisResult CheckmateAnalysisResult { get; set; }
-        internal Dictionary<Player, Player> ChangePlayer { get; set; }
+        public Dictionary<Player, Player> ChangePlayer { get; set; }
         public ChessGame()
         {
             Board = new Checkerboard();
@@ -68,7 +68,7 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
-                    var convertedTargetPositionForMatrixNotation = new Position(parsedInput.TargetPosition.Row - 1, parsedInput.TargetPosition.Col - 1,Formatter.MatrixFormat);
+                    var convertedTargetPositionForMatrixNotation = parsedInput.TargetPosition.SwitchFormat();
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
