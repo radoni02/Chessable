@@ -11,6 +11,13 @@ namespace Chess.Utils.Notations.FEN
 {
     internal class FenNotation
     {
+        public FenNotation()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                Rows.Add(new StringBuilder());
+            }
+        }
         private List<StringBuilder> Rows = new List<StringBuilder>(8);
         private char NextMove;
         private string PossibleCastling;
@@ -32,41 +39,38 @@ namespace Chess.Utils.Notations.FEN
 
         private void CalculatePiecePlacement(Checkerboard checkerboard)
         {
-            Rows.Clear();
-            for (int i = 0; i < 8; i++)
-            {
-                Rows.Add(new StringBuilder());
-            }
-
             var rows = checkerboard.Board
                 .SelectMany(ff => ff)
                 .GroupBy(field => field.Row)
                 .OrderBy(fields => fields.Key);
+
             foreach(var row in rows)
             {
-                var orderedRow = row.OrderBy(field => field.Col);
-                var emptyFields = 0;
+                var orderedRow = row
+                    .OrderBy(field => field.Col);
 
-                var fields = orderedRow.ToList();
-                fields.Select(field =>
+                var emptyFieldsCounter = 0;
+
+                foreach (var field in orderedRow)
                 {
-                    if (field.IsUsed == false)
-                        emptyFields++;
+                    var matrixNorationRow = field.Row - 1;
+                    if (!field.IsUsed)
+                        emptyFieldsCounter++;
                     else
                     {
-                        if (emptyFields != 0)
-                        {
-                            Rows[field.Row - 1].Append(char.Parse(emptyFields.ToString()));
-                        }
-                        Rows[field.Row - 1].Append(field.Figure.Name[0]);
-                        emptyFields = 0;
+                        AppendEmptyFields(matrixNorationRow,emptyFieldsCounter);
+                        Rows[matrixNorationRow].Append(field.Figure.Name[0]);
+                        emptyFieldsCounter = 0;
                     }
-                    if(field.Col == 8 && emptyFields != 0)
-                    {
-                        Rows[field.Row - 1].Append(char.Parse(emptyFields.ToString()));
-                    }
-                    return Rows[field.Row - 1];
-                });
+                }
+                AppendEmptyFields(row.Last().Row - 1, emptyFieldsCounter);
+            }
+            void AppendEmptyFields(int row,int emptyFieldsCounter)
+            {
+                if (emptyFieldsCounter > 0)
+                {
+                    Rows[row].Append(emptyFieldsCounter.ToString());
+                }
             }
         }
     }
