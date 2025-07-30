@@ -147,6 +147,37 @@ internal class Checkerboard : ICheckerboard
         return new Position(row, value);
     }
 
+    public IEnumerable<Field> GetPossibleCastlings()
+    {
+        var kings = Board
+            .SelectMany(row => row)
+            .Where(field => field.Figure is not null
+            && field.Figure is King);
+
+        foreach (var king in kings)
+        {
+            var forbiddenFieldsForKing = Board
+                .SelectMany(row => row)
+                .Where(f => f.IsUsed && f.Figure?.IsWhite != king.Figure.IsWhite)
+                .Select(field => field.Figure)
+                .SelectMany(s => s.AttackedFields)
+                .Distinct();
+
+            var rooks = Board
+                .SelectMany(row => row)
+                .Where(field => field.Figure is not null
+                && field.Figure is Rook
+                && field.Figure.IsWhite == king.Figure.IsWhite);
+
+            foreach(var rook in rooks)
+            {
+                var isValid = (king.Figure as King)!.IsCastlingValid(this,king,rook,forbiddenFieldsForKing);
+                if(isValid)
+                    yield return rook;
+            }
+        }
+    }
+
     public string GetBoard()
     {
         return "board state in FEN format";

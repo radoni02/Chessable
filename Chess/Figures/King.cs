@@ -63,11 +63,12 @@ internal class King : Figure
 
     private IEnumerable<Field> KingPossibleMoves(Checkerboard checkerboard, Field currentField)
     {
-        var forbiddenFieldsForKing = checkerboard.Board.SelectMany(fl => fl)
-                                                        .Where(f => f.IsUsed && f.Figure?.IsWhite != currentField.Figure.IsWhite)
-                                                        .Select(field => field.Figure)
-                                                        .SelectMany(s => s.AttackedFields)
-                                                        .Distinct();
+        var forbiddenFieldsForKing = checkerboard.Board
+            .SelectMany(fl => fl)
+            .Where(f => f.IsUsed && f.Figure?.IsWhite != currentField.Figure.IsWhite)
+            .Select(field => field.Figure)
+            .SelectMany(s => s.AttackedFields)
+            .Distinct();
 
         var possibleMoves = GetBasicKingMoves(checkerboard, currentField, forbiddenFieldsForKing).ToList();
 
@@ -100,32 +101,31 @@ internal class King : Figure
                 if (IsCastlingValid(board, current, rook, forbidden))
                 {
                     int castlingCol = rook.Col < current.Col ? current.Col - 2 : current.Col + 2;
-                    yield return new Field(current.Row,castlingCol);
+                    yield return new Field(current.Row, castlingCol);
                 }
             }
         }
-
-        bool IsCastlingValid(Checkerboard board, Field king, Field rook, IEnumerable<Field> forbidden)
-        {
-            var minCol = Math.Min(king.Col, rook.Col);
-            var maxCol = Math.Max(king.Col, rook.Col);
-
-            var fieldsInBetween = board.Board.SelectMany(fl => fl)
-                                            .Where(field => field.Row == king.Row
-                                                         && field.Col > minCol
-                                                         && field.Col < maxCol)
-                                            .ToList();
-
-            bool allFieldsEmpty = fieldsInBetween.All(field => !field.IsUsed);
-
-            var kingPath = new[] { king.Col, king.Col + (rook.Col > king.Col ? 1 : -1), king.Col + (rook.Col > king.Col ? 2 : -2) };
-            bool pathUnderAttack = kingPath.Any(col =>
-                forbidden.Any(ff => ff.Row == king.Row && ff.Col == col));
-
-            return allFieldsEmpty && !pathUnderAttack;
-        }
     }
 
+    public bool IsCastlingValid(Checkerboard board, Field king, Field rook, IEnumerable<Field> forbidden)
+    {
+        var minCol = Math.Min(king.Col, rook.Col);
+        var maxCol = Math.Max(king.Col, rook.Col);
+
+        var fieldsInBetween = board.Board.SelectMany(fl => fl)
+                                        .Where(field => field.Row == king.Row
+                                                     && field.Col > minCol
+                                                     && field.Col < maxCol)
+                                        .ToList();
+
+        bool allFieldsEmpty = fieldsInBetween.All(field => !field.IsUsed);
+
+        var kingPath = new[] { king.Col, king.Col + (rook.Col > king.Col ? 1 : -1), king.Col + (rook.Col > king.Col ? 2 : -2) };
+        bool pathUnderAttack = kingPath.Any(col =>
+            forbidden.Any(ff => ff.Row == king.Row && ff.Col == col));
+
+        return allFieldsEmpty && !pathUnderAttack;
+    }
 
     private bool PotentialFieldIsInKingMoveRange(Field potentialField, Field currentField)
     {

@@ -1,5 +1,7 @@
 ﻿using Chess.Chessboard;
+using Chess.Figures;
 using Chess.Utils.ChessPlayer;
+using Chess.Utils.Notations.FEN.Maps;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,7 +22,7 @@ namespace Chess.Utils.Notations.FEN
         }
         private List<StringBuilder> Rows = new List<StringBuilder>(8);
         private char NextMove;
-        private string PossibleCastling;
+        private StringBuilder PossibleCastling = new StringBuilder();
         private string PossiblePassant;
         private UInt16 HalfMoveClock;
         private uint FullMoveNumber;
@@ -29,7 +31,25 @@ namespace Chess.Utils.Notations.FEN
         {
             CalculatePiecePlacement(checkerboard);
             CalculateNextMove(nextPlayer);
+            CalculatePossibleCastlings(checkerboard);
             return "";
+        }
+
+        public void CalculatePossibleCastlings(Checkerboard checkerboard)
+        {
+            var castlingDict = new CastlingDict();
+            var rookFields = checkerboard.GetPossibleCastlings()
+                .OrderByDescending(field => field.Figure.IsWhite)
+                .ThenByDescending(field => field.Col);
+
+            foreach (var rook in rookFields)
+            {
+                var castKey = new Castling(rook.Figure.IsWhite,rook.Col == 8 ? true : false);
+                castlingDict.PossibleCastlings.TryGetValue(castKey, out char value);
+                PossibleCastling.Append(value);
+            }
+            if(PossibleCastling.Length == 0)
+                PossibleCastling.Append('-');
         }
 
         private void CalculateNextMove(Player nextPlayer)
@@ -59,7 +79,7 @@ namespace Chess.Utils.Notations.FEN
                     else
                     {
                         AppendEmptyFields(matrixNorationRow,emptyFieldsCounter);
-                        Rows[matrixNorationRow].Append(field.Figure.Name[0]);
+                        Rows[matrixNorationRow].Append(field.Figure!.Name[0]);
                         emptyFieldsCounter = 0;
                     }
                 }
