@@ -13,6 +13,8 @@ namespace Chess.Utils.Notations.FEN
 {
     internal class FenNotation
     {
+        private const char WhiteFigure = 'w';
+        private const char BlackFigure = 'b';
         public FenNotation()
         {
             for (int i = 0; i < 8; i++)
@@ -67,7 +69,7 @@ namespace Chess.Utils.Notations.FEN
 
         private void CalculateNextMove(Player nextPlayer)
         {
-            NextMove = nextPlayer.Color == PlayerColor.White ? 'w' : 'b';
+            NextMove = nextPlayer.Color == PlayerColor.White ? WhiteFigure : BlackFigure;
         }
 
         private void CalculatePiecePlacement(Checkerboard checkerboard)
@@ -92,7 +94,9 @@ namespace Chess.Utils.Notations.FEN
                     else
                     {
                         AppendEmptyFields(matrixNorationRow,emptyFieldsCounter);
-                        Rows[matrixNorationRow].Append(field.Figure!.Name[0]);
+                        char nameChar = field.Figure!.Name[0];
+                        var figureCharacter = field.Figure.IsWhite ? nameChar : char.ToLower(nameChar);
+                        Rows[matrixNorationRow].Append(figureCharacter);
                         emptyFieldsCounter = 0;
                     }
                 }
