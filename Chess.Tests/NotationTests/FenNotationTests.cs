@@ -27,7 +27,7 @@ namespace Chess.Tests.NotationTests
             var whitePlayer = new Player(0,PlayerColor.White,true);
 
             // Act
-            var result = fenNotation.GetCurrentPosition(checkerboard, whitePlayer);
+            var result = fenNotation.GetCurrentPosition(checkerboard, whitePlayer, 3);
 
             // Assert
             var fenString = result.ToString();
@@ -43,7 +43,7 @@ namespace Chess.Tests.NotationTests
             var blackPlayer = new Player(0,PlayerColor.Black,true);
 
             // Act
-            var result = fenNotation.GetCurrentPosition(checkerboard, blackPlayer);
+            var result = fenNotation.GetCurrentPosition(checkerboard, blackPlayer,3);
 
             // Assert
             var fenString = result.ToString();

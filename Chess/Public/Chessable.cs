@@ -164,7 +164,7 @@ namespace Chess.Public
         public string ExportToFEN()
         {
             var fen = new FenNotation();
-            return fen.GetCurrentPosition(game.Board,game.CurrentPlayer);
+            return fen.GetCurrentPosition(game.Board,game.CurrentPlayer,game.FullMoveCounter);
         }
         //public Result LoadFromPGN(string pgnString);
         //public string ExportToPGN();

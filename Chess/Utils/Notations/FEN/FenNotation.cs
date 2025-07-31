@@ -27,19 +27,25 @@ namespace Chess.Utils.Notations.FEN
         private UInt16 HalfMoveClock;
         private uint FullMoveNumber;
 
-        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer)
+        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer, uint fullMoveCounter)
         {
             CalculatePiecePlacement(checkerboard);
             CalculateNextMove(nextPlayer);
             CalculatePossibleCastlings(checkerboard);
+            FullMoveNumber = fullMoveCounter;
             var builder = new StringBuilder();
             builder.AppendJoin('/', Rows);
             builder.Append(' ');
             builder.Append(NextMove);
             builder.Append(' ');
             builder.Append(PossibleCastling);
-            //next parts will be added
-            return builder.ToString(); ;
+            builder.Append(' ');
+
+            builder.Append(' ');
+
+            builder.Append(' ');
+            builder.Append(FullMoveNumber);
+            return builder.ToString();
         }
 
         private void CalculatePossibleCastlings(Checkerboard checkerboard)

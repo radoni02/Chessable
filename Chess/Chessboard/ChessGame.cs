@@ -12,6 +12,7 @@ namespace Chess.Chessboard
 {
     internal sealed class ChessGame
     {
+        public uint FullMoveCounter { get; set; }
         public Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
         public CheckmateAnalysisResult CheckmateAnalysisResult { get; set; }
@@ -97,6 +98,10 @@ namespace Chess.Chessboard
 
         private void SwitchPlayer()
         {
+            if(CurrentPlayer.Color == PlayerColor.Black)
+            {
+                FullMoveCounter++;
+            }
             ChangePlayer.TryGetValue(CurrentPlayer, out var nextPlayer);
             CurrentPlayer = nextPlayer;
         }
