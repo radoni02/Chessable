@@ -1,6 +1,7 @@
 ﻿using Chess.Figures;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,21 @@ namespace Chess.Chessboard
             if (Figure is Figure)
                 return true;
             return false;
+        }
+    }
+
+    internal class FieldComparer : EqualityComparer<Field>
+    {
+        public override bool Equals(Field? x, Field? y)
+        {
+            if (x.Row == y.Row && x.Col == y.Col)
+                return true;
+            return false;
+        }
+
+        public override int GetHashCode([DisallowNull] Field obj)
+        {
+            return HashCode.Combine(obj.Col, obj.Row);
         }
     }
 }
