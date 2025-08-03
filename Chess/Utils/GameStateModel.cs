@@ -52,11 +52,19 @@ namespace Chess.Utils
         public void SetIsInStalemate()
         {
             IsStalemate = true;
+            IsValidMove = true;
         }
 
         public void SetIsInCheckmate()
         {
             IsCheckmate = true;
+            IsValidMove = true;
+        }
+
+        public void SetTargetFieldIsNotValid()
+        {
+            IsValidMove = false;
+            ErrorMessage = "Target field is not valid";
         }
 
         public void SetEmptyFieldError()

@@ -12,6 +12,7 @@ namespace Chess.Chessboard
 {
     internal sealed class ChessGame
     {
+        public List<string> MoveHistory { get; set; } = new List<string>();
         public uint FullMoveCounter { get; set; }
         public Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
@@ -79,20 +80,18 @@ namespace Chess.Chessboard
                     if(CheckmateAnalysisResult.IsInStalemate)
                     {
                         gameState.SetIsInStalemate();
-                        return gameState;
                     }
 
                     if(CheckmateAnalysisResult.IsCheckmate)
                     {
                         gameState.SetIsInCheckmate();
-                        return gameState;
                     }
 
                     SwitchPlayer();
-                    break;
+                    return gameState;
                 }
             }
-            gameState.SetMoveIsValid();
+            gameState.SetTargetFieldIsNotValid();
             return gameState;
         }
 

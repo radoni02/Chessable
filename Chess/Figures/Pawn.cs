@@ -52,19 +52,11 @@ namespace Chess.Figures
             var targetField = checkerboard.Board[targetRow][targetCol];
             var figure = targetField.Figure;
 
-            if (IsWhite && !targetField.IsUsed)
-            {
-                AttackedFields.Add(targetField);
-            }
             if (IsWhite && targetField.IsUsed && !figure!.IsWhite)
             {
                 AttackedFields.Add(targetField);
             }
 
-            if (!IsWhite && !targetField.IsUsed)
-            {
-                AttackedFields.Add(targetField);
-            }
             if (!IsWhite && targetField.IsUsed && figure!.IsWhite)
             {
                 AttackedFields.Add(targetField);
@@ -97,7 +89,7 @@ namespace Chess.Figures
             }
             if (!this.IsWhite)
             {
-                var possibleBlackMoves = new List<Field>(); ;
+                var possibleBlackMoves = new List<Field>();
                 var forwardMove = ForwardMoveBlack(checkerboard, currentField);
                 if (forwardMove is not null)
                 {
