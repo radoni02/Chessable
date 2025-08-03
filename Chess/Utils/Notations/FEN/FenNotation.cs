@@ -94,7 +94,7 @@ namespace Chess.Utils.Notations.FEN
                     else
                     {
                         AppendEmptyFields(matrixNorationRow,emptyFieldsCounter);
-                        char nameChar = field.Figure!.Name[0];
+                        FigureAbbreviation.FigureAbbreviationDict.TryGetValue(field.Figure!.Name, out var nameChar);
                         var figureCharacter = field.Figure.IsWhite ? nameChar : char.ToLower(nameChar);
                         Rows[matrixNorationRow].Append(figureCharacter);
                         emptyFieldsCounter = 0;
