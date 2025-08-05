@@ -12,7 +12,7 @@ namespace Chess.Chessboard
 {
     internal sealed class ChessGame
     {
-        public List<string> MoveHistory { get; set; } = new List<string>();
+        public List<PossibleMove> MoveHistory { get; set; } = new List<PossibleMove>();
         public uint FullMoveCounter { get; set; }
         public Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
@@ -71,6 +71,7 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
+                    MoveHistory.Add(possibleMove);
                     var convertedTargetPositionForMatrixNotation = parsedInput.TargetPosition.SwitchFormat();
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
 
