@@ -51,7 +51,7 @@ internal class King : Figure
                                         .ToList();
     }
 
-    protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+    protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField, bool passantEnable = false, PossibleMove? lastMove = null)
     {
         var possibleTargets = KingPossibleMoves(checkerboard, currentField);
 

@@ -24,7 +24,7 @@ namespace Chess.Figures
             AttackedFields.AddRange(DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).AtackedFields);
         }
 
-        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField, bool passantEnable = false, PossibleMove? lastMove = null)
         {
             var selectedFields = StraightFigureMovment.GetFieldsFromStraightFigureMovment(checkerboard, currentField).PossibleMoves;
             selectedFields.AddRange(DiagonallyFigureMovment.GetFieldsFromDiagonalFigureMovment(checkerboard, currentField).PossibleMoves);

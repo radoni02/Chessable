@@ -1,4 +1,5 @@
-﻿using Chess.Utils;
+﻿using Chess.Figures;
+using Chess.Utils;
 using Chess.Utils.ChessPlayer;
 using Chess.Utils.Notations.FEN;
 using System;
@@ -12,6 +13,7 @@ namespace Chess.Chessboard
 {
     internal sealed class ChessGame
     {
+        private bool PassantEnable;
         public List<PossibleMove> MoveHistory { get; set; } = new List<PossibleMove>();
         public uint FullMoveCounter { get; set; }
         public Player CurrentPlayer {  get; set; }
@@ -71,6 +73,7 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
+                    CheckForPassant(possibleMove, currentField);
                     MoveHistory.Add(possibleMove);
                     var convertedTargetPositionForMatrixNotation = parsedInput.TargetPosition.SwitchFormat();
                     currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
@@ -96,6 +99,22 @@ namespace Chess.Chessboard
             return gameState;
         }
 
+        private void CheckForPassant(PossibleMove move,Field currentField)
+        {
+            if (currentField.Figure is not Pawn)
+            {
+                PassantEnable = false;
+                return;
+            }
+            var distance = Math.Abs(move.BasePosition.Row - move.TargetPosition.Row);
+            if (distance == 1)
+            {
+                PassantEnable = false;
+                return;
+            }
+            PassantEnable = true;
+        }
+
         private void SwitchPlayer()
         {
             if(CurrentPlayer.Color == PlayerColor.Black)
@@ -114,7 +133,7 @@ namespace Chess.Chessboard
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleCaptureRescues);
                 possibleMoves.AddRange(CheckmateAnalysisResult.PossibleBlockingMoves);
             }
-            currentField.Figure.CheckPossibleMoves(Board, currentField);
+            currentField.Figure.CheckPossibleMoves(Board, currentField, PassantEnable, MoveHistory.LastOrDefault());
             possibleMoves.AddRange(currentField.Figure.PossibleMoves);
             return possibleMoves;
         }

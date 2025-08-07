@@ -1,5 +1,6 @@
 ﻿using Chess.Chessboard;
 using Chess.Utils;
+using Chess.Utils.ChessPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,49 +65,72 @@ namespace Chess.Figures
         }
 
 
-        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField)
+        protected override void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField, bool passantEnable = false, PossibleMove? lastMove = null)
         {
+            var possibleMoves = new List<Field>();
             if (this.IsWhite)
             {
-                var possibleWhiteMoves = new List<Field>();
                 var forwardMove = ForwardMoveWhite(checkerboard, currentField);
                 if (forwardMove is not null)
                 {
-                    possibleWhiteMoves.Add(forwardMove);
+                    possibleMoves.Add(forwardMove);
                 }
                 var moveByTwo = ForwardMoveByTwoWhite(checkerboard, currentField);
                 if (moveByTwo is not null)
                 {
-                    possibleWhiteMoves.Add(moveByTwo);
+                    possibleMoves.Add(moveByTwo);
                 }
-                possibleWhiteMoves = possibleWhiteMoves
+                possibleMoves = possibleMoves
                     .Union(this.AttackedFields, new FieldComparer())
                     .ToList();
-                PossibleMoves = possibleWhiteMoves
+                PossibleMoves = possibleMoves
                     .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                     .ToList();
 
             }
             if (!this.IsWhite)
             {
-                var possibleBlackMoves = new List<Field>();
                 var forwardMove = ForwardMoveBlack(checkerboard, currentField);
                 if (forwardMove is not null)
                 {
-                    possibleBlackMoves.Add(forwardMove);
+                    possibleMoves.Add(forwardMove);
                 }
                 var moveByTwo = ForwardMoveByTwoBlack(checkerboard, currentField);
                 if (moveByTwo is not null)
                 {
-                    possibleBlackMoves.Add(moveByTwo);
+                    possibleMoves.Add(moveByTwo);
                 }
-                possibleBlackMoves = possibleBlackMoves
+                possibleMoves = possibleMoves
                     .Union(this.AttackedFields, new FieldComparer())
                     .ToList();
-                PossibleMoves = possibleBlackMoves
+                PossibleMoves = possibleMoves
                     .Select(target => new PossibleMove(new Position(currentField.Row, currentField.Col), new Position(target.Row, target.Col)))
                     .ToList();
             }
+            if (CheckForPassant(currentField, out var potentialPassantMove, passantEnable, lastMove))
+                PossibleMoves!.Add(potentialPassantMove);
+        }
+
+        private bool CheckForPassant(Field currentField, out PossibleMove result,bool passantEnable = false, PossibleMove? lastMove = null)
+        {
+            result = default;
+            if (!passantEnable)
+                return false;
+            var distanceFromOppTargetPawn = Math.Abs(currentField.Col - lastMove.TargetPosition.Col);
+            var isOnTheSameRow = lastMove.TargetPosition.Row == currentField.Row;
+            if (distanceFromOppTargetPawn == 1 && isOnTheSameRow)
+            {
+                var targetPosition = CalculatePositionFieldForPassantMove(lastMove.TargetPosition,!currentField.Figure.IsWhite);
+                result = new PossibleMove(new Position(currentField.Row, currentField.Col), targetPosition);
+                return true;
+            }
+            return false;
+        }
+
+        private Position CalculatePositionFieldForPassantMove(Position LastMoveTargetPosition, bool isWhite)
+        {
+            var targetFieldRowNumber = isWhite == true ? LastMoveTargetPosition.Row - 1 : LastMoveTargetPosition.Row + 1;
+            return new Position(targetFieldRowNumber, LastMoveTargetPosition.Col);
         }
 
         private Field? ForwardMoveByTwoWhite(Checkerboard checkerboard, Field currentField)

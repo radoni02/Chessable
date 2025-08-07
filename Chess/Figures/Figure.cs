@@ -24,13 +24,13 @@ namespace Chess.Figures
         public int Value { get; set; }
         public string Name { get; set; }
         public int MoveConut { get; set; } = 0;
-        protected abstract void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField);
+        protected abstract void CalculatePossibleMoves(Checkerboard checkerboard, Field currentField, bool passantEnable = false, PossibleMove? lastMove = null);
 
-        public void CheckPossibleMoves(Checkerboard checkerboard, Field currentField)
+        public void CheckPossibleMoves(Checkerboard checkerboard, Field currentField,bool passantEnable = false,PossibleMove? lastMove = null)
         {
             this.PossibleMoves = null;
             if (!this.CheckIfFigureIsImmobilized(checkerboard))
-                this.CalculatePossibleMoves(checkerboard, currentField);
+                this.CalculatePossibleMoves(checkerboard, currentField, passantEnable, lastMove);
         }
 
         public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField)
