@@ -15,9 +15,9 @@ namespace Chess.Figures
         {
         }
 
-        public override void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+        public override void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false)
         {
-            base.Move(checkerboard, currentField, targetField);
+            base.Move(checkerboard, currentField, targetField,increaseMoveCount);
             var newCurrent = checkerboard.Board[targetField.Row][targetField.Col];
             CheckAndPromote(checkerboard, newCurrent);
 

@@ -15,9 +15,9 @@ internal class King : Figure
     {
     }
 
-    public override void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+    public override void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false)
     {
-        base.Move(checkerboard, currentField, targetField);
+        base.Move(checkerboard, currentField, targetField, increaseMoveCount);
         int moveDistance = Math.Abs(targetField.Col - (currentField.Col - 1));
         
         if (moveDistance == 2)
@@ -41,6 +41,7 @@ internal class King : Figure
         int rookTargetCol = isKingsideCastling ? 6 : 4;
 
         base.Move(checkerboard, rook, new Position(currentField.Row - 1, rookTargetCol - 1, Formatter.MatrixFormat));
+        rook.Figure.IncreaseMoveCount();
     }
 
     public override void CalculateAtackedFields(Checkerboard checkerboard, Field currentField)

@@ -33,7 +33,7 @@ namespace Chess.Figures
                 this.CalculatePossibleMoves(checkerboard, currentField, passantEnable, lastMove);
         }
 
-        public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField)
+        public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false)
         {
             if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)
             {
@@ -68,7 +68,13 @@ namespace Chess.Figures
 
                 checkerboard.Board[currentField.Row - 1][currentField.Col - 1] = new Field(false, currentField.Row, currentField.Col);
             }
-            currentField.Figure.MoveConut++;
+            if (increaseMoveCount)
+                IncreaseMoveCount();
+        }
+        
+        public void IncreaseMoveCount()
+        {
+            this.MoveConut++;
         }
         public Field? GetOppositKing(Checkerboard checkerboard)
         {

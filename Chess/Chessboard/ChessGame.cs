@@ -76,7 +76,7 @@ namespace Chess.Chessboard
                     CheckForPassant(possibleMove, currentField);
                     MoveHistory.Add(possibleMove);
                     var convertedTargetPositionForMatrixNotation = parsedInput.TargetPosition.SwitchFormat();
-                    currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation);
+                    currentField.Figure.Move(Board, currentField, convertedTargetPositionForMatrixNotation, true);
 
                     var oppKingField = currentField.Figure.GetOppositKing(Board);
                     CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(Board, oppKingField);

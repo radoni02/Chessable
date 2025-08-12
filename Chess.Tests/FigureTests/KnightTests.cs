@@ -29,7 +29,7 @@ namespace Chess.Tests.FigureTests
             var targetPosition = new Position(5, 4, Formatter.MatrixFormat);
 
             // Act
-            knightField.Figure.Move(chessboard, knightField, targetPosition);
+            knightField.Figure.Move(chessboard, knightField, targetPosition, true);
 
             // Assert
             Assert.Null(chessboard.Board[3][3].Figure);
