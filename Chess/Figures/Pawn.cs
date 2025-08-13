@@ -11,6 +11,7 @@ namespace Chess.Figures
 {
     internal class Pawn : Figure
     {
+        private bool Passant;
         public Pawn(bool isWhite, int value, string name) : base(isWhite, value, name)
         {
         }
@@ -18,6 +19,11 @@ namespace Chess.Figures
         public override void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false)
         {
             base.Move(checkerboard, currentField, targetField,increaseMoveCount);
+            if(Passant)
+            {
+                var row = currentField.Figure.IsWhite ? targetField.Row - 1 : targetField.Row + 1;
+                base.Move(checkerboard, new Field(false, row + 1, targetField.Col + 1), new Position(row,targetField.Col, Formatter.MatrixFormat));
+            }
             var newCurrent = checkerboard.Board[targetField.Row][targetField.Col];
             CheckAndPromote(checkerboard, newCurrent);
 
@@ -115,15 +121,20 @@ namespace Chess.Figures
         {
             result = default;
             if (!passantEnable)
+            {
+                Passant = false;
                 return false;
+            }
             var distanceFromOppTargetPawn = Math.Abs(currentField.Col - lastMove.TargetPosition.Col);
             var isOnTheSameRow = lastMove.TargetPosition.Row == currentField.Row;
             if (distanceFromOppTargetPawn == 1 && isOnTheSameRow)
             {
                 var targetPosition = CalculatePositionFieldForPassantMove(lastMove.TargetPosition,!currentField.Figure.IsWhite);
                 result = new PossibleMove(new Position(currentField.Row, currentField.Col), targetPosition);
+                Passant = true;
                 return true;
             }
+            Passant = false;
             return false;
         }
 
