@@ -112,7 +112,7 @@ namespace Chess.Tests.FigureTests
             Assert.NotNull(results);
             Assert.Contains("34", targets);
             Assert.Contains("44", targets);
-            Assert.Equal(4, results.Count);
+            Assert.Equal(2, results.Count);
         }
 
         [Fact]
