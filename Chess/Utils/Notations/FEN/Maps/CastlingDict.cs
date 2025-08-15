@@ -1,5 +1,6 @@
 ﻿using Chess.Chessboard;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Chess.Utils.Notations.FEN.Maps
             {new Castling(true,false),WHITE_QUEENSIDE_CASTLING},
             {new Castling(false,true),BLACK_KINGSIDE_CASTLING},
             {new Castling(false,false),BLACK_QUEENSIDE_CASTLING}
-        };
+        }.ToFrozenDictionary();
     }
     internal class Castling
     {
