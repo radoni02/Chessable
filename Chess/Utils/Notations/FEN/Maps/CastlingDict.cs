@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Chess.Utils.Notations.FEN.Maps
 {
-    internal class CastlingDict
+    internal static class CastlingDict
     {
         private const char WHITE_KINGSIDE_CASTLING = 'K';
         private const char WHITE_QUEENSIDE_CASTLING = 'Q';
         private const char BLACK_KINGSIDE_CASTLING = 'k';
         private const char BLACK_QUEENSIDE_CASTLING = 'q';
 
-        public IDictionary<Castling, char> PossibleCastlings = new Dictionary<Castling, char>()
+        public static IDictionary<Castling, char> PossibleCastlings = new Dictionary<Castling, char>()
         {
             {new Castling(true,true),WHITE_KINGSIDE_CASTLING},
             {new Castling(true,false),WHITE_QUEENSIDE_CASTLING},

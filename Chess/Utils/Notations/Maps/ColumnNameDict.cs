@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Utils.Notations.Maps
 {
-    internal class ColumnNameDict
+    internal static class ColumnNameDict
     {
         private const char FirstColumn = 'a';
         private const char SecondColumn = 'b';
@@ -19,7 +19,7 @@ namespace Chess.Utils.Notations.Maps
         private const char SeventhColumn = 'g';
         private const char EightColumn = 'h';
 
-        public IDictionary<int, char> ColumnNames = new Dictionary<int, char>()
+        public static IDictionary<int, char> ColumnNames = new Dictionary<int, char>()
         {
             {1,FirstColumn},
             {2,SecondColumn},

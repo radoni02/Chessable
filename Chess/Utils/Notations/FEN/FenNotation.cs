@@ -2,6 +2,7 @@
 using Chess.Figures;
 using Chess.Utils.ChessPlayer;
 using Chess.Utils.Notations.FEN.Maps;
+using Chess.Utils.Notations.Maps;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,11 +30,12 @@ namespace Chess.Utils.Notations.FEN
         private UInt16 HalfMoveClock;
         private uint FullMoveNumber;
 
-        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer, uint fullMoveCounter)
+        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer, uint fullMoveCounter, PossibleMove lastMoveFromHistory)//might be done by reflection
         {
             CalculatePiecePlacement(checkerboard);
             CalculateNextMove(nextPlayer);
             CalculatePossibleCastlings(checkerboard);
+            CalculatePossibleEnPassant(checkerboard,lastMoveFromHistory);
             FullMoveNumber = fullMoveCounter;
             var builder = new StringBuilder();
             builder.AppendJoin('/', Rows);
@@ -42,7 +44,7 @@ namespace Chess.Utils.Notations.FEN
             builder.Append(' ');
             builder.Append(PossibleCastling);
             builder.Append(' ');
-
+            builder.Append(PossiblePassant);
             builder.Append(' ');
 
             builder.Append(' ');
@@ -50,9 +52,33 @@ namespace Chess.Utils.Notations.FEN
             return builder.ToString();
         }
 
+        private void CalculatePossibleEnPassant(Checkerboard checkerboard, PossibleMove lastMoveFromHistory)
+        {
+            if(lastMoveFromHistory is null
+                || !(lastMoveFromHistory.BasePosition.Row == 2 && lastMoveFromHistory.TargetPosition.Row == 4)
+                || !(lastMoveFromHistory.BasePosition.Row == 7 && lastMoveFromHistory.TargetPosition.Row == 5))
+            {
+                PossiblePassant = "-";
+                return;
+            }
+            var fieldFromLastMove = checkerboard.Board
+                .SelectMany(row => row)
+                .FirstOrDefault(field => field.Row == lastMoveFromHistory.TargetPosition.Row
+                && field.Col == lastMoveFromHistory.TargetPosition.Col);
+
+            if(fieldFromLastMove is null && fieldFromLastMove.Figure is null && fieldFromLastMove.Figure is not Pawn)
+            {
+                PossiblePassant = "-";
+                return;
+            }
+            var colorRowAdjustment = fieldFromLastMove.Figure.IsWhite ? -1 : 1;
+
+            ColumnNameDict.ColumnNames.TryGetValue(lastMoveFromHistory.TargetPosition.Row + colorRowAdjustment, out var columnCharName);
+            PossiblePassant = $"{columnCharName}{lastMoveFromHistory.TargetPosition.Row}";
+        }
+
         private void CalculatePossibleCastlings(Checkerboard checkerboard)
         {
-            var castlingDict = new CastlingDict();
             var rookFields = checkerboard.GetPossibleCastlings()
                 .OrderByDescending(field => field.Figure.IsWhite)
                 .ThenByDescending(field => field.Col);
@@ -60,7 +86,7 @@ namespace Chess.Utils.Notations.FEN
             foreach (var rook in rookFields)
             {
                 var castKey = new Castling(rook.Figure.IsWhite,rook.Col == 8 ? true : false);
-                castlingDict.PossibleCastlings.TryGetValue(castKey, out char value);
+                CastlingDict.PossibleCastlings.TryGetValue(castKey, out char value);
                 PossibleCastling.Append(value);
             }
             if(PossibleCastling.Length == 0)
