@@ -95,7 +95,7 @@ namespace Chess.Chessboard
                     }
 
                     SwitchPlayer();
-                    return gameState;
+                    return gameState.SetMoveIsValid();
                 }
             }
             gameState.SetTargetFieldIsNotValid();

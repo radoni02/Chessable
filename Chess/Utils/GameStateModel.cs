@@ -39,9 +39,11 @@ namespace Chess.Utils
             HalfMoveClockDraw = false;
         }
 
-        public void SetMoveIsValid()
+        public GameStateModel SetMoveIsValid()
         {
             IsValidMove = true;
+            MoveMade = true;
+            return this;
         }
 
         public void SetHalfMoveClockDraw()
