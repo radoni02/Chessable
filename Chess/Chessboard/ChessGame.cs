@@ -15,6 +15,7 @@ namespace Chess.Chessboard
     {
         private bool PassantEnable;
         public List<PossibleMove> MoveHistory { get; set; } = new List<PossibleMove>();
+        public uint HalfMoveClock { get; private set; }
         public uint FullMoveCounter { get; set; }
         public Player CurrentPlayer {  get; set; }
         public Checkerboard Board { get; set; }
@@ -32,7 +33,7 @@ namespace Chess.Chessboard
                 {whitePlayer,blackPlayer },
                 {blackPlayer,whitePlayer }
             };
-
+            HalfMoveClock = 0;
             CurrentPlayer = whitePlayer;
         }
 
@@ -73,6 +74,8 @@ namespace Chess.Chessboard
             {
                 if (possibleMove.TargetPosition.Equals(parsedInput.TargetPosition))
                 {
+                    if (ProcessHalfMoveClock(currentField, possibleMove, gameState))
+                        return gameState;
                     CheckForPassant(possibleMove, currentField);
                     MoveHistory.Add(possibleMove);
                     var convertedTargetPositionForMatrixNotation = parsedInput.TargetPosition.SwitchFormat();
@@ -97,6 +100,24 @@ namespace Chess.Chessboard
             }
             gameState.SetTargetFieldIsNotValid();
             return gameState;
+        }
+
+        private bool ProcessHalfMoveClock(Field currentField, PossibleMove possibleMove, GameStateModel gameState)
+        {
+            if (currentField.Figure is not null && (currentField.Figure.CheckIfSelectedMoveIsCapture(possibleMove) || currentField.Figure is Pawn))
+            {
+                HalfMoveClock = 0;
+            }
+            else
+            {
+                HalfMoveClock++;
+            }
+            if (HalfMoveClock >= 100)
+            {
+                gameState.SetHalfMoveClockDraw();
+                return true;
+            }
+            return false;
         }
 
         private void CheckForPassant(PossibleMove move,Field currentField)
@@ -138,7 +159,7 @@ namespace Chess.Chessboard
             return possibleMoves;
         }
 
-        public ParseInputResult ParseMoveInput(string input)
+        private ParseInputResult ParseMoveInput(string input)
         {
             if (!Regex.IsMatch(input, "^[a-h][1-8]-[a-h][1-8]$"))
                 return new ParseInputResult(false);

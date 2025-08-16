@@ -22,6 +22,7 @@ namespace Chess.Utils
         public bool EmptyField { get; set; }
         public bool ChoosenWrongColorFigure { get; set; }
         public string BoardState { get; set; }
+        public bool HalfMoveClockDraw { get; private set; }
 
         public GameStateModel(ICheckerboard checkerboard, PlayerColor currentPlayer)
         {
@@ -35,11 +36,17 @@ namespace Chess.Utils
             CurrentPlayer = currentPlayer;
             NextPlayer = currentPlayer == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
             BoardState = checkerboard.GetBoard();
+            HalfMoveClockDraw = false;
         }
 
         public void SetMoveIsValid()
         {
             IsValidMove = true;
+        }
+
+        public void SetHalfMoveClockDraw()
+        {
+            HalfMoveClockDraw = true;
         }
 
         public void SetKingInCheckError()

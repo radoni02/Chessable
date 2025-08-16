@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Chess.Chessboard;
 using Chess.Figures;
 using Chess.Utils.Notations.FEN;
+using System.Net.Http.Headers;
 
 namespace Chess.Public
 {
@@ -99,6 +100,9 @@ namespace Chess.Public
                 return new GameResult(GameResultType.Win, game.CurrentPlayer.Color);
 
             if (gameState.IsStalemate)
+                return new GameResult(GameResultType.Draw);
+
+            if (gameState.HalfMoveClockDraw)
                 return new GameResult(GameResultType.Draw);
             return null;
         }
