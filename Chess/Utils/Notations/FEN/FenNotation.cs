@@ -27,16 +27,17 @@ namespace Chess.Utils.Notations.FEN
         private char NextMove;
         private StringBuilder PossibleCastling = new StringBuilder();
         private string PossiblePassant;
-        private UInt16 HalfMoveClock;
+        private uint HalfMoveClock;
         private uint FullMoveNumber;
 
-        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer, uint fullMoveCounter, PossibleMove lastMoveFromHistory)//might be done by reflection
+        public string GetCurrentPosition(Checkerboard checkerboard, Player nextPlayer, uint fullMoveCounter, uint halfMoveClock, PossibleMove lastMoveFromHistory)
         {
             CalculatePiecePlacement(checkerboard);
             CalculateNextMove(nextPlayer);
             CalculatePossibleCastlings(checkerboard);
             CalculatePossibleEnPassant(checkerboard,lastMoveFromHistory);
             FullMoveNumber = fullMoveCounter;
+            HalfMoveClock = halfMoveClock;
             var builder = new StringBuilder();
             builder.AppendJoin('/', Rows);
             builder.Append(' ');
@@ -46,7 +47,7 @@ namespace Chess.Utils.Notations.FEN
             builder.Append(' ');
             builder.Append(PossiblePassant);
             builder.Append(' ');
-
+            builder.Append(HalfMoveClock);
             builder.Append(' ');
             builder.Append(FullMoveNumber);
             return builder.ToString();
@@ -55,8 +56,8 @@ namespace Chess.Utils.Notations.FEN
         private void CalculatePossibleEnPassant(Checkerboard checkerboard, PossibleMove lastMoveFromHistory)
         {
             if(lastMoveFromHistory is null
-                || !(lastMoveFromHistory.BasePosition.Row == 2 && lastMoveFromHistory.TargetPosition.Row == 4)
-                || !(lastMoveFromHistory.BasePosition.Row == 7 && lastMoveFromHistory.TargetPosition.Row == 5))
+                || !((lastMoveFromHistory.BasePosition.Row == 2 && lastMoveFromHistory.TargetPosition.Row == 4)
+                    || (lastMoveFromHistory.BasePosition.Row == 7 && lastMoveFromHistory.TargetPosition.Row == 5)))
             {
                 PossiblePassant = "-";
                 return;
@@ -73,8 +74,8 @@ namespace Chess.Utils.Notations.FEN
             }
             var colorRowAdjustment = fieldFromLastMove.Figure.IsWhite ? -1 : 1;
 
-            ColumnNameDict.ColumnNames.TryGetValue(lastMoveFromHistory.TargetPosition.Row + colorRowAdjustment, out var columnCharName);
-            PossiblePassant = $"{columnCharName}{lastMoveFromHistory.TargetPosition.Row}";
+            ColumnNameDict.ColumnNames.TryGetValue(lastMoveFromHistory.TargetPosition.Col, out var columnCharName);
+            PossiblePassant = $"{columnCharName}{lastMoveFromHistory.TargetPosition.Row + colorRowAdjustment}";
         }
 
         private void CalculatePossibleCastlings(Checkerboard checkerboard)

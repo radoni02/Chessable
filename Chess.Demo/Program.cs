@@ -14,5 +14,5 @@ while (gameResult is null)
     if (!gameState.IsValidMove)
         Console.WriteLine(gameState.ErrorMessage);
     gameResult = chessable.GameResult(gameState);
-    chessable.ExportToFEN();
+    Console.WriteLine(chessable.ExportToFEN()); 
 }
