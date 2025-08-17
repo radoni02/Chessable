@@ -33,13 +33,6 @@ namespace Chess.Figures
                 this.CalculatePossibleMoves(checkerboard, currentField, passantEnable, lastMove);
         }
 
-        public bool CheckIfSelectedMoveIsCapture(PossibleMove selectedMove)
-        {
-            return this.AttackedFields
-                .Any(field => field.Row == selectedMove.TargetPosition.Row
-                && field.Col == selectedMove.TargetPosition.Col);
-        }
-
         public virtual void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false)
         {
             if (!checkerboard.Board[targetField.Row][targetField.Col].IsUsed)

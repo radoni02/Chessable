@@ -18,7 +18,6 @@ namespace Chess.Figures
         List<Field> AttackedFields { get; }
         void CheckPossibleMoves(Checkerboard checkerboard, Field currentField, bool passantEnable = false, PossibleMove? lastMove = null);
         void CalculateAtackedFields(Checkerboard checkerboard, Field currentField);
-        bool CheckIfSelectedMoveIsCapture(PossibleMove selectedMove);
         void Move(Checkerboard checkerboard, Field currentField, Position targetField, bool increaseMoveCount = false);
         void IncreaseMoveCount();
         bool CheckIfFieldIsOutOfTheBoard(Checkerboard checkerboard, int targetRow, int targetCol);

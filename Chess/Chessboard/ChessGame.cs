@@ -104,7 +104,7 @@ namespace Chess.Chessboard
 
         private bool ProcessHalfMoveClock(Field currentField, PossibleMove possibleMove, GameStateModel gameState)
         {
-            if (currentField.Figure is not null && (currentField.Figure.CheckIfSelectedMoveIsCapture(possibleMove) || currentField.Figure is Pawn))
+            if (currentField.Figure is not null && (Board.CheckIfTargetFieldIsUsed(possibleMove.TargetPosition) || currentField.Figure is Pawn))
             {
                 HalfMoveClock = 0;
             }

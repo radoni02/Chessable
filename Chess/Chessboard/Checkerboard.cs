@@ -178,6 +178,24 @@ internal class Checkerboard : ICheckerboard
         }
     }
 
+    public bool CheckIfTargetFieldIsUsed(Position targetPosition)
+    {
+        var targetRow = targetPosition.Row;
+        var targetCol = targetPosition.Col;
+        if(targetPosition.Format.Equals(Formatter.MatrixFormat))
+        {
+            targetRow++;
+            targetCol++;
+        }
+        var potentialTargetField = Board.SelectMany(row => row)
+            .FirstOrDefault(field => field.Row == targetRow
+            && field.Col == targetCol);
+
+        if (potentialTargetField is null)
+            throw new Exception();
+        return potentialTargetField.IsUsed;
+    }
+
     public string GetBoard()
     {
         return "board state in FEN format";
