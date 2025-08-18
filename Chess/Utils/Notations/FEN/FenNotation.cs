@@ -104,7 +104,7 @@ namespace Chess.Utils.Notations.FEN
             var rows = checkerboard.Board
                 .SelectMany(ff => ff)
                 .GroupBy(field => field.Row)
-                .OrderBy(fields => fields.Key);
+                .OrderByDescending(fields => fields.Key);
 
             foreach(var row in rows)
             {
@@ -115,7 +115,7 @@ namespace Chess.Utils.Notations.FEN
 
                 foreach (var field in orderedRow)
                 {
-                    var matrixNorationRow = field.Row - 1;
+                    var matrixNorationRow = 8 - field.Row;
                     if (!field.IsUsed)
                         emptyFieldsCounter++;
                     else
@@ -127,7 +127,7 @@ namespace Chess.Utils.Notations.FEN
                         emptyFieldsCounter = 0;
                     }
                 }
-                AppendEmptyFields(row.Last().Row - 1, emptyFieldsCounter);
+                AppendEmptyFields(8 - row.First().Row, emptyFieldsCounter);
             }
             void AppendEmptyFields(int row,int emptyFieldsCounter)
             {
