@@ -14,13 +14,13 @@ namespace Chess.Chessboard
     internal sealed class ChessGame
     {
         private bool PassantEnable;
-        public List<PossibleMove> MoveHistory { get; set; } = new List<PossibleMove>();
+        public List<PossibleMove> MoveHistory { get; private set; } = new List<PossibleMove>();
         public uint HalfMoveClock { get; private set; }
-        public uint FullMoveCounter { get; set; }
-        public Player CurrentPlayer {  get; set; }
-        public Checkerboard Board { get; set; }
-        public CheckmateAnalysisResult CheckmateAnalysisResult { get; set; }
-        public Dictionary<Player, Player> ChangePlayer { get; set; }
+        public uint FullMoveCounter { get; private set; }
+        public Player CurrentPlayer {  get; private set; }
+        public Checkerboard Board { get; private set; }
+        public CheckmateAnalysisResult CheckmateAnalysisResult { get;private set; }
+        public Dictionary<Player, Player> ChangePlayer { get; private set; }
         public ChessGame()
         {
             Board = new Checkerboard();

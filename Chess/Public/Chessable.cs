@@ -78,16 +78,16 @@ namespace Chess.Public
                         && field.Figure.IsWhite.Equals(isWhite));
 
             var kingField = fields.FirstOrDefault(field => field.Figure is King);
-            game.CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(game.Board, kingField);
+            var gameStateResult = GameStateAnalyzer.AnalizeGameState(game.Board, kingField);
 
-            if (game.CheckmateAnalysisResult.IsInCheck)
+            if (gameStateResult.IsInCheck)
             {
-                possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleCaptureRescues);
-                possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleBlockingMoves);
-                possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleKingMoves);
+                possibleMoves.AddRange(gameStateResult.PossibleCaptureRescues);
+                possibleMoves.AddRange(gameStateResult.PossibleBlockingMoves);
+                possibleMoves.AddRange(gameStateResult.PossibleKingMoves);
                 return possibleMoves;
             }
-            if(game.CheckmateAnalysisResult.IsCheckmate || game.CheckmateAnalysisResult.IsInStalemate)
+            if(gameStateResult.IsCheckmate || gameStateResult.IsInStalemate)
             {
                 return possibleMoves;
             }

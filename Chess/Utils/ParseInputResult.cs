@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Utils
 {
-    public class ParseInputResult
+    internal class ParseInputResult
     {
         public ParseInputResult(bool valid)
         {
@@ -20,8 +20,8 @@ namespace Chess.Utils
             Valid = valid;
         }
 
-        public Position? CurrentPosition { get; set; }
-        public Position? TargetPosition { get; set; }
-        public bool Valid { get; set; }
+        public Position? CurrentPosition { get; private set; }
+        public Position? TargetPosition { get; private set; }
+        public bool Valid { get; private set; }
     }
 }
