@@ -77,20 +77,26 @@ namespace Chess.Public
                 .Where(field => field.Figure is not null
                         && field.Figure.IsWhite.Equals(isWhite));
 
-            foreach(var field in fields)
-            {
-                field.Figure!.CheckPossibleMoves(game.Board,field);
-                possibleMoves.AddRange(field.Figure.PossibleMoves!);
-            }
-
             var kingField = fields.FirstOrDefault(field => field.Figure is King);
             game.CheckmateAnalysisResult = GameStateAnalyzer.AnalizeGameState(game.Board, kingField);
+
             if (game.CheckmateAnalysisResult.IsInCheck)
             {
                 possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleCaptureRescues);
                 possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleBlockingMoves);
+                possibleMoves.AddRange(game.CheckmateAnalysisResult.PossibleKingMoves);
+                return possibleMoves;
+            }
+            if(game.CheckmateAnalysisResult.IsCheckmate || game.CheckmateAnalysisResult.IsInStalemate)
+            {
+                return possibleMoves;
             }
 
+            foreach (var field in fields)
+            {
+                field.Figure!.CheckPossibleMoves(game.Board,field);
+                possibleMoves.AddRange(field.Figure.PossibleMoves!);
+            }
             return possibleMoves;
         }
 
