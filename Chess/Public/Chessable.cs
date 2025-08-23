@@ -9,6 +9,7 @@ using Chess.Chessboard;
 using Chess.Figures;
 using Chess.Utils.Notations.FEN;
 using System.Net.Http.Headers;
+using Chess.Utils.Notations.PGN;
 
 namespace Chess.Public
 {
@@ -177,7 +178,11 @@ namespace Chess.Public
             return fen.GetCurrentPosition(game.Board, game.CurrentPlayer, game.FullMoveCounter, game.HalfMoveClock, game.MoveHistory.LastOrDefault());
         }
         //public Result LoadFromPGN(string pgnString);
-        //public string ExportToPGN();
+        public void ExportToPGN()
+        {
+            var pgn = new PgnNotation();
+            pgn.ConvertToPgn(game.MoveHistory);
+        }
 
         //// move history
         //public List<Move> GetMoveHistory();

@@ -38,31 +38,62 @@ namespace Chess.Utils.Notations.PGN
             {
                 throw new Exception("Unnable to find postion fields");
             }
+            PgnMove? pgnMove = null;
             if(baseField.Figure is Pawn)
             {
-                ProcessPawnMove();
+                pgnMove = ProcessPawnMove(baseField, targetField);
             }
             else
             {
-                ProcessPieceMove(checkerboard, baseField, targetField);
+                pgnMove = ProcessPieceMove(checkerboard, baseField, targetField);
             }
+            SpecialSymbolCheck(checkerboard,baseField, targetField, pgnMove);
+            PgnMoveHistory.Add(pgnMove);
         }
 
-        private void ProcessPawnMove()
+        private PgnMove ProcessPawnMove(Field baseField, Field targetField)
         {
-
+            var pgnMove = CreateBasicPgnMove(baseField, targetField);
+            if(targetField.IsUsed)
+            {
+                ColumnNameDict.ColumnNames.TryGetValue(baseField.Col, out var columnNameResult);
+                pgnMove.SetColumnName(columnNameResult);
+            }
+            return pgnMove;
         }
 
-        private void ProcessPieceMove(Checkerboard checkerboard, Field baseField, Field targetField)
+        private PgnMove ProcessPieceMove(Checkerboard checkerboard, Field baseField, Field targetField)
         {
             var fieldsFigureCanMoveToTargetField = targetField.Figure!.GetFiguresThatCanMoveToTheField(checkerboard, targetField, baseField.Figure!.IsWhite);
             var sameFigureCanMoveToTargetField = fieldsFigureCanMoveToTargetField
                .Where(field => field != baseField)
                .FirstOrDefault(field => field.Figure.Name == baseField.Figure.Name);
             if (sameFigureCanMoveToTargetField == null)
-                PgnMoveHistory.Add(CreateBasicPgnMove(baseField, targetField));
+            {
+                return CreateBasicPgnMove(baseField, targetField);
+            }
 
+            if(baseField.Col != sameFigureCanMoveToTargetField.Col)
+                return CreatePgnMoveForSameFigureAttactTarget(baseField, targetField);
+            else
+                return CreatePgnMoveForSameFigureAttactTarget(baseField, targetField, true);
+        }
 
+        private PgnMove CreatePgnMoveForSameFigureAttactTarget(Field baseField, Field targetField, bool sameColumn = false)
+        {
+            var pgnMove = CreateBasicPgnMove(baseField, targetField);
+            if(!sameColumn)
+            {
+                ColumnNameDict.ColumnNames.TryGetValue(baseField.Col, out var columnNameResult);
+                pgnMove.SetColumnName(columnNameResult);
+                return pgnMove;
+            }
+            if(sameColumn)
+            {
+                pgnMove.SetRowNumber(baseField.Row);
+                return pgnMove;
+            }
+            return pgnMove;
         }
 
         private PgnMove CreateBasicPgnMove(Field baseField, Field targetField)
@@ -76,43 +107,22 @@ namespace Chess.Utils.Notations.PGN
             }
             return new PgnMove(targetFieldNotationResult, targetField.IsUsed);
         }
-    }
 
-    public class PgnMove
-    {
-        private char? FigureAbbreviation;
-        private char? ColumnName;
-        private char? RowNumber;
-        private char? IsCapture;
-        private string TargetField;
-        private char? SpecialSymbol;
-
-        private const char CaptureSign = 'x';
-
-        public PgnMove(char figureAbbreviation, string targetField, bool isCapture)
+        private void SpecialSymbolCheck(Checkerboard checkerboard,Field baseField, Field targetField, PgnMove move)
         {
-            if (isCapture)
-                this.IsCapture = CaptureSign;
-            this.FigureAbbreviation = figureAbbreviation;
-            this.TargetField = targetField;
-        }
-        public PgnMove( string targetField, bool isCapture)
-        {
-            if(isCapture)
-                this.IsCapture= CaptureSign;
-            this.TargetField = targetField;
-        }
+            var matrixPosition = new Position(targetField.Row - 1, targetField.Col - 1, Formatter.MatrixFormat);
+            baseField.Figure.Move(checkerboard, baseField, matrixPosition);
 
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.Append(this.FigureAbbreviation);
-            builder.Append(this.ColumnName);
-            builder.Append(this.RowNumber);
-            builder.Append(this.IsCapture);
-            builder.Append(this.TargetField);
-            builder.Append(this.SpecialSymbol);
-            return builder.ToString();
+            var oppKing = baseField.Figure.GetOppositKing(checkerboard);
+            if(oppKing is null)
+            {
+                throw new Exception("Unnable to create Pgn");
+            }
+            var result = GameStateAnalyzer.AnalizeGameState(checkerboard, oppKing);
+            if (result.IsInCheck)
+                move.SetSpecialSymbolCheck();
+            else if (result.IsCheckmate || result.IsInStalemate)
+                move.SetSpecialSymbolCheckmateOrStalemate();
         }
     }
 }
