@@ -24,7 +24,7 @@ namespace Chess.Figures
         Field? GetOppositKing(Checkerboard checkerboard);
         bool CheckIfFigureIsUnderAttack(Checkerboard checkerboard);
         List<Field> GetListOfFieldsAttackingTarget(Checkerboard checkerboard);
-        List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
+        IEnumerable<Field> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, Field targetField, bool isWhite);
         List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard, Field currentFIeld, Field targetField);
         bool CheckIfFigureIsImmobilized(Checkerboard checkerboard);
         void MakeTempMove(Checkerboard checkerboard, List<Field> fieldsToRecalculate, Action<Checkerboard> calculations);

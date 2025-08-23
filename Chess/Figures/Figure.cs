@@ -85,7 +85,9 @@ namespace Chess.Figures
                                 && field.Figure.Name.Equals("King"));
             return oppositeKing;
         }
-
+        /// <summary>
+        /// target cannot be empty field
+        /// </summary>
         public virtual List<Field> GetListOfFieldsAttackingTarget(Checkerboard checkerboard)
         {
             var allOppFields = checkerboard.Board.SelectMany(ff => ff)
@@ -95,10 +97,11 @@ namespace Chess.Figures
             return allOppFields.Where(field => field.Figure.AttackedFields.Any(f => f.Figure != null && f.Figure.Equals(this)))
                 .ToList();
         }
-
-        public virtual List<IFigure> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard,Field targetField, bool isWhite)
+        /// <summary>
+        /// target can be empty field
+        /// </summary>
+        public virtual IEnumerable<Field> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard,Field targetField, bool isWhite)
         {
-            var selectedFigures = new List<IFigure>();
             var allianceFields = checkerboard.Board
                 .SelectMany(ff => ff)
                 .Where(field => field.Figure is not null 
@@ -111,9 +114,8 @@ namespace Chess.Figures
                 var figure = field.Figure!;
                 figure.CalculateAtackedFields(checkerboard,field);
                 if (figure.AttackedFields.Any(field => field.Equals(targetField)))
-                    selectedFigures.Add(figure);
+                    yield return field;
             }
-            return selectedFigures;
         }
 
         public virtual List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard,Field currentField, Field targetField)
