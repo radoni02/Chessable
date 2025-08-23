@@ -62,6 +62,7 @@ namespace Chess.Utils.Notations.PGN
             if (sameFigureCanMoveToTargetField == null)
                 PgnMoveHistory.Add(CreateBasicPgnMove(baseField, targetField));
 
+
         }
 
         private PgnMove CreateBasicPgnMove(Field baseField, Field targetField)
@@ -71,9 +72,9 @@ namespace Chess.Utils.Notations.PGN
             if (baseField.Figure is not Pawn)
             {
                 FigureAbbreviation.FigureAbbreviationDict.TryGetValue(baseField.Figure.Name, out var abbreviationResult);
-                return new PgnMove(abbreviationResult, targetFieldNotationResult);
+                return new PgnMove(abbreviationResult, targetFieldNotationResult, targetField.IsUsed);
             }
-            return new PgnMove(targetFieldNotationResult);
+            return new PgnMove(targetFieldNotationResult, targetField.IsUsed);
         }
     }
 
@@ -82,17 +83,23 @@ namespace Chess.Utils.Notations.PGN
         private char? FigureAbbreviation;
         private char? ColumnName;
         private char? RowNumber;
-        private bool? isCapture;
+        private char? IsCapture;
         private string TargetField;
         private char? SpecialSymbol;
 
-        public PgnMove(char figureAbbreviation, string targetField)
+        private const char CaptureSign = 'x';
+
+        public PgnMove(char figureAbbreviation, string targetField, bool isCapture)
         {
+            if (isCapture)
+                this.IsCapture = CaptureSign;
             this.FigureAbbreviation = figureAbbreviation;
             this.TargetField = targetField;
         }
-        public PgnMove( string targetField)
+        public PgnMove( string targetField, bool isCapture)
         {
+            if(isCapture)
+                this.IsCapture= CaptureSign;
             this.TargetField = targetField;
         }
 
@@ -102,7 +109,7 @@ namespace Chess.Utils.Notations.PGN
             builder.Append(this.FigureAbbreviation);
             builder.Append(this.ColumnName);
             builder.Append(this.RowNumber);
-            builder.Append(this.isCapture);
+            builder.Append(this.IsCapture);
             builder.Append(this.TargetField);
             builder.Append(this.SpecialSymbol);
             return builder.ToString();
