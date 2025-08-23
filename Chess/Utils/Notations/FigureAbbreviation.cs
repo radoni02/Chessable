@@ -24,8 +24,5 @@ namespace Chess.Utils.Notations
             {"Rook",Rook},
             {"Pawn",Pawn}
         };
-
-
-
     }
 }
