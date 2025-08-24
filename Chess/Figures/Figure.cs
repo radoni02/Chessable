@@ -97,26 +97,6 @@ namespace Chess.Figures
             return allOppFields.Where(field => field.Figure.AttackedFields.Any(f => f.Figure != null && f.Figure.Equals(this)))
                 .ToList();
         }
-        /// <summary>
-        /// target can be empty field
-        /// </summary>
-        public virtual IEnumerable<Field> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard,Field targetField, bool isWhite)
-        {
-            var allianceFields = checkerboard.Board
-                .SelectMany(ff => ff)
-                .Where(field => field.Figure is not null 
-                    && field.Figure.IsWhite == isWhite
-                    && field.Figure.Name != "King")
-                .ToList();
-
-            foreach (var field in allianceFields)
-            {
-                var figure = field.Figure!;
-                figure.CalculateAtackedFields(checkerboard,field);
-                if (figure.AttackedFields.Any(field => field.Equals(targetField)))
-                    yield return field;
-            }
-        }
 
         public virtual List<Field> GetListOfFieldsThatAreBetweenCurrentAndTarget(Checkerboard checkerboard,Field currentField, Field targetField)
         {

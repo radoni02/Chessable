@@ -43,6 +43,26 @@ namespace Chess.Chessboard
         public IFigure? Figure { get; set; }
         public int Row { get; set; }
         public int Col { get; set; }
+        /// <summary>
+        /// target can be empty field
+        /// </summary>
+        public IEnumerable<Field> GetFiguresThatCanMoveToTheField(Checkerboard checkerboard, bool isWhite)
+        {
+            var allianceFields = checkerboard.Board
+                .SelectMany(ff => ff)
+                .Where(field => field.Figure is not null
+                    && field.Figure.IsWhite == isWhite
+                    && field.Figure.Name != "King")
+                .ToList();
+
+            foreach (var field in allianceFields)
+            {
+                var figure = field.Figure!;
+                figure.CalculateAtackedFields(checkerboard, field);
+                if (figure.AttackedFields.Any(field => field.Equals(this)))
+                    yield return field;
+            }
+        }
 
         public bool CheckIfFieldIsNotEmpty()
         {

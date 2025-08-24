@@ -57,7 +57,7 @@ namespace Chess.Utils.Notations.PGN
         {
             var builder = new StringBuilder();
             builder.Append(this.FigureAbbreviation);
-            builder.Append(this.ColumnName.Value);
+            builder.Append(this.ColumnName);
             builder.Append(this.RowNumber.ToString());
             builder.Append(this.IsCapture);
             builder.Append(this.TargetField);

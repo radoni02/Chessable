@@ -22,6 +22,11 @@ namespace Chess.Utils.Notations.PGN
             }
         }
 
+        public void ConvertSingleMoveToPgn(Checkerboard checkerboard, PossibleMove possibleMove)
+        {
+            ProcessSingleMoveToPgn(checkerboard, possibleMove);
+        }
+
         private void ProcessSingleMoveToPgn(Checkerboard checkerboard, PossibleMove move)
         {
             var baseField = checkerboard.Board
@@ -34,7 +39,7 @@ namespace Chess.Utils.Notations.PGN
                 .FirstOrDefault(field => field.Row == move.TargetPosition.Row
                 && field.Col == move.TargetPosition.Col);
 
-            if (baseField is null || baseField.Figure is null || targetField is null || targetField.Figure is null)
+            if (baseField is null || baseField.Figure is null || targetField is null)
             {
                 throw new Exception("Unnable to find postion fields");
             }
@@ -64,24 +69,37 @@ namespace Chess.Utils.Notations.PGN
 
         private PgnMove ProcessPieceMove(Checkerboard checkerboard, Field baseField, Field targetField)
         {
-            var fieldsFigureCanMoveToTargetField = targetField.Figure!.GetFiguresThatCanMoveToTheField(checkerboard, targetField, baseField.Figure!.IsWhite);
+            var fieldsFigureCanMoveToTargetField = targetField.GetFiguresThatCanMoveToTheField(checkerboard, baseField.Figure.IsWhite);
             var sameFigureCanMoveToTargetField = fieldsFigureCanMoveToTargetField
                .Where(field => field != baseField)
-               .FirstOrDefault(field => field.Figure.Name == baseField.Figure.Name);
-            if (sameFigureCanMoveToTargetField == null)
+               .Where(field => field.Figure.Name == baseField.Figure.Name);
+            if (!sameFigureCanMoveToTargetField.Any())
             {
                 return CreateBasicPgnMove(baseField, targetField);
             }
 
-            if(baseField.Col != sameFigureCanMoveToTargetField.Col)
+            if(sameFigureCanMoveToTargetField.Any(field => field.Col == baseField.Col) 
+                && sameFigureCanMoveToTargetField.Any(field => field.Row == baseField.Row))
+            {
+                return CreatePgnMoveForSameFigureAttactTarget(baseField, targetField, true, true);
+            }
+
+            if(!sameFigureCanMoveToTargetField.Any(field => field.Col == baseField.Col))
                 return CreatePgnMoveForSameFigureAttactTarget(baseField, targetField);
             else
                 return CreatePgnMoveForSameFigureAttactTarget(baseField, targetField, true);
         }
 
-        private PgnMove CreatePgnMoveForSameFigureAttactTarget(Field baseField, Field targetField, bool sameColumn = false)
+        private PgnMove CreatePgnMoveForSameFigureAttactTarget(Field baseField, Field targetField, bool sameColumn = false, bool sameRow = false)
         {
             var pgnMove = CreateBasicPgnMove(baseField, targetField);
+            if(sameColumn && sameRow)
+            {
+                ColumnNameDict.ColumnNames.TryGetValue(baseField.Col, out var columnNameResult);
+                pgnMove.SetColumnName(columnNameResult);
+                pgnMove.SetRowNumber(baseField.Row);
+                return pgnMove;
+            }
             if(!sameColumn)
             {
                 ColumnNameDict.ColumnNames.TryGetValue(baseField.Col, out var columnNameResult);
@@ -119,10 +137,11 @@ namespace Chess.Utils.Notations.PGN
                 throw new Exception("Unnable to create Pgn");
             }
             var result = GameStateAnalyzer.AnalizeGameState(checkerboard, oppKing);
-            if (result.IsInCheck)
-                move.SetSpecialSymbolCheck();
-            else if (result.IsCheckmate || result.IsInStalemate)
+            if (result.IsCheckmate || result.IsInStalemate)//checkmate need to be first cuz when King is in checkmate also is in check
                 move.SetSpecialSymbolCheckmateOrStalemate();
+            else if (result.IsInCheck)
+                move.SetSpecialSymbolCheck();
+            
         }
     }
 }
