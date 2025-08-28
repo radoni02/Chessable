@@ -13,6 +13,7 @@ namespace Chess.Utils.Notations.PGN
         private int? RowNumber;
         private char? IsCapture;
         private string TargetField;
+        private PgnPromotionMove? PgnPromotionMove;
         private char? SpecialSymbol;
 
         private const char CaptureSign = 'x';
@@ -31,6 +32,11 @@ namespace Chess.Utils.Notations.PGN
             if (isCapture)
                 this.IsCapture = CaptureSign;
             this.TargetField = targetField;
+        }
+
+        public void SetPgnPromotionMove(char figureAbbreviation)
+        {
+            this.PgnPromotionMove = new PgnPromotionMove(figureAbbreviation);
         }
 
         public void SetColumnName(char columnName)
@@ -61,6 +67,7 @@ namespace Chess.Utils.Notations.PGN
             builder.Append(this.RowNumber.ToString());
             builder.Append(this.IsCapture);
             builder.Append(this.TargetField);
+            builder.Append(this.PgnPromotionMove);
             builder.Append(this.SpecialSymbol);
             return builder.ToString();
         }
