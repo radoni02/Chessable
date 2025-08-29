@@ -13,8 +13,49 @@ namespace Chess.Utils.Notations.PGN
     {
         public List<PgnMove> PgnMoveHistory { get; set; } = new List<PgnMove>();
         
-        public void ConvertToPgn(List<PossibleMove> moveHistory)
+        public Checkerboard LoadFromPgn(List<string> moves)
         {
+            var tempCheckerboard = new Checkerboard();
+            foreach (var move in moves)
+            {
+                var possibleMove = ConvertPgnSingleMove(move);
+                //here need to call real Move from ChessGame
+            }
+            return tempCheckerboard;
+
+        }
+
+        private PossibleMove ConvertPgnSingleMove(string pgnMove)
+        {
+            var specialSymbolsToDelete = new char[] {'#','+'};
+            var lastPgnMovePart = pgnMove.Last();
+            if(specialSymbolsToDelete.Any(symbol => symbol.Equals(lastPgnMovePart)))
+                pgnMove = pgnMove.Substring(0, pgnMove.Length - 1);
+
+            if(pgnMove.Contains('='))
+            {
+                //promotion and castling
+                //return;
+            }
+            var targetPostion = GetTargetField(pgnMove);
+            return default;
+        }
+
+        //private Position GetBaseField(string pgnMove)
+        //{
+        //    var baseFieldValues = pgnMove.Substring(0, pgnMove.Length - 2);
+        //}
+
+        private Position GetTargetField(string pgnMove)
+        {
+            var targetFieldValues = pgnMove.Substring(pgnMove.Length - 2);
+
+            if (targetFieldValues.Length != 2)
+                throw new Exception();//need to implement Result pattern
+
+            var targetColumnName = ColumnNameDict.ColumnNames.FirstOrDefault(x => x.Value == targetFieldValues[0]).Key;
+            return new Position(targetFieldValues[1], targetColumnName, Formatter.ChessFormat);
+        }
             var tempBoard = new Checkerboard();
             foreach (var move in moveHistory)
             {
