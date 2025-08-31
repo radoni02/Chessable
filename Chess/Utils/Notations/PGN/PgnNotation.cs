@@ -3,6 +3,7 @@ using Chess.Figures;
 using Chess.Utils.Notations.Maps;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,43 +68,63 @@ namespace Chess.Utils.Notations.PGN
                 potentialAbbreviation = baseFieldValues[0];
                 baseFieldValues = baseFieldValues.Substring(1);
             }
-            
+            if(baseFieldValues.Length == 2)
             if(baseFieldValues.Length == 1 && char.IsLetter(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
-            {
-                var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
-                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals("Pawn")
-                && field.Col == col);
-            }
-            else if(baseFieldValues.Length == 1 && char.IsLetter(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
-            {
-                var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
-                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
-                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals(figure)
-                && field.Col == col);
-            }
-            else if(baseFieldValues.Length == 1 && char.IsDigit(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
-            {
-                int.TryParse(baseFieldValues[1].ToString(), out var row);
-                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals("Pawn")
-                && field.Row == row);
-            }
-            else if (baseFieldValues.Length == 1 && char.IsDigit(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
-            {
-                int.TryParse(baseFieldValues[1].ToString(), out var row);
-                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
-                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals(figure)
-                && field.Row == row);
-            }
-            else if(baseFieldValues.Length == 2)
             {
                 var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
                 int.TryParse(baseFieldValues[1].ToString(), out var row);
                 return potentialBaseFields.FirstOrDefault(field => field.Col == col && field.Row == row);
             }
+            if(baseFieldValues.Length != 1)
+            {
+                return null;
+            }
+
+            if (char.IsLetter(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
+            {
+                return FilterByColumn(potentialBaseFields,"Pawn", baseFieldValues[0]);
+            }
+            else if(char.IsLetter(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
+            {
+                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
+                return FilterByColumn(potentialBaseFields,figure, baseFieldValues[0]);
+                && field.Col == col);
+            }
+            else if(char.IsDigit(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
+            {
+                return FilterByRow(potentialBaseFields, "Pawn", baseFieldValues[1]);
+            }
+            else if (char.IsDigit(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
+            {
+                int.TryParse(baseFieldValues[1].ToString(), out var row);
+                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
+                return FilterByRow(potentialBaseFields, figure, baseFieldValues[1]);
+                && field.Row == row);
+            }
             return null;
         }
 
-        private Position GetTargetField(string pgnMove)
+        private Field? FilterByColumn(IEnumerable<Field> candidateFields,string figureName ,char columnChar)
+        {
+            var column = ColumnNameDict.ColumnNames
+                .FirstOrDefault(c => c.Value == columnChar).Key;
+
+            return candidateFields.FirstOrDefault(field => field.Figure.Name.Equals(figureName)
+               && field.Col == column);
+        }
+
+        private Field? FilterByRow(IEnumerable<Field> candidateFields,string figureName, char rowChar)
+        {
+            if (int.TryParse(rowChar.ToString(), out var row))
+            {
+                return candidateFields.FirstOrDefault(field => field.Figure.Name.Equals(figureName)
+               && field.Row == row);
+                return potentialBaseFields.FirstOrDefault(field => field.Col == col && field.Row == row);
+            }
+            return null;
+        }
+
+        private Position GetTargetPosition(string pgnMove)
         {
             var targetFieldValues = pgnMove.Substring(pgnMove.Length - 2);
 
