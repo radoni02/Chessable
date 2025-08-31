@@ -16,16 +16,17 @@ namespace Chess.Utils.Notations.PGN
         public Checkerboard LoadFromPgn(List<string> moves)
         {
             var tempCheckerboard = new Checkerboard();
-            foreach (var move in moves)
+            foreach (var (move,index) in moves.Select((val,idx) => (val, idx)))
             {
-                var possibleMove = ConvertPgnSingleMove(move);
+                var isWhiteMove = index % 2 == 0 ? true : false;
+                var possibleMove = ConvertPgnSingleMove(move, isWhiteMove);
                 //here need to call real Move from ChessGame
             }
             return tempCheckerboard;
 
         }
 
-        private PossibleMove ConvertPgnSingleMove(string pgnMove)
+        private PossibleMove ConvertPgnSingleMove(string pgnMove, bool isWhiteMove)
         {
             var specialSymbolsToDelete = new char[] {'#','+'};
             var lastPgnMovePart = pgnMove.Last();
@@ -37,14 +38,70 @@ namespace Chess.Utils.Notations.PGN
                 //promotion and castling
                 //return;
             }
-            var targetPostion = GetTargetField(pgnMove);
+            var targetPostion = GetTargetPosition(pgnMove);
             return default;
         }
 
-        //private Position GetBaseField(string pgnMove)
-        //{
-        //    var baseFieldValues = pgnMove.Substring(0, pgnMove.Length - 2);
-        //}
+        private Field? GetBaseField(string pgnMove, Checkerboard checkerboard, Position targetPostion, bool isWhiteMove)
+        {
+            var baseFieldValues = pgnMove.Substring(0, pgnMove.Length - 2);
+            var targetField = checkerboard.Board
+               .SelectMany(row => row)
+               .FirstOrDefault(field => field.Row == targetPostion.Row
+               && field.Col == targetPostion.Col);
+            if (targetPostion is null)
+                throw new Exception();
+            var potentialBaseFields = targetField.GetFiguresThatCanMoveToTheField(checkerboard, isWhiteMove);
+
+            if (string.IsNullOrEmpty(baseFieldValues))
+            {
+                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals("Pawn"));
+            }
+            if(baseFieldValues.Last().Equals('x'))
+            {
+                baseFieldValues = baseFieldValues.Substring(0, baseFieldValues.Length - 1);
+            }
+            char potentialAbbreviation = ' ';
+            if (char.IsUpper(baseFieldValues[0]))
+            {
+                potentialAbbreviation = baseFieldValues[0];
+                baseFieldValues = baseFieldValues.Substring(1);
+            }
+            
+            if(baseFieldValues.Length == 1 && char.IsLetter(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
+            {
+                var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
+                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals("Pawn")
+                && field.Col == col);
+            }
+            else if(baseFieldValues.Length == 1 && char.IsLetter(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
+            {
+                var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
+                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
+                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals(figure)
+                && field.Col == col);
+            }
+            else if(baseFieldValues.Length == 1 && char.IsDigit(baseFieldValues[0]) && potentialAbbreviation.Equals(' '))
+            {
+                int.TryParse(baseFieldValues[1].ToString(), out var row);
+                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals("Pawn")
+                && field.Row == row);
+            }
+            else if (baseFieldValues.Length == 1 && char.IsDigit(baseFieldValues[0]) && !potentialAbbreviation.Equals(' '))
+            {
+                int.TryParse(baseFieldValues[1].ToString(), out var row);
+                var figure = FigureAbbreviation.FigureAbbreviationDict.FirstOrDefault(f => f.Value.Equals(potentialAbbreviation)).Key;
+                return potentialBaseFields.FirstOrDefault(field => field.Figure.Name.Equals(figure)
+                && field.Row == row);
+            }
+            else if(baseFieldValues.Length == 2)
+            {
+                var col = ColumnNameDict.ColumnNames.FirstOrDefault(c => c.Value.Equals(baseFieldValues[0])).Key;
+                int.TryParse(baseFieldValues[1].ToString(), out var row);
+                return potentialBaseFields.FirstOrDefault(field => field.Col == col && field.Row == row);
+            }
+            return null;
+        }
 
         private Position GetTargetField(string pgnMove)
         {
